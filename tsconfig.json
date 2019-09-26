@@ -11,10 +11,12 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
+    "allowJs": true,
     "types": [
       "webpack-env",
       "jest"
     ],
+    "typeRoots": ["./src/type/root.d.ts", "./src/views/type/ChatWindow.d.ts"],
     "paths": {
       "@/*": [
         "src/*"

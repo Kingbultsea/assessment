@@ -1,0 +1,203 @@
+.home {
+  text-align: justify;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  .common-template {
+    box-shadow: 0px px2html(2px) px2html(16px) rgba(230, 230, 230, 0.5);
+    border-radius: 0 0 px2html(20px) px2html(20px);
+    background: #fff;
+    margin-bottom: px2html(9px);
+    >.banner-pic {
+      width: 100%;
+    }
+    >.content {
+      box-sizing: border-box;
+      padding: px2html(20px) px2html(32px) px2html(20px) px2html(32px);
+      >.name {
+        line-height: px2html(33px);
+        font-size: px2html(20px);
+        font-weight: 600;
+        margin-bottom: px2html(5px);
+      }
+      >.vice-name {
+        line-height: px2html(17px);
+        font-size: px2html(12px);
+        color: #999999;
+      }
+      >.price-div {
+        height: px2html(28px);
+        margin-top: px2html(20px);
+        display: flex;
+        align-items: baseline;
+        .price {
+          color: #FF524C;
+          font-size: px2html(20px);
+          font-weight: 600;
+        }
+        .origin-price {
+          position: relative;
+          height: px2html(12px);
+          display: inline-block;
+          font-size: px2html(12px);
+          color: rgba(153, 153, 153, 0.63);
+          margin-left: px2html(10px);
+        }
+        .origin-price::after {
+          line-height: px2html(12px);
+          content: '';
+          width: 100%;
+          height: px2html(1px);
+          background-color: #999999;
+          position: absolute;
+          left: 0px;
+          top: 50%;
+          transform: translateY(50%);
+        }
+      }
+
+      .dirvide {
+        margin-top: px2html(20px);
+        width: 100%;
+        height: px2html(1px);
+        background-color: #E6E6E6;
+        border-radius: px2html(1px);
+      }
+
+      .count-template {
+        margin-top: px2html(10px);
+        color: #999999;
+        font-size: px2html(12px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+  }
+}
+
+.introduce-template {
+  margin-top: px2html(20px);
+  background: #FFFFFF;
+  border-radius: px2html(5px);
+  width: px2html(343px);
+  box-sizing: border-box;
+  padding: px2html(30px) px2html(20px) px2html(30px) px2html(20px);
+  box-shadow: 0px px2html(2px) px2html(16px) rgba(230, 230, 230, 0.5);
+  .icon-pic { // 团队的图片
+    height: px2html(77px);
+    margin-top: px2html(20px);
+  }
+  .title {
+    right: px2html(-12px);
+    font-weight: 600;
+    font-size: px2html(20px);
+    line-height: px2html(28px);
+    color: #2EA1FF;
+    position: relative;
+  }
+  .title:before {
+    position: absolute;
+    content: '';
+    background: rgba(46, 161, 255, 0.11);
+    width: px2html(26px);
+    height: px2html(26px);
+    left: 0px;
+    top: 0px;
+    transform: translateY(-20%) translateX(-50%);
+    border-radius: 50%;
+  }
+  .content-template {
+    margin-top: px2html(20px);
+    font-size: px2html(12px);
+    line-height: px2html(23px);
+  }
+}
+
+.dirvide-special {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: px2html(343px);
+  margin-top: px2html(30px);
+  .line {
+    height: px2html(1px);
+    width: px2html(156px);
+    background: #E6E6E6;
+  }
+  .circle {
+    width: px2html(12px);
+    height: px2html(12px);
+    border-radius: 50%;
+    background: #E6E6E6;
+  }
+}
+.professional-parameters-title {
+  color: #999999;
+  font-size: px2html(12px);
+  font-weight: 600;
+  margin-top: px2html(30px);
+  text-align: center;
+}
+.professional-parameters-grid {
+
+}
+.professional-parameters {
+  color: #999999;
+  width: px2html(279px);
+  margin-top: px2html(15px);
+  margin-bottom: px2html(102px);
+  .title {
+    text-align: center;
+    line-height: px2html(28px);
+    font-size: px2html(20px);
+  }
+  .content {
+    margin-top: px2html(20px);
+    font-size: px2html(13px);
+  }
+}
+
+.fixed-bar {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #fff;
+  height: px2html(64px);
+  .icon {
+    width: px2html(48px);
+  }
+  .btn {
+    width: px2html(243px);
+    height: px2html(42px);
+    @include flexCenter;
+    font-size: px2html(14px);
+    color: #FFFFFF;
+    line-height: px2html(20px);
+    border-radius: px2html(21px);
+    background: #FF5454;
+    // margin-bottom: px2html(8px);
+  }
+}
+
+// 添加在理论背景下面的margin
+.add-margin {
+  margin-bottom: px2html(80px);
+}
+
+.fix-btm {
+  margin-bottom: px2html(20px);
+}
+
+.reference-align {
+  text-align: inherit;
+  word-break: break-all;
+}

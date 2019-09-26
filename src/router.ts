@@ -1,15 +1,47 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Home from './views/Home.vue';
+import Vue from 'vue'
+import Router from 'vue-router'
+import Home from './views/Home.vue'
+import LandingPage from '@/views/LandingPage.vue'
+import MyReport from '@/views/MyReport.vue'
+import ChatWindow from '@/views/ChatWindow.vue'
+import ResultPage from '@/views/ResultPage.vue'
+import List from '@/views/List.vue'
+import Tool from './unit/tool.js'
+import WJH from './unit/wjhJS'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
   routes: [
     {
       path: '/',
       name: 'home',
-      component: Home,
+      component: Home
+    },
+    {
+      path: '/lp',
+      name: 'LandingPage',
+      component: LandingPage
+    },
+    {
+      path: '/mp',
+      name: 'MyReport',
+      component: MyReport
+    },
+    {
+      path: '/cw',
+      name: 'ChatWindow',
+      component: ChatWindow
+    },
+    {
+      path: '/rp',
+      name: 'ResultPage',
+      component: ResultPage
+    },
+    {
+      path: '/list',
+      name: 'List',
+      component: List
     },
     {
       path: '/about',
@@ -17,7 +49,7 @@ export default new Router({
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
-    },
-  ],
-});
+      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+    }
+  ]
+})
