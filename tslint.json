@@ -5,10 +5,14 @@
   ],
   "linterOptions": {
     "exclude": [
-      "node_modules/**"
+      "node_modules/**",
+      "src/unit/**"
     ]
   },
   "rules": {
+    "no-string-literal": false,
+    "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
+    "semicolon":[true, "never", "ignore-interfaces"],
     "indent": [true, "spaces", 2],
     "interface-name": false,
     "no-consecutive-blank-lines": false,
