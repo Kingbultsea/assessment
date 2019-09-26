@@ -1,5 +1,5 @@
 <template>
-    <div class='result-page'>
+    <div class='result-page animated fadeIn'>
         <div class="popup-window" v-if="showNotice" @click.self="showNotice = false">
             <div class="popup animated fadeIn">
                 <img @click="showNotice = false" class="close" src="../assets/genereal_close_black@3x.png" />

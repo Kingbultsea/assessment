@@ -119,6 +119,7 @@ export default class ChatWindow extends Vue {
 
         // 下一题的逻辑
         setTimeout(() => {
+            this.submitData('save') // 保存目前的数据
             const parse = this.parseToListAction(this.list[this.index]) // 转换数据
             this.actions(parse)
         }, 1000)
@@ -170,8 +171,9 @@ export default class ChatWindow extends Vue {
             this.$axios.get('/api/users/assessments/undone', { params: { id: this.$root.id } }).then((res: any) => {
                 if (res.data.status === 0) {
 
-                    const undoneData = JSON.parse(res.data.data.undone_data)
+                    const undoneData = typeof res.data.data.undone_data === 'string' ? JSON.parse(res.data.data.undone_data) : res.data.data.undone_data
 
+                    // 为0的话 则 做初始化处理
                     if (undoneData.length === 0) {
                         console.log('m')
                         const parse = this.parseToListAction(this.list[this.index])
@@ -184,6 +186,7 @@ export default class ChatWindow extends Vue {
                     const userAction = res.data.data.undone_data.map((v: any, index: number) => {
                         const data = this.parseToListAction(this.list[index]) as listAction
                         const selected = v.selected - 1
+                        data.open = false
                         data.selectIndex = selected
 
                         listAction.push(
@@ -198,12 +201,21 @@ export default class ChatWindow extends Vue {
                         }
                     }) as usersAction[]
 
-                    this.index = userAction.length - 1
+                    console.log(userAction, '查看action', listAction, 'list action')
+
+                    this.index = userAction.length // 无须 - 1
 
                     for (let i = 0; i < userAction.length; i++) {
-                        this.robotAction.push(this.parseToListAction(this.list[i]))
+                        this.robotAction.push(listAction[i])
                         this.robotAction.push(userAction[i])
                     }
+
+                    // 查看index 下一个还有没有题
+                    if (this.index === this.list.length) {
+                        return
+                    }
+                    const parse = this.parseToListAction(this.list[this.index]) // 转换数据
+                    this.actions(parse)
                 }
             })
         } catch (e) {
@@ -244,7 +256,6 @@ export default class ChatWindow extends Vue {
     }
 
     private destoryed() {
-        this.submitData('save')
     }
 
     private async created() {
