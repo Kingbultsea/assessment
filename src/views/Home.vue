@@ -157,9 +157,6 @@ export default class Home extends Vue {
         this.homeData.notice = data[cv.notice]
         this.homeData.reference = data[cv.reference]
 
-        // 用户是否有未完成的数据
-        this.$root.haveUnDone = data.undone as boolean
-
         document.title = this.homeData.name
         this.$root.bannerPic = this.homeData.bannerPic
       }
@@ -204,6 +201,8 @@ export default class Home extends Vue {
 
       // 已经购买 但是还没有完成的测评
       if (res.data.status === 10005) {
+        // 用户是否有未完成的数据
+        this.$root.haveUnDone = true
         this.$router.push('/cw')
       }
     })

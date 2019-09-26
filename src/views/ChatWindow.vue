@@ -7,6 +7,8 @@
             </div>
         </div>
 
+        <div class="mg-bottom"></div>
+
         <div class="chat-template">
             <transition-group name="list-complete">
                 <template v-for="(li, index) in robotAction">
@@ -30,7 +32,7 @@
                             <div class="text">{{li.answer}}</div>
                             <div class="replay" @click="editActions(index - 1)"><img src="../assets/response_replay.png"/></div>
                         </div>
-                        <img class="head-pic animated fadeIn" src="../assets/pro.jpg"/>
+                        <img class="head-pic animated fadeIn" :src="avatar"/>
                     </div>
                 </template>
             </transition-group>
@@ -54,6 +56,7 @@ type submitUsersType = 'submit' | 'save'
 export default class ChatWindow extends Vue {
     private list: listData[] = []
     private users: usersAction[] = [] // 用户操作
+    private avatar: string | null = localStorage.getItem('avatar') // 用户头像
 
     private robotAction: Array<listAction | usersAction> = [] // 相当于一个暂存区了
     private index: number = 0 // 当前题目index
@@ -68,7 +71,7 @@ export default class ChatWindow extends Vue {
                     this.list = res.data.list as listData[]
 
                     // 初始化第一题 saverMode是判断当前用户是否有漏题
-                    if (saverMode) {
+                    if (!saverMode) {
                         const parse = this.parseToListAction(this.list[this.index])
                         this.actions(parse)
                     }
@@ -161,36 +164,51 @@ export default class ChatWindow extends Vue {
         }
     }
 
+    // 获取用户未完成的数据
     private getUsersUndoneData() {
-        this.get('api/users/assessments/undone', { id: this.$root.id }).then((res: any) => {
-            if (res.status === 0) {
-                let listAction = [] as listAction[]
+        try {
+            this.$axios.get('/api/users/assessments/undone', { params: { id: this.$root.id } }).then((res: any) => {
+                if (res.data.status === 0) {
 
-                const userAction = res.data.data.undone_data.map((v: any, index: number) => {
-                    const data = this.parseToListAction(this.list[index]) as listAction
-                    const selected = v.selected - 1
-                    data.selectIndex = selected
+                    const undoneData = JSON.parse(res.data.data.undone_data)
 
-                    listAction.push(
-                        data
-                    )
-                    // this.list[index].selectIndex
-                    return {
-                        from: 'user',
-                        answer: data.options[selected].desc,
-                        qid: v.qid,
-                        selected
+                    if (undoneData.length === 0) {
+                        console.log('m')
+                        const parse = this.parseToListAction(this.list[this.index])
+                        this.actions(parse)
+                        return
                     }
-                }) as usersAction[]
 
-                this.index = userAction.length - 1
+                    let listAction = [] as listAction[]
 
-                for (let i = 0; i < userAction.length; i++) {
-                    this.robotAction.push(this.parseToListAction(this.list[i]))
-                    this.robotAction.push(userAction[i])
+                    const userAction = res.data.data.undone_data.map((v: any, index: number) => {
+                        const data = this.parseToListAction(this.list[index]) as listAction
+                        const selected = v.selected - 1
+                        data.selectIndex = selected
+
+                        listAction.push(
+                            data
+                        )
+                        // this.list[index].selectIndex
+                        return {
+                            from: 'user',
+                            answer: data.options[selected].desc,
+                            qid: v.qid,
+                            selected
+                        }
+                    }) as usersAction[]
+
+                    this.index = userAction.length - 1
+
+                    for (let i = 0; i < userAction.length; i++) {
+                        this.robotAction.push(this.parseToListAction(this.list[i]))
+                        this.robotAction.push(userAction[i])
+                    }
                 }
-            }
-        })
+            })
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     // 提交用户的选项到服务器
@@ -237,8 +255,12 @@ export default class ChatWindow extends Vue {
         // 用户有未完成的 就不需要开头就push数据进去了
         await this.getTopicList(this.$root.haveUnDone)
 
+        console.log('?')
+
         // 如果用户有未完成data 则查询
-        this.$root.haveUnDone && this.getUsersUndoneData()
+        if (this.$root.haveUnDone) {
+            this.getUsersUndoneData()
+        }
     }
 }
 </script>
