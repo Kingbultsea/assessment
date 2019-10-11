@@ -2,6 +2,9 @@ var qiniu = require("qiniu");
 var glob= require("glob")
 const key='Wxe4Fvn8XfvDpkeUO0RVUj2Sz1E1KVi05wwZAr6x'
 const secret='LG1FrkyGlglfCl67m7Clib7Rbj-GONqVPDi0GNnC'
+console.log(
+  qiniu.zone
+)
 class SiguoyaQiniu{
     constructor(ACCESS_KEY,SECRET_KEY,bucket){
         this.bucket=bucket
@@ -17,6 +20,7 @@ class SiguoyaQiniu{
 
     initConfig(){
         this.config = new qiniu.conf.Config();
+        this.config.zone = qiniu.zone.Zone_z0
     }
 
     initFormUploader(){
@@ -89,5 +93,3 @@ glob("dist/**/*", {nodir:true}, function (er, files) {
         console.log(er);
     }
 });
-
-console.log('??')

@@ -5,12 +5,12 @@
 .mg-bottom {
   height: px2html(26px);
   width: 100vw;
-  background: #F7F7F7;
+  // background: #F7F7F7; 这里无需 加背景
 }
 
 .speed-of-progress {
+  background: #F7F7F7;
   height: px2html(26px);
-  // background: #fff;
   width: 100vw;
   font-size: px2html(12px);
   line-height: px2html(17px);
@@ -76,6 +76,7 @@
         margin-top: px2html(15px);
       }
       .title {
+        max-width: 90%;
         font-size: px2html(18px);
         line-height: px2html(25px);
         color: #000000;

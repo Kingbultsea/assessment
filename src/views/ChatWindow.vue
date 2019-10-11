@@ -131,7 +131,7 @@ export default class ChatWindow extends Vue {
         // 后面需要操控scroll
         // window.document
         this.$nextTick(() => {
-            window.scrollTo(0, document.documentElement.clientHeight)
+            window.scrollTo(0, 99998)
         })
     }
 
@@ -154,12 +154,19 @@ export default class ChatWindow extends Vue {
         li.open = false
         li.selectIndex = optionId
         this.robotAction[index + 1].answer = desc
+        this.robotAction[index + 1].selected = optionId
     }
 
     // 根据listAction的editMode 来选择  selectOptions(li.id, index2, li2.desc, li)   editUsersAction
     private chooseActions(titleId: number, optionId: number, title: string, li: listAction, robotIndex: number) {
         if (li.editMode === true) {
             this.editUsersAction(li, robotIndex, title, optionId)
+            // 最后一个选项修改 不需要保存
+            console.log(
+                this.index,
+                this.list.length
+            )
+            this.submitData('save') // eidt 完毕后 保存目前的数据
         } else {
             this.selectOptions(titleId, optionId, title, li)
         }
@@ -175,7 +182,6 @@ export default class ChatWindow extends Vue {
 
                     // 为0的话 则 做初始化处理
                     if (undoneData.length === 0) {
-                        console.log('m')
                         const parse = this.parseToListAction(this.list[this.index])
                         this.actions(parse)
                         return
@@ -212,6 +218,7 @@ export default class ChatWindow extends Vue {
 
                     // 查看index 下一个还有没有题
                     if (this.index === this.list.length) {
+                        this.showSubmit = true
                         return
                     }
                     const parse = this.parseToListAction(this.list[this.index]) // 转换数据
@@ -246,6 +253,7 @@ export default class ChatWindow extends Vue {
         this.$axios.post(url, data).then((res: any) => {
             if (res.data.status === 0) {
                 if (type === 'submit') {
+                    this.$root.haveUnDone = false
                     // this.$root.rpData = res.data.data
                     sessionStorage.setItem('reportId', res.data.data.report_id)
                     this.$router.replace('rp')
@@ -263,15 +271,11 @@ export default class ChatWindow extends Vue {
             await this.$root.login()
         }
 
-        // 用户有未完成的 就不需要开头就push数据进去了
-        await this.getTopicList(this.$root.haveUnDone)
-
-        console.log('?')
+        // 用户有未完成的 就不需要开头就push数据进去了 初始化 交给 getUsersUndoneData 来做
+        await this.getTopicList(true)
 
         // 如果用户有未完成data 则查询
-        if (this.$root.haveUnDone) {
-            this.getUsersUndoneData()
-        }
+        this.getUsersUndoneData()
     }
 }
 </script>

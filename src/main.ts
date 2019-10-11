@@ -17,6 +17,17 @@ const myAxios = Axios.create({
   baseURL: URL
 })
 
+interface webchatpubpay {
+  appId: string,
+  timeStamp: number,
+  nonceStr: string,
+  package: string,
+  signType: string,
+  paySign: string
+}
+
+declare const WeixinJSBridge: any
+
 declare module 'vue/types/vue' { // 模块补充 可以去这个路径查阅
   interface Vue {
     $wjh: any,
@@ -34,6 +45,7 @@ Vue.use(animated)
 new Vue({
   data() {
     return {
+      busyPay: false,
       haveUnDone: false as boolean,
       URLSHARE: URLSHARE,
       openid: localStorage.getItem('openid'), // || '1234-s3qIvA1_qcA-r6fYH7zF50k',
@@ -106,10 +118,55 @@ new Vue({
           return res.data.data.token
         }
       })
+    },
+    async payAPI() {
+      if (this.busyPay) {
+        return
+      }
+      this.busyPay = true
+      if (!this.$root.token) {
+        // await this.$root.share.wei
+        await this.$root.login()
+      }
+      const data = {
+        goods_id: this.$root.id,
+        goods_vendor_ids: '[' + this.$root.channel + ']',
+        wap_url: window.location.href.split('#')[0] + '#/cw'
+      }
+      this.$axios.post('/api/pay/order', data).then((res: any) => {
+        if (res.data.status === 0) {
+          this.busyPay = false
+          let query = ''
+          if (this.$root.channel === 1) { // 1 是微信
+            query = 'wechatpubpay'
+            this.wechatPublicPayWayData(res.data.data.pay_platforms[query] as webchatpubpay)
+          }
+        }
+
+        // 已经购买 但是还没有完成的测评
+        if (res.data.status === 10005) {
+          // 用户是否有未完成的数据
+          this.$root.haveUnDone = true
+          this.$router.push('/cw')
+        }
+      })
+    },
+    wechatPublicPayWayData(wechatpubpay: webchatpubpay) {
+      const getBrandWCPayRequest = wechatpubpay
+      console.log('pay 平台')
+      WeixinJSBridge.invoke(
+          'getBrandWCPayRequest', getBrandWCPayRequest,
+          (res: any) => {
+            console.log(res)
+            if (res.err_msg === "get_brand_wcpay_request:ok" ) {
+              // 使用以上方式判断前端返回,微信团队郑重提示：
+              //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+              this.$router.push('/cw')
+            }
+          })
     }
   },
   created() {
-    console.log('created')
     this.id = this.parseQuery(window.location.href).id
     this.shareM('小睡眠', '小睡眠', 'https://wx2.sinaimg.cn/mw690/006Zdy2vgy1frycovbf8cj304z0553zu.jpg')
   },

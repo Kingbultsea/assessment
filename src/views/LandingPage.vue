@@ -6,7 +6,7 @@
             <div class="explain">
                 请允许专业测评获得你的公开信息（昵称、头像、地区及性别），以保证测评功能能够正常使用。
             </div>
-            <div class="btn">申请授权</div>
+            <div class="btn" @click="refleash">申请授权</div>
         </div>
     </div>
 </template>
@@ -18,6 +18,10 @@ import {Component, Vue} from 'vue-property-decorator'
     components: {}
 })
 export default class LandingPage extends Vue {
+    // 刷新页面 进行重新询问授权
+    private refleash() {
+        window.location.href = window.location.href.split('#')[0]
+    }
     private mounted() {
         document.title = '专业测评'
     }

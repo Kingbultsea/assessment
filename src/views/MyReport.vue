@@ -1,37 +1,98 @@
 <template>
     <div class='my-report'>
-        <!-- <div class="template">
-            <div class="title">啊的都阿</div>
-            <div class="time">2019.09.17  08:55</div>
+        <Tips v-if="showTips" @click="showTips = false" text="复制成功"/>
+
+        <div class="template" v-for="(li, index) in dataList" :key="index">
+            <div class="title">{{li.title}}</div>
+            <div class="time">{{li.assessment_time}}</div>
             <div class="order">
                 <span class="prefix">订单编号：</span>
-                <span class="num">9527</span>
-                <img class="icon" src="../assets/myreport_icon@3x.png"/>
+                <span class="num" :id="li.order_number">{{li.order_number}}</span>
+                <img @click="copyNumber(li.order_number)" class="icon" src="../assets/myreport_icon@3x.png"/>
             </div>
-            <div class="btn">查看报告</div>
-        </div> -->
-        <div class="null-template">
+            <div class="btn" @click="viewReport(li.id)">查看报告</div>
+        </div>
+        <div class="null-template" v-if="nullList === '1'">
             <img class="pic" src="../assets/myreport_null@3x.png"/>
         </div>
-        <div class="null-bar">
-            <div class="title">阿松大</div>
+        <div class="null-bar" v-if="nullList === '1'">
+            <div class="title">{{goodsDesc.title}}阿松大</div>
             <div class="price-div">
-                <span class="price">￥2</span>
-                <div class="origin-price">￥3</div>
+                <span class="price">￥{{goodsDesc.price}}</span>
+                <div class="origin-price">￥{{goodsDesc.price_origin}}</div>
             </div>
-            <div class="btn">立即购买</div>
+            <div class="btn" id="test" :class="{'fix-top': goodsDesc.title.length <= 8 ? true : false}" @click="this.$root.payAPI">立即购买</div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator'
+import Tips from '@/components/Tips.vue'
 
 @Component({
-    components: {}
+    components: {
+        Tips
+    }
 })
 export default class MyReport extends Vue {
-    private mounted() {
+    private showTips: boolean = false // 展示提示
+
+    private goodsDesc: any = {
+        id: '',
+        title: '',
+        price_origin: '',
+        price: ''
+    }
+    private nullList: string = '0'
+    private dataList: any = []
+    private pageIndex: number = 0
+    // 服务器上获取data
+    private getData(page = 1 as number) {
+        this.pageIndex += 1
+        this.$axios.get('/api/assessments/reports', { params: { id: this.$root.id, page } }).then((res: any) => {
+            if (res.data.status === 0) {
+                this.dataList = this.dataList.concat(res.data.data.list)
+                if (this.dataList.length === 0) {
+                    this.nullList = '1'
+                }
+                // this.goodsDesc = res.data.data.default
+            }
+        })
+    }
+
+    // 内容复制
+    private copyNumber(id: any) {
+        if (this.showTips) {
+            return
+        }
+        const Url2: any = document.getElementById(id)
+        if (Url2) {
+            window.getSelection()!.selectAllChildren(Url2)
+            this.showTips = true
+            document.execCommand ('Copy')
+            // document.execCommand('copy', false, undefined)
+            setTimeout(() => {
+                this.showTips = false
+            }, 2000)
+        }
+    }
+
+    private viewReport(id: string) {
+        sessionStorage.setItem('reportId', id)
+        this.$router.push('/rp')
+    }
+    private async mounted() {
+        if (!this.$root.token) {
+            await this.$root.login()
+        }
+        this.goodsDesc = {
+            id: this.$root.id,
+            title: sessionStorage.getItem('title'),
+            price_origin: sessionStorage.getItem('originPrice'),
+            price: sessionStorage.getItem('price')
+        }
+        this.getData()
         document.title = '我的报告'
     }
 }
@@ -46,6 +107,7 @@ export default class MyReport extends Vue {
     width: 100vw;
     min-height: 100vh;
     position: relative;
+    padding-bottom: px2html(110px);
 }
     .template {
         margin-top: px2html(20px);
@@ -102,7 +164,7 @@ export default class MyReport extends Vue {
         @include flexCenter;
         .pic {
             position: relative;
-            top: px2html(-50px);
+            top: px2html(-30px);
             width: px2html(118px);
         }
     }
@@ -115,6 +177,10 @@ export default class MyReport extends Vue {
         box-sizing: border-box;
         background: #fff;
         text-align: left;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
         .btn {
             width: px2html(142px);
             height: px2html(40px);
@@ -123,12 +189,10 @@ export default class MyReport extends Vue {
             font-size: px2html(14px);
             line-height: px2html(20px);
             @include flexCenter;
-            position: absolute;
-            right: px2html(32px);
             background: #FF5454;
-            top: px2html(28px);
         }
         .title {
+            width: 100%;
             line-height: px2html(28px);
             font-size: px2html(20px);
             font-weight: 600;
@@ -163,5 +227,11 @@ export default class MyReport extends Vue {
                 transform: translateY(50%);
             }
 
+    }
+</style>
+<style lang="scss">
+    .fix-top {
+        position: relative;
+        top: px2html(-20px);
     }
 </style>

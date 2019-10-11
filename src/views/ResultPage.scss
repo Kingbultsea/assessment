@@ -63,15 +63,21 @@
 .btn {
   height: px2html(32px);
   width: px2html(120px);
-  @include flexCenter;
+  // @include flexCenter;
   background-color: #fff;
   position: relative;
   top: px2html(-30px);
   box-shadow: 0px px2html(2px) px2html(16px) rgba(230, 230, 230, 0.5);
   // transform: translateX(50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: px2html(10px);
   img {
+    margin-right: px2html(5px);
     height: px2html(14px);
   }
+  font-size: px2html(12px);
   border-radius: 0px 0px px2html(10px) px2html(10px);
 }
 
@@ -103,6 +109,7 @@
     }
   }
   .content-template {
+    margin-bottom: px2html(10px);
     width: px2html(343px);
     background-color: #fff;
     border-radius: px2html(10px);

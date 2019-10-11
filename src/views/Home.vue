@@ -20,19 +20,21 @@
 
     <div class="introduce-template">
       <div class="title">内容简介</div>
-      <div class="content-template" v-html="parseLineFeed(homeData.contentValidity, 2)"></div>
+      <div class="content-template" v-html="homeData.contentValidity"></div>
     </div>
     <div class="introduce-template">
       <div class="title">你将获得</div>
-      <div class="content-template" v-html="parseLineToTagDiv(homeData.yourHarvest)">
+      <div class="content-template tag-content" v-html="homeData.yourHarvest">
       </div>
     </div>
     <div class="introduce-template">
       <div class="title">适合推测</div>
+      <div class="content-template tag-content" v-html="homeData.suitableForSpeculation"></div>
     </div>
     <div class="introduce-template">
       <div class="title">理论背景</div>
-      <div class="content-template" v-html="parseToColorBgContent(homeData.contentValidity, 2)"></div>
+      <div class="content-template" v-html="homeData.contentValidity"></div>
+      <div class="content-template color-bg-content" v-html="homeData.reference"></div>
     </div>
 
     <div class="dirvide-special">
@@ -43,13 +45,13 @@
 
     <div class="professional-parameters">
       <div class="title">专业参数</div>
-      <div class="content" v-html="parseLineFeed(homeData.notice)">
+      <div class="content professional-query" v-html="homeData.notice">
         · 专业报告：123
       </div>
     </div>
 
     <div class="fixed-bar">
-      <img class="icon" src="../assets/我的报告.png" />
+      <img @click="toMyReport" class="icon" src="../assets/我的报告.png" />
       <div class="btn" @click="payAPI">
         立即购买
       </div>
@@ -86,6 +88,7 @@ const enum cv {
   contentValidity = 'intro',
   yourHarvest = 'reward',
   professionalTheory = 'theory',
+  suitableForSpeculation = 'suitable',
   notice = 'notice',
   reference = 'references'
 }
@@ -106,9 +109,12 @@ export default class Home extends Vue {
     peopleTest: '',
     contentValidity: '',
     yourHarvest: '',
+    suitableForSpeculation: '',
     professionalTheory: '',
     notice: ''
   }
+
+  private busyPay: boolean = false
 
   // 换行功能
   public parseLineFeed(text: string, times: number): string {
@@ -154,8 +160,13 @@ export default class Home extends Vue {
         this.homeData.contentValidity = data[cv.contentValidity]
         this.homeData.yourHarvest = data[cv.yourHarvest]
         this.homeData.professionalTheory = data[cv.professionalTheory]
+        this.homeData.suitableForSpeculation = data[cv.suitableForSpeculation]
         this.homeData.notice = data[cv.notice]
         this.homeData.reference = data[cv.reference]
+
+        sessionStorage.setItem('title', '' + this.homeData.name)
+        sessionStorage.setItem('price', '' + this.homeData.price)
+        sessionStorage.setItem('originPrice', '' + this.homeData.originPrice)
 
         document.title = this.homeData.name
         this.$root.bannerPic = this.homeData.bannerPic
@@ -181,6 +192,10 @@ export default class Home extends Vue {
 
   // 支付接口
   private async payAPI() {
+    if (this.busyPay) {
+      return
+    }
+    this.busyPay = true
     if (!this.$root.token) {
       // await this.$root.share.wei
       await this.$root.login()
@@ -192,11 +207,13 @@ export default class Home extends Vue {
     }
     this.$axios.post('/api/pay/order', data).then((res: any) => {
       if (res.data.status === 0) {
+        this.busyPay = false
         let query = ''
         if (this.$root.channel === 1) { // 1 是微信
           query = 'wechatpubpay'
           this.wechatPublicPayWayData(res.data.data.pay_platforms[query] as webchatpubpay)
         }
+        return
       }
 
       // 已经购买 但是还没有完成的测评
@@ -204,11 +221,30 @@ export default class Home extends Vue {
         // 用户是否有未完成的数据
         this.$root.haveUnDone = true
         this.$router.push('/cw')
+        return
+      }
+
+      // 用户没有登录 进入授权页面
+      if (!localStorage.getItem('openid')) {
+        this.$router.push('/lp')
       }
     })
   }
 
-  private created() {
+  // 我的报告按钮
+  private toMyReport() {
+    if (this.$root.haveUnDone) {
+      this.$router.push('/cw')
+    } else {
+      this.$router.push('/mp')
+    }
+  }
+
+  private async created() {
+    window.scrollTo(0, 0)
+    if (!this.$root.token) {
+      await this.$root.login()
+    }
     this.getData()
   }
 }
@@ -219,16 +255,21 @@ export default class Home extends Vue {
 </style>
 
 <style lang="scss">
-  .tag-content {
+  .professional-query div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .tag-content div {
     position: relative;
     width: px2html(240px);
     margin-left: px2html(27px);
     margin-bottom: px2html(10px);
   }
-  .tag-content:last-of-type {
+  .tag-content div:last-of-type {
     margin-bottom: px2html(0px);
   }
-  .tag-content::before {
+  .tag-content div::before {
     position: absolute;
     left: px2html(-27px);
     top: px2html(2px);
@@ -240,9 +281,11 @@ export default class Home extends Vue {
     background-size: 100% auto;
   }
   .color-bg-content {
+    margin-top: px2html(20px);
     border-radius: px2html(10px);
     background: #FAFAFA;
     box-sizing: border-box;
+    text-align: left;
     padding: px2html(20px) px2html(16px);
   }
 </style>

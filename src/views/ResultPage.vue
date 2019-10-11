@@ -11,7 +11,7 @@
         <img class="header-pic" :src="rpData.banner" />
         <div class="introduce-template">
             <p class="name">{{title}}</p>
-            <p class="result-name">哲学家</p>
+            <p class="result-name">{{section.sectionOne.resultTitle}}</p>
             <div class="self-time">
                 <div class="users-features">
                     <img class="head-pic" :src="headPic"/>
@@ -22,38 +22,41 @@
         </div>
 
         <div class="btn" @click="showNotice = true">
-            <img src="../assets/result_button.png"/>
+            <img src="../assets/result_button_explain@3x.png"/>阅读说明
         </div>
 
         <div class="section">
             <div class="title">
                 <div class="num">01</div>
-                <div class="content">{{section.sectionOne.levelOneTitle}}</div>
+                <div class="content" v-html="section.sectionOne.levelOneTitle"></div>
             </div>
             <div class="content-template" style="padding: unset;display: flex;justify-content: center;align-items: center;flex-direction: column">
-                <p class="chart-title">{{section.sectionOne.chartPicTitle}}</p>
+                <p class="chart-title" v-html="section.sectionOne.chartPicTitle"></p>
                 <div id="chart" class="chart"></div>
-                <p class="chart-explan">{{section.sectionOne.chartExplan}}</p>
-                <p class="levelTwo-title">{{section.sectionOne.levelTwoTitle}}</p>
-                <p class="levelTwo-text" v-html="parseLineFeed(section.sectionOne.text, 2)"></p>
+                <p class="chart-explan" v-html="section.sectionOne.chartExplan"></p>
+                <p class="levelTwo-title" v-html="section.sectionOne.levelTwoTitle"></p>
+                <p class="levelTwo-text" v-html="section.sectionOne.text"></p>
+            </div>
+            <div class="content-template" v-for="(li, index) in section.sectionOneRelease" :key="index">
+                <div class="levelTitle" v-html="li.levelTwoTitle"></div>
+                <div class="levelText" v-html="li.text">
+                </div>
             </div>
         </div>
 
         <div class="section sectionTwo">
             <div class="title">
                 <div class="num">02</div>
-                <div class="content">{{section.sectionTwo.data.levelOneTitle}}</div>
+                <div class="content" v-html="section.sectionTwo.data.levelOneTitle"></div>
             </div>
             <div class="content-template">
-                <div class="levelTitle">{{section.sectionTwo.data.levelTwoTitle}}</div>
-                <div class="levelText">
-                    {{section.sectionTwo.data.text}}
+                <div class="levelTitle" v-html="section.sectionTwo.data.levelTwoTitle"></div>
+                <div class="levelText" v-html="section.sectionTwo.data.text">
                 </div>
             </div>
             <div class="content-template" v-for="(li, index) in section.sectionTwo.release" :key="index">
-                <div class="levelTitle">{{li.levelTwoTitle}}</div>
-                <div class="levelText">
-                    {{li.text}}
+                <div class="levelTitle" v-html="li.levelTwoTitle"></div>
+                <div class="levelText" v-html="li.text">
                 </div>
             </div>
         </div>
@@ -61,18 +64,16 @@
         <div class="section sectionTwo">
             <div class="title">
                 <div class="num">03</div>
-                <div class="content">{{section.sectionThree.data.levelOneTitle}}</div>
+                <div class="content" v-html="section.sectionThree.data.levelOneTitle"></div>
             </div>
             <div class="content-template">
-                <div class="levelTitle">{{section.sectionThree.data.levelTwoTitle}}</div>
-                <div class="levelText">
-                    {{section.sectionThree.data.text}}
+                <div class="levelTitle" v-if="section.sectionThree.data.levelTwoTitle" v-html="section.sectionThree.data.levelTwoTitle"></div>
+                <div class="levelText" v-html="section.sectionThree.data.text">
                 </div>
             </div>
-            <div class="content-template" v-for="(li, index) in section.sectionTwo.release" :key="index">
-                <div class="levelTitle">{{li.levelTwoTitle}}</div>
-                <div class="levelText">
-                    {{li.text}}
+            <div class="content-template" v-for="(li, index) in section.sectionThree.release" :key="index">
+                <div class="levelTitle" v-if="li.levelTwoTitle" v-html="li.levelTwoTitle"></div>
+                <div class="levelText" v-html="li.text">
                 </div>
             </div>
         </div>
@@ -91,13 +92,16 @@ export default class ResultPage extends Vue {
     private headPic: string | null = localStorage.getItem('avatar') // 用户头像
     private title: string = document.title
     private name: string | null = localStorage.getItem('name')
+    private dimensions: any = {}
     private section: any = {
         sectionOne: {
+            resultTitle: '-',
             levelOneTitle: '',
             chartPicTitle: '',
             levelTwoTitle: '',
             text: ''
         },
+        sectionOneRelease: [],
         sectionTwo: {
             data: {
                 levelOneTitle: ''
@@ -135,18 +139,46 @@ export default class ResultPage extends Vue {
     private getApiData(id: number) {
         this.$axios.get('/api/assessments/reports/find', { params: { id } }).then((res: any) => {
             if (res.data.status === 0) {
-                console.log(res.data.data)
+                this.dimensions = res.data.data.dimension
                 this.section = res.data.data.section
+
+                // 如果没有则为空数组
+                if (!this.section['sectionOneRelease']) {
+                    this.section.sectionOneRelease = []
+                }
                 this.rpData = res.data.data
                 this.parseCharts()
             }
         })
     }
 
+    // 把服务器取得的dimension 转换成charts 的 能看懂 的 数据
+    private prrseDimensionToChartsData(dimension: any) {
+        let data = []
+        for (let i in dimension) {
+            data.push({ name: dimension[i].title, value: dimension[i].score, axis_max: dimension[i].axis_max })
+        }
+        return data
+    }
+
     private parseCharts() {
+        const chartsData = this.prrseDimensionToChartsData(this.dimensions)
+
         const myChart = echarts.init(document.getElementById('chart'))
 
         const documentChart =  document.querySelector('#chart') as HTMLBaseElement
+
+        const indicator = [] as any
+        const value = [] as any
+
+        const maxNumb = [16, 12, 18, 16] // 临时加上的
+        let maxNumbIndex = 0
+
+        for (let i of chartsData) {
+            value.push(i.value)
+            indicator.push({ name: i.name, max: i.axis_max || 1 })
+            maxNumbIndex++
+        }
 
         // 绘制图表
         myChart.setOption({
@@ -158,12 +190,7 @@ export default class ResultPage extends Vue {
                         color: '#333333'
                     }
                 },
-                indicator: [
-                    { name: '销售', max: 100 },
-                    { name: '管理', max: 100 },
-                    { name: '信息技术', max: 100 },
-                    { name: '客服', max: 100 }
-                ]
+                indicator
             },
             series: [{
                 name: '预算 vs 开销（Budget vs spending）',
@@ -185,7 +212,7 @@ export default class ResultPage extends Vue {
                 },
                 data : [
                     {
-                        value : [100, 10, 100, 100],
+                        value,
                         name : '预算分配（Allocated Budget）'
                     }
                 ]
@@ -194,6 +221,7 @@ export default class ResultPage extends Vue {
     }
 
     private async created() {
+        window.scrollTo(0, 0)
         if (!this.$root.token) {
             await this.$root.login()
         }
