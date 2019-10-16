@@ -28,32 +28,35 @@
       </div>
     </div>
     <div class="introduce-template">
-      <div class="title">适合推测</div>
+      <div class="title">适合谁测</div>
       <div class="content-template tag-content" v-html="homeData.suitableForSpeculation"></div>
     </div>
-    <div class="introduce-template">
+    <div class="introduce-template add-margin">
       <div class="title">理论背景</div>
-      <div class="content-template" v-html="homeData.contentValidity"></div>
+      <div class="content-template" v-html="homeData.professionalTheory"></div>
+      <div class="professional-parameters-title fix-btm">部分参考文献</div>
       <div class="content-template color-bg-content" v-html="homeData.reference"></div>
+      <div class="professional-parameters-title">专业参数</div>
+      <div class="professional-query" v-html="homeData.notice"></div>
     </div>
 
-    <div class="dirvide-special">
+    <!-- <div class="dirvide-special">
       <div class="line"></div>
       <div class="circle"></div>
       <div class="line"></div>
-    </div>
+    </div> -->
 
-    <div class="professional-parameters">
+    <!-- <div class="professional-parameters">
       <div class="title">专业参数</div>
       <div class="content professional-query" v-html="homeData.notice">
-        · 专业报告：123
       </div>
-    </div>
+    </div> -->
 
     <div class="fixed-bar">
       <img @click="toMyReport" class="icon" src="../assets/我的报告.png" />
       <div class="btn" @click="payAPI">
-        立即购买
+        <!-- 立即购买 -->
+        {{this.$root.haveUnDone ? '继续测评' : '立即购买'}}
       </div>
     </div>
   </div>
@@ -164,6 +167,8 @@ export default class Home extends Vue {
         this.homeData.notice = data[cv.notice]
         this.homeData.reference = data[cv.reference]
 
+        this.$root.haveUnDone = data.undone
+
         sessionStorage.setItem('title', '' + this.homeData.name)
         sessionStorage.setItem('price', '' + this.homeData.price)
         sessionStorage.setItem('originPrice', '' + this.homeData.originPrice)
@@ -184,7 +189,7 @@ export default class Home extends Vue {
               console.log(res)
               if (res.err_msg === "get_brand_wcpay_request:ok" ) {
                 // 使用以上方式判断前端返回,微信团队郑重提示：
-                //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                 this.$router.push('/cw')
               }
             })
@@ -255,15 +260,35 @@ export default class Home extends Vue {
 </style>
 
 <style lang="scss">
+  .professional-query {
+    color: #999999;
+    margin-top: px2html(20px);
+    font-size: px2html(12px);
+    border-left: px2html(1px) solid #E6E6E6;
+    border-right: px2html(1px) solid #E6E6E6;
+  }
   .professional-query div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    text-indent: px2html(10px);
+    width: 100%;
+    position: relative;
+    border-top: px2html(1px) solid #E6E6E6;
+    b {
+      text-indent: px2html(0px);
+      padding-top: px2html(5px);
+      padding-bottom: px2html(5px);
+      margin-right: px2html(10px);
+      border-right: px2html(1px) solid #E6E6E6;
+      display: inline-block;
+      width: 50%;
+    }
+  }
+  .professional-query div:last-of-type {
+    border-bottom: px2html(1px) solid #E6E6E6;
   }
   .tag-content div {
     position: relative;
-    width: px2html(240px);
-    margin-left: px2html(27px);
+    width: px2html(274px);
+    margin-left: px2html(20px);
     margin-bottom: px2html(10px);
   }
   .tag-content div:last-of-type {
@@ -271,21 +296,36 @@ export default class Home extends Vue {
   }
   .tag-content div::before {
     position: absolute;
-    left: px2html(-27px);
-    top: px2html(2px);
+    left: px2html(-10px);
+    top: px2html(8px);
     content: '';
+    transform: translateX(-100%);
     width: px2html(12px);
-    height: px2html(16px);
+    height: px2html(9px);
     background: url("../assets/tag_icon.png");
     background-repeat: no-repeat;
     background-size: 100% auto;
   }
   .color-bg-content {
-    margin-top: px2html(20px);
-    border-radius: px2html(10px);
-    background: #FAFAFA;
+    div div {
+      margin-bottom: px2html(14px);
+    }
+    margin-top: 0px!important;
+    color: #999999;
+    // border-top: px2html(1px) solid rgba(153, 153, 153, 0.22);
+    // padding-top: px2html(24px);
+    // margin-top: px2html(24px);
+    // background: #FAFAFA;
     box-sizing: border-box;
     text-align: left;
-    padding: px2html(20px) px2html(16px);
+    // padding: px2html(20px) px2html(16px);
+  }
+
+  // 修改section 为粘连 状态
+  .fix-rest-section {
+    margin-top: px2html(20px);
+    div div {
+      margin-top: px2html(10px) !important; // 有坑 因为 后台传入的 第一个不是div 后面的才带div
+    }
   }
 </style>

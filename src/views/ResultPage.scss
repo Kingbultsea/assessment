@@ -17,7 +17,7 @@
   box-shadow: 0px px2html(2px) px2html(16px) rgba(230, 230, 230, 0.5);
   width: px2html(343px);
   background-color: #fff;
-  border-radius: px2html(10px);
+  border-radius: px2html(5px);
   // overflow: hidden;
   position: relative;
   .name {
@@ -114,7 +114,7 @@
     background-color: #fff;
     border-radius: px2html(10px);
     box-sizing: border-box;
-    padding: px2html(30px) px2html(32px);
+    padding: px2html(30px) px2html(20px);
     .chart-title {
       font-size: px2html(13px);
       line-height: px2html(18px);
@@ -131,7 +131,7 @@
       color: #999999;
       font-size: px2html(12px);
       line-height: px2html(23px);
-      margin-bottom: px2html(40px);
+      margin-bottom: px2html(30px);
     }
     .levelTwo-title {
       font-size: px2html(14px);
@@ -139,13 +139,13 @@
       width: px2html(279px);
       text-align: justify;
       font-weight: 600;
+      margin-bottom: px2html(20px);
     }
     .levelTwo-text {
       font-size: px2html(13px);
       line-height: px2html(23px);
       width: px2html(279px);
       text-align: justify;
-      margin-top: px2html(20px);
       margin-bottom: px2html(30px);
     }
   }
@@ -163,6 +163,7 @@
     position: relative;
     z-index: 10;
     width: max-content;
+    margin-bottom: px2html(30px);
   }
   .levelTitle::after {
     padding-right: px2html(12px);
@@ -179,7 +180,6 @@
   .levelText {
     font-size: px2html(13px);
     line-height: px2html(23px);
-    margin-top: px2html(30px);
     text-align: justify;
     color: #333333;
   }
@@ -242,3 +242,4 @@
     }
   }
 }
+

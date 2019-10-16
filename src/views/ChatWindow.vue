@@ -39,7 +39,7 @@
         </div>
 
         <div class="bottom-bar" v-show="showSubmit">
-            <div class="btn" @click="submitData('submit')">提交</div>
+            <div class="btn" @click="submitData('submit')">我已认真完成，确定提交</div>
         </div>
     </div>
 </template>
@@ -162,13 +162,12 @@ export default class ChatWindow extends Vue {
         if (li.editMode === true) {
             this.editUsersAction(li, robotIndex, title, optionId)
             // 最后一个选项修改 不需要保存
-            console.log(
-                this.index,
-                this.list.length
-            )
             this.submitData('save') // eidt 完毕后 保存目前的数据
         } else {
-            this.selectOptions(titleId, optionId, title, li)
+            // 调试
+            setTimeout(() => {
+                this.selectOptions(titleId, optionId, title, li)
+            }, 1000)
         }
     }
 
@@ -226,7 +225,7 @@ export default class ChatWindow extends Vue {
                 }
             })
         } catch (e) {
-            console.log(e)
+            // console.log(e)
         }
     }
 

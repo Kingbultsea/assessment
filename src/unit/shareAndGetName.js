@@ -69,14 +69,14 @@ export default class Share {
             localStorage.setItem('name', r.data.name)
             localStorage.setItem('avatar', r.data.avatar)
             localStorage.setItem('openid', r.data.openid)
-            console.log(r, 'hkjhkhk')
-            console.log(r.data.name, 'fgjhfjhfj')
+            // console.log(r, 'hkjhkhk')
+            // console.log(r.data.name, 'fgjhfjhfj')
           } catch (e) {
-            console.log(result.data.avatar)
+            // console.log(result.data.avatar)
             localStorage.setItem('avatar', result.data.avatar)
             localStorage.setItem('name', result.data.name)
             localStorage.setItem('openid', result.data.openid)
-            console.log(result.data.name)
+            // console.log(result.data.name)
           }
         })
       }
@@ -113,16 +113,16 @@ export default class Share {
 
     getappid.onreadystatechange = function () {
       if (getappid.readyState === 4 && getappid.status === 200) {
-        console.log('sdk ok', bl, bl && !localStorage.getItem('name'))
+        // console.log('sdk ok', bl, bl && !localStorage.getItem('name'))
         let getSDK = JSON.parse(getappid.response)
-        console.log(getSDK.data.wechat_config)
+        // console.log(getSDK.data.wechat_config)
         getSDK.data.wechat_config.debug = false
 
-        console.log('这里错误？')
+        // console.log('这里错误？')
         const appid = 'wx2dbf7017998b37cb' // process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'wx2dbf7017998b37cb' : 'wx632d4c99bd681cf3'
 
         // 正式服 appid wx2dbf7017998b37cb   测试服： wx632d4c99bd681cf3
-        console.log('bl 没有bl 吗？', bl, bl && !localStorage.getItem('name'))
+        // console.log('bl 没有bl 吗？', bl, bl && !localStorage.getItem('name'))
         if (bl && !localStorage.getItem('name')) window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid +  '&redirect_uri=' + encodeURI(location.href.split('#')[0]) +'&response_type=code&scope=snsapi_userinfo#wechart_redirect'
         if (!bl || localStorage.getItem('name')) {
           wx.config(getSDK.data.wechat_config)
@@ -139,7 +139,7 @@ export default class Share {
     const QRblock = /code=(.+?)&/
     localStorage.setItem('test', window.location.href)
     const code = parseQuery(window.location.href).code
-    console.log(code)
+    // console.log(code)
     code && localStorage.setItem('code', code)
 
     if (code) { return code } else {
@@ -150,21 +150,27 @@ export default class Share {
   weiXinGetName (url) {
     return new Promise((resolve) => {
       if (!localStorage.getItem('name') || !localStorage.getItem('openid')) {
-        console.log(code + 'cd' + localStorage.getItem('code'))
+        // console.log(code + 'cd' + localStorage.getItem('code'))
         const code = localStorage.getItem('code').replace(/code=/, '').replace(/\&.+/, '')
-        console.log(code)
-        console.log('axios 错误吗')
-        axios.get(url + '/web/v1/wechat/user', { params: { code } }).then((res) => {
+        // console.log(code)
+        // console.log('axios 错误吗')
+        axios.get(url + '/web/v1/wechat/user', { params: { code } }).then((res) => { // weixinUserData type:   root.d.ts
           const data = res.data
-          console.log(data)
+          // console.log(data)
           if (data.hasOwnProperty('data')) {
-            console.log(data)
-            console.log('设置session')
+            // console.log(data)
+            // console.log('设置session')
             localStorage.setItem('avatar', data.data.headimgurl)
             localStorage.setItem('name', data.data.nickname)
             localStorage.setItem('openid', data.data.openid)
+            localStorage.setItem('sex', data.data.sex)
+
+            localStorage.setItem('city', data.data.city)
+            localStorage.setItem('country', data.data.country)
+            localStorage.setItem('province', data.data.province)
+
             resolve()
-            console.log(data.data.nickname)
+            // console.log(data.data.nickname)
           }
         })
       } else {

@@ -7,7 +7,7 @@
   position: relative;
   .common-template {
     box-shadow: 0px px2html(2px) px2html(16px) rgba(230, 230, 230, 0.5);
-    border-radius: 0 0 px2html(30px) px2html(30px);
+    border-radius: 0 0 px2html(20px) px2html(20px);
     background: #fff;
     margin-bottom: px2html(9px);
     >.banner-pic {
@@ -82,12 +82,14 @@
 .introduce-template {
   margin-top: px2html(20px);
   background: #FFFFFF;
-  border-radius: px2html(10px);
+  border-radius: px2html(5px);
   width: px2html(343px);
   box-sizing: border-box;
-  padding: px2html(34px) px2html(32px) px2html(32px) px2html(40px);
+  padding: px2html(25px) px2html(20px) px2html(30px) px2html(20px);
   box-shadow: 0px px2html(2px) px2html(16px) rgba(230, 230, 230, 0.5);
   .title {
+    right: px2html(-12px);
+    font-weight: 600;
     font-size: px2html(20px);
     line-height: px2html(28px);
     color: #2EA1FF;
@@ -105,7 +107,7 @@
     border-radius: 50%;
   }
   .content-template {
-    margin-top: px2html(30px);
+    margin-top: px2html(20px);
     font-size: px2html(12px);
     line-height: px2html(23px);
   }
@@ -130,7 +132,15 @@
     background: #E6E6E6;
   }
 }
+.professional-parameters-title {
+  color: #999999;
+  font-size: px2html(12px);
+  font-weight: 600;
+  margin-top: px2html(20px);
+}
+.professional-parameters-grid {
 
+}
 .professional-parameters {
   color: #999999;
   width: px2html(279px);
@@ -170,4 +180,13 @@
     border-radius: px2html(21px);
     background: #FF5454;
   }
+}
+
+// 添加在理论背景下面的margin
+.add-margin {
+  margin-bottom: px2html(80px);
+}
+
+.fix-btm {
+  margin-bottom: px2html(20px);
 }

@@ -51,19 +51,20 @@
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    margin-top: px2html(10px);
+    margin-top: px2html(20px);
     .head-pic {
       width: px2html(44px);
       border-radius: 50%;
-      margin-left: px2html(16px);
+      margin-left: px2html(12px);
     }
     .content {
       box-shadow: 0px px2html(2px) px2html(16px) rgba(230, 230, 230, 0.5);
-      margin-top: px2html(20px);
+      // margin-top: px2html(20px);
       margin-left: px2html(12px);
-      width: px2html(231px);
+      max-width: px2html(231px);
+      width: max-content;
       background: #fff;
-      border-radius: px2html(10px);
+      border-radius: px2html(5px);
       overflow: hidden;
       position: relative;
       text-align: left;
@@ -73,14 +74,16 @@
         color: #999999;
         font-size: px2html(12px);
         line-height: px2html(17px);
-        margin-top: px2html(15px);
+        margin-top: px2html(8px);
       }
       .title {
-        max-width: 90%;
-        font-size: px2html(18px);
-        line-height: px2html(25px);
+        width: 100%;
+        box-sizing: border-box;
+        padding-right: px2html(20px);
+        font-size: px2html(14px);
+        line-height: px2html(20px);
         color: #000000;
-        margin-bottom: px2html(15px);
+        margin-bottom: px2html(10px);
         margin-top: px2html(3px);
       }
       .dirvide {
@@ -93,8 +96,11 @@
         font-size: px2html(14px);
         line-height: px2html(20px);
         color: #000000;
+        width: 100%;
         .options {
-          padding: px2html(20px) 0px;
+          width: 100%;
+          padding: px2html(15px) 0px;
+          padding-right: px2html(20px);
           border-bottom: px2html(1px) solid #E6E6E6;
           display: flex;
           align-items: flex-start;
@@ -131,18 +137,20 @@
       width: px2html(44px);
       border-radius: 50%;
       margin-left: px2html(12px);
-      margin-right: px2html(16px);
+      margin-right: px2html(12px);
     }
     .content {
       box-shadow: 0px px2html(2px) px2html(16px) rgba(230, 230, 230, 0.5);
-      margin-top: px2html(18px);
+      // margin-top: px2html(18px);
       max-width: px2html(231px);
       display: flex;
       justify-content: flex-end;
+      border-radius: px2html(5px);
       font-size: px2html(14px);
+      background-color: #fff;
       .text {
         color: #000000;
-        border-radius: px2html(10px) 0px 0px px2html(10px) ;
+        border-radius: px2html(5px) 0px 0px px2html(5px) ;
         background-color: #fff;
         max-width: content-box;
         box-sizing: border-box;

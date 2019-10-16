@@ -31,32 +31,32 @@
                 <div class="content" v-html="section.sectionOne.levelOneTitle"></div>
             </div>
             <div class="content-template" style="padding: unset;display: flex;justify-content: center;align-items: center;flex-direction: column">
-                <p class="chart-title" v-html="section.sectionOne.chartPicTitle"></p>
+                <p class="chart-title" v-if="section.sectionOne.chartPicTitle" v-html="section.sectionOne.chartPicTitle"></p>
                 <div id="chart" class="chart"></div>
-                <p class="chart-explan" v-html="section.sectionOne.chartExplan"></p>
-                <p class="levelTwo-title" v-html="section.sectionOne.levelTwoTitle"></p>
-                <p class="levelTwo-text" v-html="section.sectionOne.text"></p>
-            </div>
-            <div class="content-template" v-for="(li, index) in section.sectionOneRelease" :key="index">
-                <div class="levelTitle" v-html="li.levelTwoTitle"></div>
-                <div class="levelText" v-html="li.text">
+                <p class="chart-explan" v-if="section.sectionOne.chartExplan" v-html="section.sectionOne.chartExplan"></p>
+                <p class="levelTwo-title" v-if="section.sectionOne.levelTwoTitle" v-html="section.sectionOne.levelTwoTitle"></p>
+                <p class="levelTwo-text fix-bootom-10" v-if="section.sectionOne.text" v-html="parseHTMLICON(section.sectionOne.text)"></p>
+                <div class="fix-rest-section" v-for="(li, index) in section.sectionOneRelease">
+                    <div class="levelTwo-title" v-if="li.levelTwoTitle" v-html="li.levelTwoTitle"></div> <!-- -->
+                    <div class="levelTwo-text fix-section-one-bottom-10" v-if="li.text" v-html="parseHTMLICON(li.text)"> <!--   -->
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="section sectionTwo">
             <div class="title">
-                <div class="num">02</div>
+                <div class="num" @click="getIcon(1)">02</div>
                 <div class="content" v-html="section.sectionTwo.data.levelOneTitle"></div>
             </div>
             <div class="content-template">
-                <div class="levelTitle" v-html="section.sectionTwo.data.levelTwoTitle"></div>
-                <div class="levelText" v-html="section.sectionTwo.data.text">
+                <div class="levelTitle" v-if="section.sectionTwo.data.levelTwoTitle" v-html="section.sectionTwo.data.levelTwoTitle"></div>
+                <div class="levelText fix-bootom-10" v-html="parseHTMLICON(section.sectionTwo.data.text)">
                 </div>
-            </div>
-            <div class="content-template" v-for="(li, index) in section.sectionTwo.release" :key="index">
-                <div class="levelTitle" v-html="li.levelTwoTitle"></div>
-                <div class="levelText" v-html="li.text">
+                <div class="fix-rest-section" v-for="(li, index) in section.sectionTwo.release" :key="index">
+                    <div class="levelTitle" v-if="li.levelTwoTitle" v-html="li.levelTwoTitle"></div>
+                    <div class="levelText fix-bootom-10" v-if="li.text" v-html="parseHTMLICON(li.text)">
+                    </div>
                 </div>
             </div>
         </div>
@@ -68,12 +68,12 @@
             </div>
             <div class="content-template">
                 <div class="levelTitle" v-if="section.sectionThree.data.levelTwoTitle" v-html="section.sectionThree.data.levelTwoTitle"></div>
-                <div class="levelText" v-html="section.sectionThree.data.text">
+                <div class="levelText fix-bootom-10" v-html="parseHTMLICON(section.sectionThree.data.text)">
                 </div>
-            </div>
-            <div class="content-template" v-for="(li, index) in section.sectionThree.release" :key="index">
-                <div class="levelTitle" v-if="li.levelTwoTitle" v-html="li.levelTwoTitle"></div>
-                <div class="levelText" v-html="li.text">
+                <div class="fix-rest-section" v-for="(li, index) in section.sectionThree.release" :key="index">
+                    <div class="levelTitle" v-if="li.levelTwoTitle" v-html="li.levelTwoTitle"></div>
+                    <div class="levelText" v-if="li.text" v-html="parseHTMLICON(li.text)">
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,6 +88,17 @@ const echarts = require('echarts')
     components: {}
 })
 export default class ResultPage extends Vue {
+    private iconList: any[] = [
+        require(`../assets/resultIconList/1@3x.png`),
+        require(`../assets/resultIconList/2@3x.png`),
+        require(`../assets/resultIconList/3@3x.png`),
+        require(`../assets/resultIconList/4@3x.png`),
+        require(`../assets/resultIconList/5@3x.png`),
+        require(`../assets/resultIconList/6@3x.png`),
+        require(`../assets/resultIconList/7@3x.png`),
+        require(`../assets/resultIconList/8@3x.png`),
+        require(`../assets/resultIconList/9@3x.png`)
+    ]
     private showNotice: boolean = false
     private headPic: string | null = localStorage.getItem('avatar') // 用户头像
     private title: string = document.title
@@ -101,7 +112,9 @@ export default class ResultPage extends Vue {
             levelTwoTitle: '',
             text: ''
         },
-        sectionOneRelease: [],
+        sectionOneRelease: [
+            {}, {}
+        ],
         sectionTwo: {
             data: {
                 levelOneTitle: ''
@@ -161,8 +174,10 @@ export default class ResultPage extends Vue {
         return data
     }
 
+    // 结果页表格处理
     private parseCharts() {
         const chartsData = this.prrseDimensionToChartsData(this.dimensions)
+        // const chartsData = [{ name: '测试', value: 5, axis_max: 10 }, { name: '测试', value: 5, axis_max: 10 }, { name: '测试', value: 5, axis_max: 10 }, { name: '测试', value: 5, axis_max: 10 }]
 
         const myChart = echarts.init(document.getElementById('chart'))
 
@@ -184,6 +199,22 @@ export default class ResultPage extends Vue {
         myChart.setOption({
             // tooltip: {},
             radar: {
+                splitNumber: 5,
+                splitArea: {
+                    areaStyle: {
+                        color: ['#fff', '#fff', '#fff', '#fff']
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: 'rgba(204,204,204,0.4)'
+                    }
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'rgba(204,204,204,0.4)'
+                    }
+                },
                 // shape: 'circle',
                 name: {
                     textStyle: {
@@ -196,19 +227,43 @@ export default class ResultPage extends Vue {
                 name: '预算 vs 开销（Budget vs spending）',
                 type: 'radar',
                 color: '#2196F3',
-                areaStyle: {
-                    color: {
-                        type: 'radial',
-                        x: documentChart.clientWidth / 2,
-                        y: documentChart.clientHeight / 2,
-                        r: 100,
-                        colorStops: [{
-                            offset: 0, color: 'rgba(33,150,243,0.3)' // 0% 处的颜色
-                        }, {
-                            offset: 1, color: '#2196F3' // 100% 处的颜色
-                        }],
-                        global: true // 缺省为 false
+                itemStyle: {//节点数据显示
+                    normal: {
+                        label: {
+                            color: '#2EA1FF',
+                            show: true,
+                            fontWeight: '500',
+                            position: 'inside',
+                            formatter: (params: any) => {
+                                let change = [
+                                    params.value + '\n\n',
+                                    params.value + '     ',
+                                    '\n\n' + params.value,
+                                    '     ' + params.value
+                                ]
+                                return change[params.dimensionIndex]
+                                console.log(params.dimensionIndex)
+                            }
+                        }
                     }
+                },
+                lineStyle: {
+                    width: 1
+                },
+                areaStyle: {
+                    color: '#2196F3'
+                    // color: {
+                    //     type: 'radial',
+                    //     x: documentChart.clientWidth / 2,
+                    //     y: documentChart.clientHeight / 2,
+                    //     r: 100,
+                    //     colorStops: [{
+                    //         offset: 0, color: 'rgba(33,150,243,0.3)' // 0% 处的颜色
+                    //     }, {
+                    //         offset: 1, color: '#2196F3' // 100% 处的颜色
+                    //     }],
+                    //     global: true // 缺省为 false
+                    // }
                 },
                 data : [
                     {
@@ -220,7 +275,24 @@ export default class ResultPage extends Vue {
         })
     }
 
+    private getIcon(name: number): any {
+        return this.iconList[name]
+        // console.log(icon)
+    }
+
+    // 处理Html数据里面的icon ${1}
+    private parseHTMLICON(data: string) {
+        if (data) {
+            return data.replace(/\$\{(.*?)\}/g, (a: string, b: any): string => {
+                return `<img src=${this.getIcon(b)} class="result-icon" />`
+            })
+        }
+    }
+
     private async created() {
+        setTimeout(() => {
+            // this.parseCharts()
+        }, 1000)
         window.scrollTo(0, 0)
         if (!this.$root.token) {
             await this.$root.login()
@@ -239,5 +311,22 @@ export default class ResultPage extends Vue {
     #chart {
         width: 90%;
         height: px2html(400px);
+    }
+</style>
+<style lang="scss">
+    .result-icon {
+        // transform: translateY(2px);
+        height: px2html(9px);
+        margin-right: px2html(7px);
+    }
+    .fix-bootom-10 {
+        div {
+            margin-top: px2html(10px);
+        }
+    }
+    .fix-section-one-bottom-10 {
+        div {
+            margin-bottom: px2html(10px);
+        }
     }
 </style>

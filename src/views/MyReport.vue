@@ -16,7 +16,7 @@
             <img class="pic" src="../assets/myreport_null@3x.png"/>
         </div>
         <div class="null-bar" v-if="nullList === '1'">
-            <div class="title">{{goodsDesc.title}}阿松大</div>
+            <div class="title">{{goodsDesc.title}}</div>
             <div class="price-div">
                 <span class="price">￥{{goodsDesc.price}}</span>
                 <div class="origin-price">￥{{goodsDesc.price_origin}}</div>
@@ -83,6 +83,7 @@ export default class MyReport extends Vue {
         this.$router.push('/rp')
     }
     private async mounted() {
+        window.scrollTo(0, 0)
         if (!this.$root.token) {
             await this.$root.login()
         }

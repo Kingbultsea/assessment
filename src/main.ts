@@ -93,13 +93,13 @@ new Vue({
       }
 
       const data = {
-        nickname: '蔡徐坤',
-        avatarurl: 'https://wx2.sinaimg.cn/mw690/006Zdy2vgy1frycovbf8cj304z0553zu.jpg',
-        sex: 0,
-        country: '中国',
-        province: '湖南',
-        city: '湖南市'
-      }
+        nickname: localStorage.getItem('name') || '',
+        avatarurl: localStorage.getItem('avatar') || '',
+        sex: parseInt(localStorage.getItem('sex') as string) || 0,
+        country: localStorage.getItem('country') || '',
+        province: localStorage.getItem('province') || '',
+        city: localStorage.getItem('city') || ''
+      } as apiUSERSDATA
 
       return this.$axios.post('/api/users/login', data, { headers }).then((res: any) => {
         if (res.data.status === 0) {
@@ -167,7 +167,7 @@ new Vue({
     }
   },
   created() {
-    this.id = this.parseQuery(window.location.href).id
+    this.id = this.parseQuery(window.location.href).id || 107
     this.shareM('小睡眠', '小睡眠', 'https://wx2.sinaimg.cn/mw690/006Zdy2vgy1frycovbf8cj304z0553zu.jpg')
   },
   router,

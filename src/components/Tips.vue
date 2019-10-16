@@ -25,6 +25,7 @@ export default class Tips extends Vue {
     color: #FFFFFF;
     font-size: px2html(14px);
     position: fixed;
+    z-index: 9999;
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
