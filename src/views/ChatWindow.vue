@@ -10,11 +10,11 @@
         <div class="mg-bottom"></div>
 
         <div class="chat-template">
-            <transition-group name="list-complete">
+            <!-- <transition-group name="list-complete"> -->
                 <template v-for="(li, index) in robotAction">
-                    <div class="request list-complete-item" v-if="li.from === 'robot'" :key="index">
-                        <img class="head-pic animated fadeIn" src="../assets/cosleep.png"/>
-                        <div class="content animated fadeIn">
+                    <div class="request list-complete-item animated fadeInUp" v-if="li.from === 'robot'" :key="index">
+                        <img class="head-pic" src="../assets/cosleep.png"/>
+                        <div class="content">
                             <p class="type">单选题</p>
                             <p class="title">{{li.title}}</p>
                             <div class="dirvide" v-show="li.open"></div>
@@ -32,10 +32,10 @@
                             <div class="text">{{li.answer}}</div>
                             <div class="replay" @click="editActions(index - 1)"><img src="../assets/response_replay.png"/></div>
                         </div>
-                        <img class="head-pic animated fadeIn" :src="avatar"/>
+                        <img class="head-pic" :src="avatar"/>
                     </div>
                 </template>
-            </transition-group>
+            <!-- </transition-group> -->
         </div>
 
         <div class="bottom-bar" v-show="showSubmit">
@@ -106,6 +106,9 @@ export default class ChatWindow extends Vue {
         this.actions(usersAction)
 
         li.open = false // 关闭状态
+        this.$nextTick(() => {
+
+        })
         li.selectIndex = optionId
 
         // 下一题 提升到这里 是bar的逻辑问题

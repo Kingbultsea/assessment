@@ -195,9 +195,9 @@ export default class Share {
     getappid.open('GET', url + '/web/v1/wechat/config?debug=1&url=' + encodeURIComponent(location.href.split('#')[0]))
     getappid.onreadystatechange = function () {
       if (getappid.readyState === 4 && getappid.status === 200) {
-        console.log('sdk ok')
+        // console.log('sdk ok')
         let getSDK = JSON.parse(getappid.response)
-        console.log(getSDK.data.wechat_config)
+        // console.log(getSDK.data.wechat_config)
         getSDK.data.wechat_config.debug = false
 
         wx.config(getSDK.data.wechat_config)

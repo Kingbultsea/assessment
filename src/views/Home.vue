@@ -12,6 +12,7 @@
         <div class="dirvide"></div> <!-- 分割线 -->
         <div class="count-template">
           <span>· {{homeData.questionCount}}道精选题</span>
+          <span>· 7页分析报告</span>
           <span>· {{homeData.peopleTest}}人测过</span>
         </div>
       </div>
@@ -20,7 +21,7 @@
 
     <div class="introduce-template">
       <div class="title">内容简介</div>
-      <div class="content-template" v-html="homeData.contentValidity"></div>
+      <div class="content-template fix-bootom-10" v-html="homeData.contentValidity"></div>
     </div>
     <div class="introduce-template">
       <div class="title">你将获得</div>
@@ -29,7 +30,7 @@
     </div>
     <div class="introduce-template">
       <div class="title">适合谁测</div>
-      <div class="content-template tag-content" v-html="homeData.suitableForSpeculation"></div>
+      <div class="content-template tag-content2" v-html="homeData.suitableForSpeculation"></div>
     </div>
     <div class="introduce-template add-margin">
       <div class="title">理论背景</div>
@@ -300,15 +301,39 @@ export default class Home extends Vue {
   .tag-content div::before {
     position: absolute;
     left: px2html(-10px);
-    top: px2html(8px);
+    top: px2html(7px);
     content: '';
     transform: translateX(-100%);
     width: px2html(12px);
     height: px2html(9px);
-    background: url("../assets/tag_icon.png");
+    background: url("../assets/resultIconList/1@3x.png");
     background-repeat: no-repeat;
-    background-size: 100% auto;
+    background-size: auto 100%;
   }
+
+  .tag-content2 div {
+    position: relative;
+    width: px2html(274px);
+    margin-left: px2html(20px);
+    margin-bottom: px2html(10px);
+  }
+  .tag-content2 div:last-of-type {
+    margin-bottom: px2html(0px);
+  }
+  .tag-content2 div::before {
+    position: absolute;
+    left: px2html(-10px);
+    top: px2html(6px);
+    content: '';
+    transform: translateX(-100%);
+    width: px2html(12px);
+    height: px2html(9px);
+    background: url("../assets/resultIconList/9@3x.png");
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+  }
+
+
   .color-bg-content {
     div div {
       margin-bottom: px2html(14px);

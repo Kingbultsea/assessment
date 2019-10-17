@@ -8,13 +8,42 @@ import animated from 'animate.css'
 import Share from './unit/shareAndGetName.js'
 
 require('@/unit/setSize')
+const md5 = require('blueimp-md5')
 
-const URL = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'https://wenjuan.common.heartide.com/' : 'https://debug.wenjuan.common.heartide.com/'
+const URL = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'https://wenjuan.common.heartide.com/' : 'https://debug.wenjuan.common.heartide.com/' // http://heartide.free.idcfengye.com https://debug.wenjuan.common.heartide.com/
 const URLSHARE = 'https://api.psy-1.com' // process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'https://api.psy-1.com' : 'https://api.debug.psy-1.com'
 
+// 版本号
+const VERSION = 1
 
 const myAxios = Axios.create({
-  baseURL: URL
+  baseURL: URL,
+  headers: {
+    version: VERSION
+  }
+})
+
+// const QUERY = wjh.parseQuery(document.location.href) as any
+
+const AXIOSFULLFILLFUNCTION = (config: any) => {
+  const data = config.data
+  let params = '' as string
+  const key = 'HeartideAssessment' as string
+  for (const i in data) {
+    if (data[i] !== '') {
+      params += i + '=' + data[i] + '&'
+    }
+  }
+  params = params.replace(/\&$/, '')
+  // console.log(params)
+  const str = `version=${VERSION}&${key}&${params}&${key}`
+  // console.log(md5(str).toUpperCase(), str)
+  config.sign = md5(str).toUpperCase()
+  return config
+}
+
+myAxios.interceptors.request.use(AXIOSFULLFILLFUNCTION, (error) => {
+  return Promise.reject(error)
 })
 
 interface webchatpubpay {
@@ -112,8 +141,13 @@ new Vue({
             headers: {
               channel: this.channel,
               package: this.platForm,
-              token: res.data.data.token
+              token: res.data.data.token,
+              version: VERSION
             }
+          })
+
+          Vue.prototype.$axios.interceptors.request.use(AXIOSFULLFILLFUNCTION, (error: any) => {
+            return Promise.reject(error)
           })
 
           return res.data.data.token

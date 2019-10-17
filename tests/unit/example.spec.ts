@@ -1,12 +1,9 @@
-/* import { shallowMount } from '@vue/test-utils'
-import HelloWorld from '@/components/HelloWorld.vue'
+import { shallowMount, mount } from '@vue/test-utils'
+import MyReport from '@/views/MyReport.vue'
 
 describe('HelloWorld.vue', () => {
-  it('renders props.msg when passed', () => {
-    const msg = 'new message'
-    const wrapper = shallowMount(HelloWorld, {
-      propsData: { msg }
+    test('is a Vue instance', () => {
+        const wrapper = mount(MyReport)
+        expect(wrapper.isVueInstance()).toBeTruthy()
     })
-    expect(wrapper.text()).toMatch(msg)
-  })
-}) */
+})

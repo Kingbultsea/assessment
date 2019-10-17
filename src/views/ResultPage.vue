@@ -10,7 +10,7 @@
 
         <img class="header-pic" :src="rpData.banner" />
         <div class="introduce-template">
-            <p class="name">{{title}}</p>
+            <p class="name">在职场中，你可能成为一位优秀的：</p><!-- {{title}} -->
             <p class="result-name">{{section.sectionOne.resultTitle}}</p>
             <div class="self-time">
                 <div class="users-features">
@@ -222,22 +222,28 @@ export default class ResultPage extends Vue {
                         color: '#333333'
                     }
                 },
-                indicator
+                indicator,
+                radius: 100
             },
             series: [{
                 name: '预算 vs 开销（Budget vs spending）',
                 type: 'radar',
                 color: '#2196F3',
+                smooth: true,
+                radius: '0%',
+                symbol: 'pin',
+                symbolSize: [0, 1],
                 itemStyle: {//节点数据显示
                     normal: {
                         label: {
+                            borderWidth: '0',
                             color: '#2EA1FF',
                             show: true,
                             fontWeight: '500',
                             position: 'inside',
                             formatter: (params: any) => {
                                 let change = [
-                                    params.value + '\n\n',
+                                    params.value + '\n',
                                     params.value + '     ',
                                     '\n\n' + params.value,
                                     '     ' + params.value
@@ -291,6 +297,7 @@ export default class ResultPage extends Vue {
     }
 
     private async created() {
+        window.document.title = sessionStorage.getItem('title') || '测评报告'
         this.$root.loading = true
         setTimeout(() => {
             // this.parseCharts()

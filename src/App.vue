@@ -23,10 +23,10 @@
 </script>
 
 <style lang="scss">
-  * {
-    padding: 0;
-    margin: 0;
-  }
+* {
+  padding: 0;
+  margin: 0;
+}
 #app {
   font-family: "思源黑体 CN Normal";
   -webkit-font-smoothing: antialiased;
