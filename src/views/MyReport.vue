@@ -57,6 +57,7 @@ export default class MyReport extends Vue {
                     this.nullList = '1'
                 }
                 // this.goodsDesc = res.data.data.default
+                this.$root.loading = false
             }
         })
     }
@@ -83,6 +84,7 @@ export default class MyReport extends Vue {
         this.$router.push('/rp')
     }
     private async mounted() {
+        this.$root.loading = true
         window.scrollTo(0, 0)
         if (!this.$root.token) {
             await this.$root.login()

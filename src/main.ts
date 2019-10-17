@@ -45,6 +45,7 @@ Vue.use(animated)
 new Vue({
   data() {
     return {
+      loading: false as boolean,
       busyPay: false,
       haveUnDone: false as boolean,
       URLSHARE: URLSHARE,

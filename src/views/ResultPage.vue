@@ -161,6 +161,7 @@ export default class ResultPage extends Vue {
                 }
                 this.rpData = res.data.data
                 this.parseCharts()
+                this.$root.loading = false
             }
         })
     }
@@ -290,6 +291,7 @@ export default class ResultPage extends Vue {
     }
 
     private async created() {
+        this.$root.loading = true
         setTimeout(() => {
             // this.parseCharts()
         }, 1000)

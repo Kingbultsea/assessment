@@ -14,7 +14,7 @@
                 <template v-for="(li, index) in robotAction">
                     <div class="request list-complete-item" v-if="li.from === 'robot'" :key="index">
                         <img class="head-pic animated fadeIn" src="../assets/cosleep.png"/>
-                        <div class="content">
+                        <div class="content animated fadeIn">
                             <p class="type">单选题</p>
                             <p class="title">{{li.title}}</p>
                             <div class="dirvide" v-show="li.open"></div>
@@ -102,6 +102,7 @@ export default class ChatWindow extends Vue {
             selected: optionId,
             qid: titleId
         } as usersAction
+
         this.actions(usersAction)
 
         li.open = false // 关闭状态
@@ -122,7 +123,7 @@ export default class ChatWindow extends Vue {
             this.submitData('save') // 保存目前的数据
             const parse = this.parseToListAction(this.list[this.index]) // 转换数据
             this.actions(parse)
-        }, 1000)
+        }, 0)
     }
 
     // 答题选择 给什么push 什么 动画通过 那个啥修改
@@ -165,9 +166,7 @@ export default class ChatWindow extends Vue {
             this.submitData('save') // eidt 完毕后 保存目前的数据
         } else {
             // 调试
-            setTimeout(() => {
-                this.selectOptions(titleId, optionId, title, li)
-            }, 1000)
+            this.selectOptions(titleId, optionId, title, li)
         }
     }
 
@@ -176,7 +175,7 @@ export default class ChatWindow extends Vue {
         try {
             this.$axios.get('/api/users/assessments/undone', { params: { id: this.$root.id } }).then((res: any) => {
                 if (res.data.status === 0) {
-
+                    this.$root.loading = false
                     const undoneData = typeof res.data.data.undone_data === 'string' ? JSON.parse(res.data.data.undone_data) : res.data.data.undone_data
 
                     // 为0的话 则 做初始化处理
@@ -266,6 +265,7 @@ export default class ChatWindow extends Vue {
     }
 
     private async created() {
+        this.$root.loading = true
         if (!this.$root.token) {
             await this.$root.login()
         }

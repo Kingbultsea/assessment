@@ -4,9 +4,23 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div> -->
+    <Loading v-if="this.$root.loading"/>
     <router-view/>
   </div>
 </template>
+
+<script lang="ts">
+  import Loading from './components/Loading.vue'
+  import {Component, Vue} from 'vue-property-decorator'
+  @Component({
+    components: {
+      Loading
+    }
+  })
+  export default class App extends Vue {
+
+  }
+</script>
 
 <style lang="scss">
   * {

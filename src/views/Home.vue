@@ -175,6 +175,7 @@ export default class Home extends Vue {
 
         document.title = this.homeData.name
         this.$root.bannerPic = this.homeData.bannerPic
+        this.$root.loading = false
       }
     })
   }
@@ -238,14 +239,16 @@ export default class Home extends Vue {
 
   // 我的报告按钮
   private toMyReport() {
-    if (this.$root.haveUnDone) {
-      this.$router.push('/cw')
-    } else {
-      this.$router.push('/mp')
-    }
+    // if (this.$root.haveUnDone) {
+    //   this.$router.push('/cw')
+    // } else {
+    //   this.$router.push('/mp')
+    // }
+    this.$router.push('/mp')
   }
 
   private async created() {
+    this.$root.loading = true
     window.scrollTo(0, 0)
     if (!this.$root.token) {
       await this.$root.login()
