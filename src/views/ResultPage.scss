@@ -148,6 +148,32 @@
       text-align: justify;
       margin-bottom: px2html(30px);
     }
+
+
+    text-align: left;
+    .levelTitle {
+      font-size: px2html(18px);
+      line-height: px2html(25px);
+      color: #000000;
+      position: relative;
+      z-index: 10;
+      width: max-content;
+      margin-bottom: px2html(30px);
+    }
+    .levelTitle::after {
+      padding-right: px2html(12px);
+      z-index: -1;
+      content: '';
+      width: 100%;
+      height: px2html(14px);
+      background: rgba(46, 161, 255, 0.9);
+      position: absolute;
+      left: px2html(-5px);
+      top: px2html(13px);
+      border-radius: px2html(7px);
+    }
+
+
   }
 }
 .section:last-of-type {

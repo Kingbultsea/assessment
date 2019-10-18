@@ -15,7 +15,8 @@
                     <div class="request list-complete-item animated fadeInUp" v-if="li.from === 'robot'" :key="index">
                         <img class="head-pic" src="../assets/cosleep.png"/>
                         <div class="content">
-                            <p class="type">单选题</p>
+                            <p class="type" v-if="index !== 0">单选题</p>
+                            <p class="type" v-else></p>
                             <p class="title">{{li.title}}</p>
                             <div class="dirvide" v-show="li.open"></div>
                             <div class="choices">
@@ -122,11 +123,11 @@ export default class ChatWindow extends Vue {
         }
 
         // 下一题的逻辑
-        setTimeout(() => {
-            this.submitData('save') // 保存目前的数据
-            const parse = this.parseToListAction(this.list[this.index]) // 转换数据
-            this.actions(parse)
-        }, 0)
+        // setTimeout(() => {
+        this.submitData('save') // 保存目前的数据
+        const parse = this.parseToListAction(this.list[this.index]) // 转换数据
+        this.actions(parse)
+        // }, 0)
     }
 
     // 答题选择 给什么push 什么 动画通过 那个啥修改

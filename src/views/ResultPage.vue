@@ -34,10 +34,10 @@
                 <p class="chart-title" v-if="section.sectionOne.chartPicTitle" v-html="section.sectionOne.chartPicTitle"></p>
                 <div id="chart" class="chart"></div>
                 <p class="chart-explan" v-if="section.sectionOne.chartExplan" v-html="section.sectionOne.chartExplan"></p>
-                <p class="levelTwo-title" v-if="section.sectionOne.levelTwoTitle" v-html="section.sectionOne.levelTwoTitle"></p>
+                <p class="levelTitle fix-bottom-to-20" v-if="section.sectionOne.levelTwoTitle" v-html="section.sectionOne.levelTwoTitle"></p> <!-- v-if="section.sectionOne.levelTwoTitle" v-html="section.sectionOne.levelTwoTitle" -->
                 <p class="levelTwo-text fix-bootom-10" v-if="section.sectionOne.text" v-html="parseHTMLICON(section.sectionOne.text)"></p>
                 <div class="fix-rest-section" v-for="(li, index) in section.sectionOneRelease">
-                    <div class="levelTwo-title" v-if="li.levelTwoTitle" v-html="li.levelTwoTitle"></div> <!-- -->
+                    <div class="levelTitle" v-if="li.levelTwoTitle" v-html="li.levelTwoTitle"></div> <!-- -->
                     <div class="levelTwo-text fix-section-one-bottom-10" v-if="li.text" v-html="parseHTMLICON(li.text)"> <!--   -->
                     </div>
                 </div>
@@ -283,7 +283,7 @@ export default class ResultPage extends Vue {
     }
 
     private getIcon(name: number): any {
-        return this.iconList[name]
+        return this.iconList[name - 1]
         // console.log(icon)
     }
 
@@ -328,8 +328,17 @@ export default class ResultPage extends Vue {
         height: px2html(9px);
         margin-right: px2html(7px);
     }
+    .fix-bottom-to-20 {
+        align-self: end;
+        position: relative;
+        right: px2html(-30px);
+        margin-bottom: px2html(20px) !important;
+    }
     .fix-bootom-10 {
         div {
+            margin-top: px2html(10px);
+        }
+        >br {
             margin-top: px2html(10px);
         }
     }
