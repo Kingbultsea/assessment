@@ -11,7 +11,7 @@ import wjhJS from './unit/wjhJS';
 require('@/unit/setSize')
 const md5 = require('blueimp-md5')
 
-const URL = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'http://wenjuan.common.heartide.com/' : 'https://debug.wenjuan.common.heartide.com/' // http://heartide.free.idcfengye.com https://debug.wenjuan.common.heartide.com/
+const URL = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'https://wenjuan.common.heartide.com/' : 'https://debug.wenjuan.common.heartide.com/' // http://heartide.free.idcfengye.com https://debug.wenjuan.common.heartide.com/
 const URLSHARE = 'https://api.psy-1.com' // process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'https://api.psy-1.com' : 'https://api.debug.psy-1.com'
 
 // 版本号
