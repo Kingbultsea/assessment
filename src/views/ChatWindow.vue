@@ -95,8 +95,23 @@ export default class ChatWindow extends Vue {
         return Object.assign(action, rawData) as listAction
     }
 
+    // 选择繁忙状态
+    private selectBusy: boolean = false
+
+    private _selectOptions(titleId: number, optionId: number, title: string, li: listAction) {
+        if (this.selectBusy) {
+            return
+        }
+        this.selectBusy = true
+        li.selectIndex = optionId
+
+        setTimeout(() => {
+            this.selectOptions(titleId, optionId, title, li, false)
+        }, 300)
+    }
+
     // 用户操作 用户选择opetions的时候 传入id 所选的id 该title
-    private selectOptions(titleId: number, optionId: number, title: string, li: listAction) {
+    private selectOptions(titleId: number, optionId: number, title: string, li: listAction, selectIndexBoolean = true as boolean) {
         const usersAction = {
             from: 'user',
             answer: title,
@@ -106,11 +121,13 @@ export default class ChatWindow extends Vue {
 
         this.actions(usersAction)
 
-        li.open = false // 关闭状态
-        this.$nextTick(() => {
+        if (selectIndexBoolean) {
+            li.selectIndex = optionId
+        } else {
+            this.selectBusy = false
+        }
 
-        })
-        li.selectIndex = optionId
+        li.open = false // 关闭状态
 
         // 下一题 提升到这里 是bar的逻辑问题
         this.index += 1
@@ -170,7 +187,7 @@ export default class ChatWindow extends Vue {
             this.submitData('save') // eidt 完毕后 保存目前的数据
         } else {
             // 调试
-            this.selectOptions(titleId, optionId, title, li)
+            this._selectOptions(titleId, optionId, title, li)
         }
     }
 
@@ -209,7 +226,7 @@ export default class ChatWindow extends Vue {
                         }
                     }) as usersAction[]
 
-                    console.log(userAction, '查看action', listAction, 'list action')
+                    // console.log(userAction, '查看action', listAction, 'list action')
 
                     this.index = userAction.length // 无须 - 1
 

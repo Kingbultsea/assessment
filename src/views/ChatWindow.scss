@@ -107,16 +107,18 @@
           align-items: flex-start;
           justify-content: flex-start;
           .circle-template {
-            width: px2html(18px);
-            height: px2html(18px);
+            position: relative;
+            top: px2html(2px);
+            width: 18px;
+            height: 18px;
             box-sizing: border-box;
             border: px2html(1px) solid #999999;
             border-radius: 50%;
             margin-right: px2html(10px);
             @include flexCenter;
             .circle {
-              width: px2html(8px);
-              height: px2html(8px);
+              width: 8px;
+              height: 8px;
               background: #2EA1FF;
               border-radius: 50%;
             }

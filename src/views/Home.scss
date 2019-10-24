@@ -15,10 +15,10 @@
     }
     >.content {
       box-sizing: border-box;
-      padding: px2html(20px) px2html(32px) px2html(31px) px2html(32px);
+      padding: px2html(20px) px2html(32px) px2html(20px) px2html(32px);
       >.name {
         line-height: px2html(33px);
-        font-size: px2html(24px);
+        font-size: px2html(20px);
         font-weight: 600;
         margin-bottom: px2html(5px);
       }
@@ -85,8 +85,12 @@
   border-radius: px2html(5px);
   width: px2html(343px);
   box-sizing: border-box;
-  padding: px2html(25px) px2html(20px) px2html(30px) px2html(20px);
+  padding: px2html(30px) px2html(20px) px2html(30px) px2html(20px);
   box-shadow: 0px px2html(2px) px2html(16px) rgba(230, 230, 230, 0.5);
+  .icon-pic { // 团队的图片
+    height: px2html(77px);
+    margin-top: px2html(20px);
+  }
   .title {
     right: px2html(-12px);
     font-weight: 600;
@@ -137,6 +141,7 @@
   font-size: px2html(12px);
   font-weight: 600;
   margin-top: px2html(20px);
+  text-align: center;
 }
 .professional-parameters-grid {
 

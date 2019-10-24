@@ -15,6 +15,7 @@ export default class Tips extends Vue {
 
 <style lang="scss" scoped>
 .tips {
+    border-radius: px2html(5px);
     width: px2html(140px);
     height: px2html(58px);
     background: rgba(0, 0, 0, 0.76);

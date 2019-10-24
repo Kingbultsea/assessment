@@ -12,5 +12,7 @@ interface homeData {
     professionalTheory: string, // 专业理论 （实际是： 理论背景）
     suitableForSpeculation: string, // 适合推测
     notice: string, // 测评须知 & 研发团队 （实际测评须知 这里有修改 修过成专业参数）
+    groups: string, // 团队
+    groupsPic: string, // 团队图片
     [key: string]: any // 解决对象的遍历 为 any
 }

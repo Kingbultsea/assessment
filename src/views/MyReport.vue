@@ -56,6 +56,10 @@ export default class MyReport extends Vue {
                 if (this.dataList.length === 0) {
                     this.nullList = '1'
                 }
+                // if (this.dataList.length === 1) {
+                //     this.viewReport(this.dataList[0].id)
+                //     return
+                // }
                 // this.goodsDesc = res.data.data.default
                 this.$root.loading = false
             }
@@ -103,6 +107,7 @@ export default class MyReport extends Vue {
 
 <style lang="scss" scoped>
 .my-report {
+    letter-spacing: initial !important;
     display: flex;
     // justify-content: center;
     align-items: center;
@@ -114,12 +119,12 @@ export default class MyReport extends Vue {
 }
     .template {
         margin-top: px2html(20px);
-        border-radius: px2html(10px);
+        border-radius: px2html(5px);
         box-sizing: border-box;
         background: #fff;
         width: px2html(343px);
         text-align: justify;
-        padding: px2html(20px) px2html(16px) px2html(16px) px2html(21px);
+        padding: px2html(20px) px2html(16px) px2html(16px) px2html(16px);
         position: relative;
         .title {
             font-weight: 600;
@@ -157,7 +162,7 @@ export default class MyReport extends Vue {
             border-radius: px2html(14px);
             background: #2EA1FF;
             line-height: px2html(20px);
-            right: px2html(16px);
+            right: px2html(10px);
             bottom: px2html(21px);
         }
     }

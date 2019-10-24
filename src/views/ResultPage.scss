@@ -17,7 +17,7 @@
   box-shadow: 0px px2html(2px) px2html(16px) rgba(230, 230, 230, 0.5);
   width: px2html(343px);
   background-color: #fff;
-  border-radius: px2html(5px);
+  border-radius: px2html(10px);
   // overflow: hidden;
   position: relative;
   .name {
@@ -38,7 +38,7 @@
     color: #999999;
     align-items: center;
     justify-content: space-between;
-    margin-top: px2html(33px);
+    margin-top: px2html(20px);
     margin-bottom: px2html(20px);
     .users-features {
       @include flexCenter;
@@ -52,22 +52,30 @@
       font-size: px2html(12px);
       line-height: px2html(17px);
     }
-    .time {
-      margin-right: px2html(16px);
-      font-size: px2html(12px);
-      line-height: px2html(17px);
-    }
   }
+}
+
+.time {
+  font-size: px2html(10px);
+  line-height: px2html(17px);
+  height: px2html(14px);
+  color: #CCCCCC;
+  position: relative;
+  top: px2html(-20px);
+  width: 100%;
+  text-align: right;
+  box-sizing: border-box;
+  padding-right: px2html(36px);
 }
 
 .btn {
   height: px2html(32px);
   width: px2html(120px);
-  // @include flexCenter;
-  background-color: #fff;
-  position: relative;
-  top: px2html(-30px);
-  box-shadow: 0px px2html(2px) px2html(16px) rgba(230, 230, 230, 0.5);
+  // // @include flexCenter;
+  // background-color: #fff;
+  // position: relative;
+  // top: px2html(-30px);
+  // box-shadow: 0px px2html(2px) px2html(16px) rgba(230, 230, 230, 0.5);
   // transform: translateX(50%);
   display: flex;
   align-items: center;
@@ -82,7 +90,9 @@
 }
 
 .section {
-  margin-bottom: px2html(16px);
+  position: relative;
+  top: px2html(-20px);
+  margin-bottom: px2html(10px);
   .title {
     text-align: left;
     position: relative;
@@ -115,6 +125,9 @@
     border-radius: px2html(10px);
     box-sizing: border-box;
     padding: px2html(30px) px2html(20px);
+    .fix-rest-section:last-of-type {
+      margin-bottom: px2html(20px);
+    }
     .chart-title {
       font-size: px2html(13px);
       line-height: px2html(18px);
@@ -146,12 +159,13 @@
       line-height: px2html(23px);
       width: px2html(279px);
       text-align: justify;
-      margin-bottom: px2html(30px);
+      margin-bottom: px2html(0px);
     }
 
 
     text-align: left;
     .levelTitle {
+      margin-top: px2html(10px);
       font-size: px2html(18px);
       line-height: px2html(25px);
       color: #000000;
@@ -270,4 +284,15 @@
 }
 
 .chart {
+  height: px2html(270px) !important;
+}
+
+.fix-first-child-margin-top {
+  .fix-rest-section:first-child {
+    margin-top: px2html(0px);
+  }
+}
+
+.fix-rest-section {
+  margin-top: px2html(30px);
 }

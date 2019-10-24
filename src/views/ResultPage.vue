@@ -17,15 +17,23 @@
                     <img class="head-pic" :src="headPic"/>
                     {{name}}
                 </div>
-                <div class="time">{{rpData.assessment_time}}</div>
+                <div class="btn" @click="showNotice = true">
+                    <img src="../assets/result_button_explain@3x.png"/>报告说明
+                </div>
+                <!-- <div class="time">
+                    {{rpData.assessment_time}}
+                </div> -->
             </div>
         </div>
 
-        <div class="btn" @click="showNotice = true">
+        <!-- <div class="btn" @click="showNotice = true">
             <img src="../assets/result_button_explain@3x.png"/>阅读说明
+        </div> -->
+        <div class="time">
+            报告生成时间：{{rpData.assessment_time}}
         </div>
 
-        <div class="section">
+        <div class="section" id="section">
             <div class="title">
                 <div class="num">01</div>
                 <div class="content" v-html="section.sectionOne.levelOneTitle"></div>
@@ -66,9 +74,9 @@
                 <div class="num">03</div>
                 <div class="content" v-html="section.sectionThree.data.levelOneTitle"></div>
             </div>
-            <div class="content-template">
+            <div class="content-template fix-first-child-margin-top">
                 <div class="levelTitle" v-if="section.sectionThree.data.levelTwoTitle" v-html="section.sectionThree.data.levelTwoTitle"></div>
-                <div class="levelText fix-bootom-10" v-html="parseHTMLICON(section.sectionThree.data.text)">
+                <div class="levelText fix-bootom-10" v-if="section.sectionThree.data.text" v-html="parseHTMLICON(section.sectionThree.data.text)">
                 </div>
                 <div class="fix-rest-section" v-for="(li, index) in section.sectionThree.release" :key="index">
                     <div class="levelTitle" v-if="li.levelTwoTitle" v-html="li.levelTwoTitle"></div>
@@ -88,6 +96,7 @@ const echarts = require('echarts')
     components: {}
 })
 export default class ResultPage extends Vue {
+    private myChart: any = undefined // 图表引用 拿来设置数据展开效果
     private iconList: any[] = [
         require(`../assets/resultIconList/1@3x.png`),
         require(`../assets/resultIconList/2@3x.png`),
@@ -99,6 +108,7 @@ export default class ResultPage extends Vue {
         require(`../assets/resultIconList/8@3x.png`),
         require(`../assets/resultIconList/9@3x.png`)
     ]
+    private canParseCharts: boolean = false // 能否渲染报告
     private showNotice: boolean = false
     private headPic: string | null = localStorage.getItem('avatar') // 用户头像
     private title: string = document.title
@@ -125,7 +135,7 @@ export default class ResultPage extends Vue {
             data: {
                 levelOneTitle: ''
             },
-            release: []
+            release: [] // { levelTwoTitle: '123', text: '1233313212asdasd啊实打实大苏打实打实大苏打实打实大苏打啊实打实大苏打' }, { levelTwoTitle: '234', text: '1233313212asdasd啊实打实大苏打实打实大苏打实打实大苏打啊实打实大苏打' }
         }
     } // 先设置any
 
@@ -139,7 +149,7 @@ export default class ResultPage extends Vue {
     // 获取用户测评报告列表api
     private getReportListId() {
         this.$axios.get('/api/assessments/reports', { params: { id: this.$root.id } }).then((res: any) => {
-            console.log(res)
+            // console.log(res)
         })
     }
 
@@ -160,7 +170,9 @@ export default class ResultPage extends Vue {
                     this.section.sectionOneRelease = []
                 }
                 this.rpData = res.data.data
-                this.parseCharts()
+                this.canParseCharts = true
+                this.parseCharts(true) // true 是需要初始化饼图
+                this.delayToParseCharts() // 动画效果
                 this.$root.loading = false
             }
         })
@@ -176,7 +188,7 @@ export default class ResultPage extends Vue {
     }
 
     // 结果页表格处理
-    private parseCharts() {
+    private parseCharts(init: boolean = false) {
         const chartsData = this.prrseDimensionToChartsData(this.dimensions)
         // const chartsData = [{ name: '测试', value: 5, axis_max: 10 }, { name: '测试', value: 5, axis_max: 10 }, { name: '测试', value: 5, axis_max: 10 }, { name: '测试', value: 5, axis_max: 10 }]
 
@@ -187,14 +199,17 @@ export default class ResultPage extends Vue {
         const indicator = [] as any
         const value = [] as any
 
-        const maxNumb = [16, 12, 18, 16] // 临时加上的
         let maxNumbIndex = 0
 
         for (let i of chartsData) {
-            value.push(i.value)
+            init === true
+                ? value.push(0) // 0 的原因是初始是不需要的
+                : value.push(i.value)
             indicator.push({ name: i.name, max: i.axis_max || 1 })
             maxNumbIndex++
         }
+
+        // indicator[0].axisLabel =  { show: true, textStyle: { fontSize: 18, color: '#333' } }
 
         // 绘制图表
         myChart.setOption({
@@ -208,6 +223,8 @@ export default class ResultPage extends Vue {
                 },
                 axisLine: {
                     lineStyle: {
+                        width: 1,
+                        symbolSize: [10, 20],
                         color: 'rgba(204,204,204,0.4)'
                     }
                 },
@@ -231,7 +248,8 @@ export default class ResultPage extends Vue {
                 color: '#2196F3',
                 smooth: true,
                 radius: '0%',
-                symbol: 'pin',
+                // symbol: 'pin',
+                symbol: 'none',
                 symbolSize: [0, 1],
                 itemStyle: {//节点数据显示
                     normal: {
@@ -249,16 +267,16 @@ export default class ResultPage extends Vue {
                                     '     ' + params.value
                                 ]
                                 return change[params.dimensionIndex]
-                                console.log(params.dimensionIndex)
+                                // console.log(params.dimensionIndex)
                             }
                         }
                     }
                 },
                 lineStyle: {
-                    width: 1
+                    width: 1 // 设置一个 图形 的粗细
                 },
                 areaStyle: {
-                    color: '#2196F3'
+                    color: 'rgb(33,150,243)'
                     // color: {
                     //     type: 'radial',
                     //     x: documentChart.clientWidth / 2,
@@ -280,6 +298,8 @@ export default class ResultPage extends Vue {
                 ]
             }]
         })
+
+        this.myChart = myChart
     }
 
     private getIcon(name: number): any {
@@ -287,13 +307,67 @@ export default class ResultPage extends Vue {
         // console.log(icon)
     }
 
+    // 渲染成 灰色 带 ·的样式
+    private parseHTMLToindector(data: string) {
+        if (data) {
+            const saver = data
+            data = data.replace(/<div>(\})<\/div>/g, '$1')
+            data = data.replace(/<div>(\^\{)<\/div>/g, '$1')
+            data = data.replace(/\n/g, '')
+            return data.replace(/\^\{(.*?)\}/g, (a: string, b: any): string => {
+                // console.log(b, saver, '123 svaer @@@@')
+                return `<div class="fix-green-color">${b}</div>`
+            })
+        }
+    }
+
     // 处理Html数据里面的icon ${1}
     private parseHTMLICON(data: string) {
+        data = this.parseHTMLToindector(data) as string
         if (data) {
             return data.replace(/\$\{(.*?)\}/g, (a: string, b: any): string => {
                 return `<img src=${this.getIcon(b)} class="result-icon" />`
             })
         }
+    }
+
+    private delayToParseCharts() {
+        const u = navigator.userAgent
+        const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1
+
+        let toTop = 12340
+        this.$nextTick(() => {
+            const chartElement = document.querySelector('#chart') as HTMLBaseElement
+            const sectionElement = document.querySelector('#section') as HTMLBaseElement
+            // 到顶部的位置
+            toTop = chartElement.offsetTop + sectionElement.offsetTop - (window.document.documentElement.clientHeight / 2)
+            if (isAndroid) {
+
+            }
+        })
+
+        const scrollFunc = () => {
+            // console.log('scroll', toTop, window.document.documentElement.scrollTop, window.screen.height - window.innerHeight, window.screen, document.body.scrollTop) // document.body.scrollTop 兼容微信
+
+            // 兼容安卓和ios
+            let scrollSize = window.document.documentElement.scrollTop
+            if (isAndroid) {
+                scrollSize = document.body.scrollTop
+            }
+
+            // console.log(scrollSize >= toTop)
+
+            if (scrollSize >= toTop && this.canParseCharts) {
+                this.parseCharts()
+                window.document.removeEventListener('scroll', scrollFunc)
+            }
+        }
+
+        this.$nextTick(() => {
+            scrollFunc()
+        })
+
+        window.document.addEventListener('scroll', scrollFunc)
     }
 
     private async created() {
@@ -325,8 +399,10 @@ export default class ResultPage extends Vue {
 <style lang="scss">
     .result-icon {
         // transform: translateY(2px);
-        height: px2html(9px);
+        height: px2html(18px);
         margin-right: px2html(7px);
+        position: relative;
+        top: px2html(2px);
     }
     .fix-bottom-to-20 {
         align-self: end;

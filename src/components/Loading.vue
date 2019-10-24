@@ -20,19 +20,23 @@ export default class Loading extends Vue {
 
 <style lang="scss" scoped>
     .loading {
+        // display: none;
         position: fixed;
         top: 0px;
         left: 0px;
         width: 100vw;
         height: 100vh;
         background: #fff;
-        z-index: 99999;
+        z-index: 99;
+        @include flexCenter;
         .greed {
-            width: 100vw;
-            height: 100vh;
-            position: fixed;
-            left: 0px;
-            top: 0px;
+            // width: 100vw;
+            // height: 100vh;
+            // position: fixed;
+            // left: 0px;
+            // top: 0px;
+            padding: px2html(10px);
+            border-radius: px2html(5px);
             background: rgba(0, 0, 0, 0.5);
             @include flexCenter;
         }

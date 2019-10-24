@@ -6,11 +6,12 @@ import Axios from 'axios'
 import wjh from './unit/wjhJS.js'
 import animated from 'animate.css'
 import Share from './unit/shareAndGetName.js'
+import wjhJS from './unit/wjhJS';
 
 require('@/unit/setSize')
 const md5 = require('blueimp-md5')
 
-const URL = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'https://wenjuan.common.heartide.com/' : 'https://debug.wenjuan.common.heartide.com/' // http://heartide.free.idcfengye.com https://debug.wenjuan.common.heartide.com/
+const URL = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'http://wenjuan.common.heartide.com/' : 'https://debug.wenjuan.common.heartide.com/' // http://heartide.free.idcfengye.com https://debug.wenjuan.common.heartide.com/
 const URLSHARE = 'https://api.psy-1.com' // process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'https://api.psy-1.com' : 'https://api.debug.psy-1.com'
 
 // 版本号
@@ -26,7 +27,13 @@ const myAxios = Axios.create({
 // const QUERY = wjh.parseQuery(document.location.href) as any
 
 const AXIOSFULLFILLFUNCTION = (config: any) => {
-  const data = config.data
+  let data = config.data || config.params || {}
+
+  // post 对data 进行acsii码 进行排序
+  if (config.method === 'post') {
+    data = wjhJS.sort_ASCII(data)
+  }
+
   let params = '' as string
   const key = 'HeartideAssessment' as string
   for (const i in data) {
@@ -35,10 +42,18 @@ const AXIOSFULLFILLFUNCTION = (config: any) => {
     }
   }
   params = params.replace(/\&$/, '')
-  // console.log(params)
   const str = `version=${VERSION}&${key}&${params}&${key}`
-  // console.log(md5(str).toUpperCase(), str)
-  config.sign = md5(str).toUpperCase()
+
+  if ('params' in config) {
+    config.params.sign = md5(str).toUpperCase()
+  } else {
+    config.url.includes('?') === true
+        ? config.url += `&sign=${md5(str).toUpperCase()}`
+        : config.url += `?sign=${md5(str).toUpperCase()}`
+  }
+
+  // console.log(md5(str).toUpperCase(), str, '-->>>>>>params-----', params, config)
+
   return config
 }
 
@@ -122,6 +137,8 @@ new Vue({
         package: 2 // ios: 1  android: 2
       }
 
+      console.log('apple ~~')
+
       const data = {
         nickname: localStorage.getItem('name') || '',
         avatarurl: localStorage.getItem('avatar') || '',
@@ -152,6 +169,8 @@ new Vue({
 
           return res.data.data.token
         }
+      }).catch(() => {
+        return null
       })
     },
     async payAPI() {
@@ -188,11 +207,11 @@ new Vue({
     },
     wechatPublicPayWayData(wechatpubpay: webchatpubpay) {
       const getBrandWCPayRequest = wechatpubpay
-      console.log('pay 平台')
+      // console.log('pay 平台')
       WeixinJSBridge.invoke(
           'getBrandWCPayRequest', getBrandWCPayRequest,
           (res: any) => {
-            console.log(res)
+            // console.log(res)
             if (res.err_msg === "get_brand_wcpay_request:ok" ) {
               // 使用以上方式判断前端返回,微信团队郑重提示：
               //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
@@ -203,7 +222,6 @@ new Vue({
   },
   created() {
     this.id = this.parseQuery(window.location.href).id || 107
-    this.shareM('小睡眠', '小睡眠', 'https://wx2.sinaimg.cn/mw690/006Zdy2vgy1frycovbf8cj304z0553zu.jpg')
   },
   router,
   store,

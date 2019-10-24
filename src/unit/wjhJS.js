@@ -141,4 +141,19 @@ export default class wjhTool {
     }
     return temp
   }
+
+  static sort_ASCII (obj) {
+    let arr = []
+    let num = 0
+    for (const i in obj) {
+      arr[num] = i
+      num++
+    }
+    let sortArr = arr.sort()
+    let sortObj = {}
+    for (const i in sortArr) {
+      sortObj[sortArr[i]] = obj[sortArr[i]]
+    }
+    return sortObj
+  }
 }

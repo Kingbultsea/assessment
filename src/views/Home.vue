@@ -21,7 +21,7 @@
 
     <div class="introduce-template">
       <div class="title">内容简介</div>
-      <div class="content-template fix-bootom-10" v-html="homeData.contentValidity"></div>
+      <div class="content-template fix-bootom-10" v-html="parseHTMLToindector(homeData.contentValidity)"></div>
     </div>
     <div class="introduce-template">
       <div class="title">你将获得</div>
@@ -35,10 +35,13 @@
     <div class="introduce-template add-margin">
       <div class="title">理论背景</div>
       <div class="content-template" v-html="homeData.professionalTheory"></div>
-      <div class="professional-parameters-title fix-btm">部分参考文献</div>
+      <div class="professional-parameters-title fix-btm">- 研发团队 -</div>
+      <div class="content-template color-bg-content" style="text-align: justify" v-html="homeData.groups"></div>
+      <img class="icon-pic" :src="homeData.groupsPic"/>
+      <div class="professional-parameters-title">- 专业参数 -</div>
+      <div class="professional-query add-margin-profession" v-html="homeData.notice"></div>
+      <div class="professional-parameters-title fix-btm">- 部分参考文献 -</div>
       <div class="content-template color-bg-content" v-html="homeData.reference"></div>
-      <div class="professional-parameters-title">专业参数</div>
-      <div class="professional-query" v-html="homeData.notice"></div>
     </div>
 
     <!-- <div class="dirvide-special">
@@ -94,7 +97,9 @@ const enum cv {
   professionalTheory = 'theory',
   suitableForSpeculation = 'suitable',
   notice = 'notice',
-  reference = 'references'
+  reference = 'references',
+  groups = 'rd_team',
+  groupsPic = 'rd_team_icon'
 }
 
 @Component({
@@ -115,7 +120,9 @@ export default class Home extends Vue {
     yourHarvest: '',
     suitableForSpeculation: '',
     professionalTheory: '',
-    notice: ''
+    notice: '',
+    groups: '',
+    groupsPic: ''
   }
 
   private busyPay: boolean = false
@@ -167,6 +174,9 @@ export default class Home extends Vue {
         this.homeData.suitableForSpeculation = data[cv.suitableForSpeculation]
         this.homeData.notice = data[cv.notice]
         this.homeData.reference = data[cv.reference]
+        this.homeData.groups = data[cv.groups]
+        this.homeData.groupsPic = data[cv.groupsPic]
+
 
         this.$root.haveUnDone = data.undone
 
@@ -177,6 +187,8 @@ export default class Home extends Vue {
         document.title = this.homeData.name
         this.$root.bannerPic = this.homeData.bannerPic
         this.$root.loading = false
+
+        this.$root.shareM(this.homeData.name, this.homeData.viceName, this.homeData.coverPic || 'https://res.psy-1.com/Fp1Izu3J4WNYC3kJaFd5hAOQCKb5')
       }
     })
   }
@@ -184,11 +196,11 @@ export default class Home extends Vue {
   // 公众号相关支付信息
   private wechatPublicPayWayData(wechatpubpay: webchatpubpay) {
     const getBrandWCPayRequest = wechatpubpay
-    console.log('pay 平台')
+    // console.log('pay 平台')
     WeixinJSBridge.invoke(
             'getBrandWCPayRequest', getBrandWCPayRequest,
             (res: any) => {
-              console.log(res)
+              // console.log(res)
               if (res.err_msg === "get_brand_wcpay_request:ok" ) {
                 // 使用以上方式判断前端返回,微信团队郑重提示：
                 // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
@@ -238,6 +250,19 @@ export default class Home extends Vue {
     })
   }
 
+  // 渲染成 灰色 带 ·的样式
+  private parseHTMLToindector(data: string) {
+    if (data) {
+      data = data.replace(/<div>(\})<\/div>/, '$1')
+      data = data.replace(/<div>(\^\{)<\/div>/, '$1')
+      data = data.replace(/\n/g, '')
+      return data.replace(/\^\{(.*?)\}/g, (a: string, b: any): string => {
+        // console.log(b, '123')
+        return `<div class="fix-green-color">${b}</div>`
+      })
+    }
+  }
+
   // 我的报告按钮
   private toMyReport() {
     // if (this.$root.haveUnDone) {
@@ -271,6 +296,9 @@ export default class Home extends Vue {
     border-left: px2html(1px) solid #E6E6E6;
     border-right: px2html(1px) solid #E6E6E6;
   }
+  .add-margin-profession {
+    margin-bottom: px2html(30px);
+  }
   .professional-query div {
     text-indent: px2html(10px);
     width: 100%;
@@ -300,12 +328,12 @@ export default class Home extends Vue {
   }
   .tag-content div::before {
     position: absolute;
-    left: px2html(-10px);
-    top: px2html(7px);
+    left: px2html(-4px);
+    top: px2html(2px);
     content: '';
     transform: translateX(-100%);
-    width: px2html(12px);
-    height: px2html(9px);
+    width: px2html(10px);
+    height: px2html(14px);
     background: url("../assets/resultIconList/1@3x.png");
     background-repeat: no-repeat;
     background-size: auto 100%;
@@ -322,13 +350,13 @@ export default class Home extends Vue {
   }
   .tag-content2 div::before {
     position: absolute;
-    left: px2html(-10px);
-    top: px2html(6px);
+    left: px2html(-6px);
+    top: px2html(1px);
     content: '';
     transform: translateX(-100%);
-    width: px2html(12px);
-    height: px2html(9px);
-    background: url("../assets/resultIconList/9@3x.png");
+    width: px2html(14px);
+    height: px2html(18px);
+    background: url("../assets/resultIconList/7@3x.png");
     background-repeat: no-repeat;
     background-size: auto 100%;
   }
@@ -354,6 +382,14 @@ export default class Home extends Vue {
     margin-top: px2html(20px);
     div div {
       margin-top: px2html(10px) !important; // 有坑 因为 后台传入的 第一个不是div 后面的才带div
+    }
+  }
+
+  .fix-green-color {
+    margin: 0px!important;
+    color: #999999 !important;
+    div {
+      margin: 0px!important;
     }
   }
 </style>

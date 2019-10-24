@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{'font-android': isAndroidd}">
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
@@ -18,7 +18,16 @@
     }
   })
   export default class App extends Vue {
-
+    private isAndroidd: boolean = false
+    private mounted() {
+      // console.log('n2')
+      const u = navigator.userAgent
+      const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1
+      if(isAndroid){
+        this.isAndroidd = true
+      }
+      // console.log('n')
+    }
   }
 </script>
 
@@ -27,8 +36,12 @@
   padding: 0;
   margin: 0;
 }
-#app {
+.font-android {
   font-family: "思源黑体 CN Normal";
+}
+
+#app {
+  letter-spacing: px2html(0.8px);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
