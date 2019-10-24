@@ -123,8 +123,7 @@ export default class ResultPage extends Vue {
             text: ''
         },
         sectionOneRelease: [
-            {}, {}
-        ],
+        ], // { levelTwoTitle: '123', text: '1233313212asdasd啊实打实大苏打实打实大苏打实打实大苏打啊实打实大苏打' }, { levelTwoTitle: '234', text: '1233313212asdasd啊实打实大苏打实打实大苏打实打实大苏打啊实打实大苏打' }
         sectionTwo: {
             data: {
                 levelOneTitle: ''
@@ -209,7 +208,7 @@ export default class ResultPage extends Vue {
             maxNumbIndex++
         }
 
-        // indicator[0].axisLabel =  { show: true, textStyle: { fontSize: 18, color: '#333' } }
+        indicator[0].axisLabel =  { show: true, textStyle: { fontSize: 14, color: '#060606' } }
 
         // 绘制图表
         myChart.setOption({
@@ -219,6 +218,17 @@ export default class ResultPage extends Vue {
                 splitArea: {
                     areaStyle: {
                         color: ['#fff', '#fff', '#fff', '#fff']
+                    }
+                },
+                axisLabel: {
+                    align: 'left',
+                    margin: -4,
+                    color: 'rgb(168,168,168)',
+                    fontSize: 10,
+                    formatter: (params: any, value: any) => {
+                        let data =  [0, 20, 40, 60, 80, 100]
+                        return data[value]
+                        // console.log(params.dimensionIndex)
                     }
                 },
                 axisLine: {
@@ -316,7 +326,7 @@ export default class ResultPage extends Vue {
             data = data.replace(/\n/g, '')
             return data.replace(/\^\{(.*?)\}/g, (a: string, b: any): string => {
                 // console.log(b, saver, '123 svaer @@@@')
-                return `<div class="fix-green-color">${b}</div>`
+                return `<div class="fix-green-color green-add-10-margin-bottom">${b}</div>`
             })
         }
     }
@@ -397,6 +407,9 @@ export default class ResultPage extends Vue {
     }
 </style>
 <style lang="scss">
+    .green-add-10-margin-bottom {
+        margin-bottom: px2html(10px);
+    }
     .result-icon {
         // transform: translateY(2px);
         height: px2html(18px);
