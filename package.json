@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && node cdn",
+    "build": "vue-cli-service build && node cdn && npm run copy",
     "lint": "vue-cli-service lint",
     "copy": "COPY /y E:\\心潮项目\\专业测评\\dist\\index.html E:\\heartideProduct\\frontend-wangjianhai\\ProfessionalAssessment",
-    "experiment": "vue-cli-service build --mode experiment && node cdn",
+    "copy2": "COPY /y E:\\心潮项目\\专业测评\\dist\\index.html E:\\heartide\\frontend-wangjianhai\\ProfessionalAssessment",
+    "experiment": "vue-cli-service build --mode experiment && node cdn && npm run copy2",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
   },
