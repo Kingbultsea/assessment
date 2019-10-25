@@ -187,7 +187,7 @@ export default class MyReport extends Vue {
     width: 100vw;
     min-height: 100vh;
     position: relative;
-    // padding-bottom: px2html(110px);
+    padding-bottom: px2html(110px);
 }
     .template {
         margin-top: px2html(20px);
