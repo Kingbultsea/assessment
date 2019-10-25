@@ -1,5 +1,5 @@
 <template>
-    <div class='result-page animated fadeIn'>
+    <div class='result-page animated fadeIn' v-show="initialReady">
         <div class="popup-window" v-if="showNotice" @click.self="showNotice = false">
             <div class="popup animated fadeIn">
                 <img @click="showNotice = false" class="close" src="../assets/genereal_close_black@3x.png" />
@@ -96,6 +96,7 @@ const echarts = require('echarts')
     components: {}
 })
 export default class ResultPage extends Vue {
+    private initialReady: boolean = false // 初始化渲染
     private myChart: any = undefined // 图表引用 拿来设置数据展开效果
     private iconList: any[] = [
         require(`../assets/resultIconList/1@3x.png`),
@@ -123,7 +124,8 @@ export default class ResultPage extends Vue {
             text: ''
         },
         sectionOneRelease: [
-        ], // { levelTwoTitle: '123', text: '1233313212asdasd啊实打实大苏打实打实大苏打实打实大苏打啊实打实大苏打' }, { levelTwoTitle: '234', text: '1233313212asdasd啊实打实大苏打实打实大苏打实打实大苏打啊实打实大苏打' }
+        ], // { levelTwoTitle: '123', text: '1233313212asdasd啊实打实大苏打实打实大苏打实打实大苏打啊实打实大苏打' },
+        // { levelTwoTitle: '234', text: '1233313212asdasd啊实打实大苏打实打实大苏打实打实大苏打啊实打实大苏打' }
         sectionTwo: {
             data: {
                 levelOneTitle: ''
@@ -134,7 +136,8 @@ export default class ResultPage extends Vue {
             data: {
                 levelOneTitle: ''
             },
-            release: [] // { levelTwoTitle: '123', text: '1233313212asdasd啊实打实大苏打实打实大苏打实打实大苏打啊实打实大苏打' }, { levelTwoTitle: '234', text: '1233313212asdasd啊实打实大苏打实打实大苏打实打实大苏打啊实打实大苏打' }
+            release: [] // { levelTwoTitle: '123', text: '1233313212asdasd啊实打实大苏打实打实大苏打实打实大苏打啊实打实大苏打' },
+            // { levelTwoTitle: '234', text: '1233313212asdasd啊实打实大苏打实打实大苏打实打实大苏打啊实打实大苏打' }
         }
     } // 先设置any
 
@@ -145,6 +148,11 @@ export default class ResultPage extends Vue {
         notice: ''
     }
 
+    // 换行功能
+    public parseLineFeed(text: string, times: number): string {
+        return text.replace(/script/g, '').replace(/\n/g, '<br/>'.repeat(times))
+    }
+
     // 获取用户测评报告列表api
     private getReportListId() {
         this.$axios.get('/api/assessments/reports', { params: { id: this.$root.id } }).then((res: any) => {
@@ -152,36 +160,36 @@ export default class ResultPage extends Vue {
         })
     }
 
-    // 换行功能
-    public parseLineFeed(text: string, times: number): string {
-        return text.replace(/script/g, '').replace(/\n/g, '<br/>'.repeat(times))
-    }
-
     // 从服务器处领取信息
     private getApiData(id: number) {
         this.$axios.get('/api/assessments/reports/find', { params: { id } }).then((res: any) => {
             if (res.data.status === 0) {
-                this.dimensions = res.data.data.dimension
-                this.section = res.data.data.section
+                this.initialReady = true
+                this.$nextTick(() => {
+                    this.dimensions = res.data.data.dimension
+                    this.section = res.data.data.section
 
-                // 如果没有则为空数组
-                if (!this.section['sectionOneRelease']) {
-                    this.section.sectionOneRelease = []
-                }
-                this.rpData = res.data.data
-                this.canParseCharts = true
-                this.parseCharts(true) // true 是需要初始化饼图
-                this.delayToParseCharts() // 动画效果
-                this.$root.loading = false
+                    // 如果没有则为空数组
+                    if (!this.section['sectionOneRelease']) {
+                        this.section.sectionOneRelease = []
+                    }
+                    this.rpData = res.data.data
+                    this.canParseCharts = true
+                    this.parseCharts(true) // true 是需要初始化饼图
+                    this.delayToParseCharts() // 动画效果
+                    this.$root.loading = false
+                })
             }
         })
     }
 
     // 把服务器取得的dimension 转换成charts 的 能看懂 的 数据
     private prrseDimensionToChartsData(dimension: any) {
-        let data = []
-        for (let i in dimension) {
-            data.push({ name: dimension[i].title, value: dimension[i].score, axis_max: dimension[i].axis_max })
+        const data = []
+        for (const i in dimension) {
+            if (dimension[i]) {
+                data.push({ name: dimension[i].title, value: dimension[i].score, axis_max: dimension[i].axis_max })
+            }
         }
         return data
     }
@@ -189,7 +197,9 @@ export default class ResultPage extends Vue {
     // 结果页表格处理
     private parseCharts(init: boolean = false) {
         const chartsData = this.prrseDimensionToChartsData(this.dimensions)
-        // const chartsData = [{ name: '测试', value: 5, axis_max: 10 }, { name: '测试', value: 5, axis_max: 10 }, { name: '测试', value: 5, axis_max: 10 }, { name: '测试', value: 5, axis_max: 10 }]
+        // const chartsData = [{ name: '测试', value: 5, axis_max: 10 },
+        // { name: '测试', value: 5, axis_max: 10 }, { name: '测试', value: 5, axis_max: 10 },
+        // { name: '测试', value: 5, axis_max: 10 }]
 
         const myChart = echarts.init(document.getElementById('chart'))
 
@@ -200,7 +210,7 @@ export default class ResultPage extends Vue {
 
         let maxNumbIndex = 0
 
-        for (let i of chartsData) {
+        for (const i of chartsData) {
             init === true
                 ? value.push(0) // 0 的原因是初始是不需要的
                 : value.push(i.value)
@@ -225,9 +235,9 @@ export default class ResultPage extends Vue {
                     margin: -4,
                     color: 'rgb(168,168,168)',
                     fontSize: 10,
-                    formatter: (params: any, value: any) => {
-                        let data =  [0, 20, 40, 60, 80, 100]
-                        return data[value]
+                    formatter: (params: any, index: any) => {
+                        const data =  [0, 20, 40, 60, 80, 100]
+                        return data[index]
                         // console.log(params.dimensionIndex)
                     }
                 },
@@ -261,7 +271,7 @@ export default class ResultPage extends Vue {
                 // symbol: 'pin',
                 symbol: 'none',
                 symbolSize: [0, 1],
-                itemStyle: {//节点数据显示
+                itemStyle: { // 节点数据显示
                     normal: {
                         label: {
                             borderWidth: '0',
@@ -270,7 +280,7 @@ export default class ResultPage extends Vue {
                             fontWeight: '500',
                             position: 'inside',
                             formatter: (params: any) => {
-                                let change = [
+                                const change = [
                                     params.value + '\n',
                                     params.value + '     ',
                                     '\n\n' + params.value,
@@ -350,14 +360,11 @@ export default class ResultPage extends Vue {
             const chartElement = document.querySelector('#chart') as HTMLBaseElement
             const sectionElement = document.querySelector('#section') as HTMLBaseElement
             // 到顶部的位置
-            toTop = chartElement.offsetTop + sectionElement.offsetTop - (window.document.documentElement.clientHeight / 2)
-            if (isAndroid) {
-
-            }
+            const chartAndSection = chartElement.offsetTop + sectionElement.offsetTop
+            toTop = chartAndSection - (window.document.documentElement.clientHeight / 2)
         })
 
         const scrollFunc = () => {
-            // console.log('scroll', toTop, window.document.documentElement.scrollTop, window.screen.height - window.innerHeight, window.screen, document.body.scrollTop) // document.body.scrollTop 兼容微信
 
             // 兼容安卓和ios
             let scrollSize = window.document.documentElement.scrollTop

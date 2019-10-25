@@ -4,7 +4,7 @@ let URL = ''
 
 export default class Share {
   constructor ({ url, title, desc, pic, dataUrl = null }) {
-    console.log('??')
+    // console.log('??')
     URL = url
     this.url = url
     this.title = title
@@ -120,10 +120,18 @@ export default class Share {
 
         // console.log('这里错误？')
         const appid = 'wx2dbf7017998b37cb' // process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'wx2dbf7017998b37cb' : 'wx632d4c99bd681cf3'
+        // console.log(
+        //   'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid +  '&redirect_uri=' + encodeURI(location.href.split('#')[0]) +'&response_type=code&scope=snsapi_userinfo#wechart_redirect'
+        // )
 
-        // 正式服 appid wx2dbf7017998b37cb   测试服： wx632d4c99bd681cf3
-        // console.log('bl 没有bl 吗？', bl, bl && !localStorage.getItem('name'))
-        if (bl && !localStorage.getItem('name')) window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid +  '&redirect_uri=' + encodeURI(location.href.split('#')[0]) +'&response_type=code&scope=snsapi_userinfo#wechart_redirect'
+        const redirtUrl = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? true : false
+
+        if (redirtUrl) { // 正式
+          if (bl && !localStorage.getItem('name')) window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid +  '&redirect_uri=' + encodeURIComponent(location.href.split('#')[0]) +'&response_type=code&scope=snsapi_userinfo#wechart_redirect'
+        } else { // 测试
+          if (bl && !localStorage.getItem('name')) window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid +  '&redirect_uri=' + encodeURIComponent('https://www.heartide.com/heartidemp/auth/proxy?link_actual=' + encodeURIComponent(location.href.split('#')[0])) +'&response_type=code&scope=snsapi_userinfo#wechart_redirect'
+        }
+
         if (!bl || localStorage.getItem('name')) {
           wx.config(getSDK.data.wechat_config)
           that.weiXinShare()

@@ -1,5 +1,5 @@
 <template>
-  <div class="home animated fadeIn">
+  <div class="home animated fadeIn" v-show="initialReady">
     <div class="common-template">
       <img class="banner-pic" :src="homeData.bannerPic" />
       <div class="content">
@@ -16,7 +16,6 @@
           <span>· {{homeData.peopleTest}}人测过</span>
         </div>
       </div>
-
     </div>
 
     <div class="introduce-template">
@@ -107,6 +106,7 @@ const enum cv {
   }
 })
 export default class Home extends Vue {
+  private initialReady: boolean = false // 初始化
   private homeData: homeData = {
     id: 1,
     bannerPic: '',
@@ -189,6 +189,7 @@ export default class Home extends Vue {
         this.$root.loading = false
 
         this.$root.shareM(this.homeData.name, this.homeData.viceName, this.homeData.coverPic || 'https://res.psy-1.com/Fp1Izu3J4WNYC3kJaFd5hAOQCKb5')
+        this.initialReady = true // 初始化渲染成功
       }
     })
   }
@@ -214,6 +215,12 @@ export default class Home extends Vue {
     if (this.busyPay) {
       return
     }
+    if (this.$root.haveUnDone) {
+      // localStorage.setItem('loadingtext', '支付信息获取中 请稍候…')
+    } else {
+      localStorage.setItem('loadingtext', '支付信息获取中 请稍候…')
+    }
+    this.$root.loading = true
     this.busyPay = true
     if (!this.$root.token) {
       // await this.$root.share.wei
@@ -225,6 +232,8 @@ export default class Home extends Vue {
       wap_url: window.location.href.split('#')[0] + '#/cw'
     }
     this.$axios.post('/api/pay/order', data).then((res: any) => {
+      localStorage.removeItem('loadingtext')
+      this.$root.loading = false
       if (res.data.status === 0) {
         this.busyPay = false
         let query = ''

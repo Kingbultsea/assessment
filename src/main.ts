@@ -35,23 +35,44 @@ const AXIOSFULLFILLFUNCTION = (config: any) => {
   }
 
   let params = '' as string
-  const key = 'HeartideAssessment' as string
+  const key = 'fe4cd0c961d9e394ddf370aa3033da33+5db1796320e71' as string
+  let groupsData = [] as any
   for (const i in data) {
     if (data[i] !== '') {
-      params += i + '=' + data[i] + '&'
+      groupsData.push([i, data[i]])
+      // params += i + '=' + data[i] + '&'
     }
   }
+  groupsData.reverse()
+  groupsData.forEach((v: any) => {
+    params += v[0] + '=' + v[1] + '&'
+  })
+  // console.log(groupsData, 'db', params)
   params = params.replace(/\&$/, '')
-  const str = `version=${VERSION}&${key}&${params}&${key}`
+  // console.log(params, '+++++++++++params')
+  const version = md5(`version=${VERSION}${key}`).split('').splice(9, 16).join('')
+  // console.log(md5(`version=${VERSION}`), version, '--version')
+  let saver = md5(params)
+  params = md5(params).split('').splice(8, 16).join('')
+  // console.log(params, saver, '+++++params')
+  // params = params.replace(/\&$/, '')
+  // const str = `${version}&${key}&${params}&${key}`
 
-  if ('params' in config) {
-    config.params.sign = md5(str).toUpperCase()
-  } else {
-    config.url.includes('?') === true
-        ? config.url += `&sign=${md5(str).toUpperCase()}`
-        : config.url += `?sign=${md5(str).toUpperCase()}`
-  }
-
+  const str = (version + '+' + key + '+' + params)
+  // console.log(str,'++++++++++++str')
+  // if ('params' in config) {
+  //   config.params.sign = md5(str).toUpperCase()
+  // } else {
+  //   config.url.includes('?') === true
+  //       ? config.url += `&sign=${md5(str).toUpperCase()}`
+  //       : config.url += `?sign=${md5(str).toUpperCase()}`
+  // }
+  config.headers.sign = md5(md5(str).toUpperCase().split('').splice(10, 16).join(''))
+  // console.log(md5(str).toUpperCase().split('').splice(10, 16).join(''), md5(str), 'result')
+  // console.log(
+  //     config
+  // )
+  // console.log(config)
   // console.log(md5(str).toUpperCase(), str, '-->>>>>>params-----', params, config)
 
   return config
@@ -128,6 +149,7 @@ new Vue({
         share.weatherCode()
         await share.weiXinGetName(URLSHARE)
         this.openid = localStorage.getItem('openid')
+        this.login()
       }
     },
     async login() {
@@ -136,8 +158,6 @@ new Vue({
         channel: this.channel, // wechat: 1
         package: 2 // ios: 1  android: 2
       }
-
-      console.log('apple ~~')
 
       const data = {
         nickname: localStorage.getItem('name') || '',
@@ -177,6 +197,12 @@ new Vue({
       if (this.busyPay) {
         return
       }
+      if (this.haveUnDone) {
+        // localStorage.setItem('loadingtext', '支付信息获取中 请稍候…')
+      } else {
+        localStorage.setItem('loadingtext', '支付信息获取中 请稍候…')
+      }
+      this.$root.loading = true
       this.busyPay = true
       if (!this.$root.token) {
         // await this.$root.share.wei
@@ -188,6 +214,8 @@ new Vue({
         wap_url: window.location.href.split('#')[0] + '#/cw'
       }
       this.$axios.post('/api/pay/order', data).then((res: any) => {
+        this.$root.loading = false
+        localStorage.removeItem('loadingtext')
         if (res.data.status === 0) {
           this.busyPay = false
           let query = ''
@@ -202,6 +230,11 @@ new Vue({
           // 用户是否有未完成的数据
           this.$root.haveUnDone = true
           this.$router.push('/cw')
+        }
+
+        // 用户没有登录 进入授权页面
+        if (!localStorage.getItem('openid')) {
+          this.$router.push('/lp')
         }
       })
     },

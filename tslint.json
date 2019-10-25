@@ -10,6 +10,7 @@
     ]
   },
   "rules": {
+    "class-name": false, // 取消canmel case
     "no-string-literal": false,
     "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
     "semicolon":[true, "never", "ignore-interfaces"],

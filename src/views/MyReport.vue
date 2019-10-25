@@ -1,5 +1,5 @@
 <template>
-    <div class='my-report'>
+    <div class='my-report' id="report">
         <Tips v-if="showTips" @click="showTips = false" text="复制成功"/>
 
         <div class="template" v-for="(li, index) in dataList" :key="index">
@@ -21,7 +21,7 @@
                 <span class="price">￥{{goodsDesc.price}}</span>
                 <div class="origin-price">￥{{goodsDesc.price_origin}}</div>
             </div>
-            <div class="btn" id="test" :class="{'fix-top': goodsDesc.title.length <= 8 ? true : false}" @click="this.$root.payAPI">立即购买</div>
+            <div class="btn" id="test" :class="{'fix-top': goodsDesc.title.length <= 8 ? true : false}" @click="pay()">立即购买</div>
         </div>
     </div>
 </template>
@@ -37,7 +37,7 @@ import Tips from '@/components/Tips.vue'
 })
 export default class MyReport extends Vue {
     private showTips: boolean = false // 展示提示
-
+    private isGetData: boolean = false // 数据正在获取中
     private goodsDesc: any = {
         id: '',
         title: '',
@@ -47,15 +47,31 @@ export default class MyReport extends Vue {
     private nullList: string = '0'
     private dataList: any = []
     private pageIndex: number = 0
+    private getPageDone: boolean = false // 是否有下一页
     // 服务器上获取data
     private getData(page = 1 as number) {
+        if (this.getPageDone || this.isGetData) {
+            return
+        }
+        this.isGetData = true // 数据正在获取中
+        this.$root.loading = true
         this.pageIndex += 1
-        this.$axios.get('/api/assessments/reports', { params: { id: this.$root.id, page } }).then((res: any) => {
+        this.$axios.get('/api/assessments/reports', { params: { id: this.$root.id, page: this.pageIndex } }).then((res: any) => {
             if (res.data.status === 0) {
+                this.isGetData = false
+                // console.log('???')
                 this.dataList = this.dataList.concat(res.data.data.list)
                 if (this.dataList.length === 0) {
                     this.nullList = '1'
                 }
+
+                if (res.data.data.paging.page_total === res.data.data.paging.curr) {
+                    console.log('done page', res.data.data.page_total, res.data.data.curr)
+                    this.getPageDone = true
+                    this.$root.loading = false
+                    return
+                }
+
                 // if (this.dataList.length === 1) {
                 //     this.viewReport(this.dataList[0].id)
                 //     return
@@ -64,6 +80,11 @@ export default class MyReport extends Vue {
                 this.$root.loading = false
             }
         })
+    }
+
+    // 立刻购买
+    private pay() {
+        this.$root.payAPI()
     }
 
     // 内容复制
@@ -83,11 +104,61 @@ export default class MyReport extends Vue {
         }
     }
 
+    // 底部加载
+    private getPageReportList() {
+        console.log('?')
+        const u = navigator.userAgent
+        const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1
+
+        let toTop = 12340
+        this.$nextTick(() => {
+            const sectionElement = document.querySelector('#report') as HTMLBaseElement
+            if (isAndroid) {
+
+            }
+        })
+
+        const scrollFunc = () => {
+            console.log('scroll func')
+            const sectionElement = document.querySelector('#report') as HTMLBaseElement
+            toTop = sectionElement.offsetHeight
+            if (this.isGetData) { // 数据正在获取中
+                return
+            }
+            if (this.getPageDone) { // 如果页数已经尽头的话那么无需请求
+                console.log('scroll func done')
+                window.document.removeEventListener('scroll', scrollFunc)
+                return
+            } else {
+            }
+            // console.log('scroll', toTop, window.document.documentElement.scrollTop, window.screen.height - window.innerHeight, window.screen, document.body.scrollTop) // document.body.scrollTop 兼容微信
+
+            // 兼容安卓和ios
+            let scrollSize = window.document.documentElement.scrollTop + window.screen.height
+            if (isAndroid) {
+                scrollSize = document.body.scrollTop + window.screen.height
+            }
+            console.log(scrollSize >= toTop, scrollSize, toTop, '查看')
+
+            if (scrollSize >= toTop) {
+                console.log('底部')
+                this.getData()
+            }
+        }
+
+        this.$nextTick(() => {
+            // scrollFunc()
+        })
+
+        window.document.addEventListener('scroll', scrollFunc)
+    }
+
     private viewReport(id: string) {
         sessionStorage.setItem('reportId', id)
         this.$router.push('/rp')
     }
     private async mounted() {
+        console.log('---')
         this.$root.loading = true
         window.scrollTo(0, 0)
         if (!this.$root.token) {
@@ -99,7 +170,8 @@ export default class MyReport extends Vue {
             price_origin: sessionStorage.getItem('originPrice'),
             price: sessionStorage.getItem('price')
         }
-        this.getData()
+        this.getData() // getPageReportList会首次执行
+        this.getPageReportList()
         document.title = '我的报告'
     }
 }
@@ -115,7 +187,7 @@ export default class MyReport extends Vue {
     width: 100vw;
     min-height: 100vh;
     position: relative;
-    padding-bottom: px2html(110px);
+    // padding-bottom: px2html(110px);
 }
     .template {
         margin-top: px2html(20px);

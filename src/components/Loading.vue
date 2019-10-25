@@ -2,6 +2,7 @@
     <div class='loading'>
         <div class="greed">
             <img src="../assets/Loading-common.gif"/>
+            <p>{{loadingText}}</p>
         </div>
         <!-- <div class="template">
         </div> -->
@@ -15,6 +16,7 @@ import {Component, Vue} from "vue-property-decorator";
     components: {}
 })
 export default class Loading extends Vue {
+    private loadingText = localStorage.getItem('loadingtext') || '数据加载中…' // ''
 }
 </script>
 
@@ -26,19 +28,28 @@ export default class Loading extends Vue {
         left: 0px;
         width: 100vw;
         height: 100vh;
-        background: #fff;
+        // background: #fff;
         z-index: 99;
         @include flexCenter;
         .greed {
+            width: px2html(112px);
+            height: px2html(115px);
+            box-sizing: border-box;
             // width: 100vw;
             // height: 100vh;
             // position: fixed;
             // left: 0px;
             // top: 0px;
-            padding: px2html(10px);
+            padding: px2html(20px) px2html(14px) px2html(10px) px2html(14px);
             border-radius: px2html(5px);
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.85);
             @include flexCenter;
+            p {
+                width: px2html(100px);
+                margin-top: px2html(10px);
+                font-size: px2html(12px);
+                color: rgba(255, 255, 255, 0.8);
+            }
         }
 
         img {
