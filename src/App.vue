@@ -23,7 +23,7 @@
       // console.log('n2')
       const u = navigator.userAgent
       const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1
-      if(isAndroid){
+      if (isAndroid) {
         this.isAndroidd = true
       }
       // console.log('n')

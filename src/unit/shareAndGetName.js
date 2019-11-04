@@ -189,7 +189,7 @@ export default class Share {
 
   weiXinInit (url) {
     const code = this.weatherCode()
-    code ? this.weiXinSDK(url, false) : this.weiXinSDK(url, true)
+    code ? '' : this.weiXinSDK(url, true) // this.weiXinSDK(url, false) 拥有code 也不获取
   }
 
   appInit () {

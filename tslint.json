@@ -10,6 +10,8 @@
     ]
   },
   "rules": {
+    "no-require-imports": false,
+    "no-var-requires": false,
     "class-name": false, // 取消canmel case
     "no-string-literal": false,
     "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],

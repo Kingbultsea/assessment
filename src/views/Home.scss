@@ -171,7 +171,7 @@
   align-items: center;
   justify-content: space-around;
   background: #fff;
-  height: px2html(52px);
+  height: px2html(64px);
   .icon {
     width: px2html(48px);
   }
@@ -184,6 +184,7 @@
     line-height: px2html(20px);
     border-radius: px2html(21px);
     background: #FF5454;
+    // margin-bottom: px2html(8px);
   }
 }
 

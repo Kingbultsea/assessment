@@ -112,8 +112,8 @@ export default class ResultPage extends Vue {
     private canParseCharts: boolean = false // 能否渲染报告
     private showNotice: boolean = false
     private headPic: string | null = localStorage.getItem('avatar') // 用户头像
+    private name: string | null = localStorage.getItem('name') // 用户名称
     private title: string = document.title
-    private name: string | null = localStorage.getItem('name')
     private dimensions: any = {}
     private section: any = {
         sectionOne: {
@@ -175,7 +175,7 @@ export default class ResultPage extends Vue {
                     }
                     this.rpData = res.data.data
                     this.canParseCharts = true
-                    this.parseCharts(true) // true 是需要初始化饼图
+                    this.parseCharts(false) // true 是需要初始化饼图
                     this.delayToParseCharts() // 动画效果
                     this.$root.loading = false
                 })
@@ -361,7 +361,7 @@ export default class ResultPage extends Vue {
             const sectionElement = document.querySelector('#section') as HTMLBaseElement
             // 到顶部的位置
             const chartAndSection = chartElement.offsetTop + sectionElement.offsetTop
-            toTop = chartAndSection - (window.document.documentElement.clientHeight / 2)
+            toTop = chartAndSection - (window.document.documentElement.clientHeight / 1.1)
         })
 
         const scrollFunc = () => {
@@ -388,15 +388,13 @@ export default class ResultPage extends Vue {
     }
 
     private async created() {
+        this.$root.canScroll = false
         window.document.title = sessionStorage.getItem('title') || '测评报告'
         this.$root.loading = true
         setTimeout(() => {
             // this.parseCharts()
         }, 1000)
         window.scrollTo(0, 0)
-        if (!this.$root.token) {
-            await this.$root.login()
-        }
         const id = sessionStorage.getItem('reportId')
         if (id) {
             this.getApiData(+id)
@@ -415,7 +413,7 @@ export default class ResultPage extends Vue {
 </style>
 <style lang="scss">
     .green-add-10-margin-bottom {
-        margin-bottom: px2html(10px);
+        margin-bottom: px2html(10px) !important;
     }
     .result-icon {
         // transform: translateY(2px);

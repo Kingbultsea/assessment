@@ -43,7 +43,7 @@
 }
 
 .chat-template {
-  padding-bottom: 10vh;
+  padding-bottom: 14vh;
   overflow: hidden;
   .request:first-of-type {
     margin-top: px2html(10px);
@@ -175,7 +175,7 @@
 }
 
 .bottom-bar {
-  background: #F7F7F7;
+  // background: #F7F7F7;
   position: fixed;
   bottom: 0px;
   left: 0px;
@@ -184,7 +184,7 @@
   overflow: hidden;
   padding-top: px2html(10px);
   .btn {
-    margin-bottom: px2html(10px);
+    margin-bottom: px2html(30px);
     width: px2html(231px);
     height: px2html(41px);
     background-color: #2EA1FF;

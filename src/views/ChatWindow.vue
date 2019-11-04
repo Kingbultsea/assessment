@@ -64,12 +64,15 @@ export default class ChatWindow extends Vue {
 
     private showSubmit: boolean = false // 展示底部的提交按钮
 
+    // 选择繁忙状态
+    private selectBusy: boolean = false
+
     // 获取题目信息/?>
     private getTopicList(saverMode = false as boolean) {
         return new Promise((resolve) => {
             this.$axios.get('/api/assessments/question', { params: { id: this.$root.id } }).then((res: any) => {
-                if (res.data.list) { // 接口不规范 存在问题 成功不返回status
-                    this.list = res.data.list as listData[]
+                if (res.data.status === 0) { // 接口不规范 存在问题 成功不返回status
+                    this.list = res.data.data.list as listData[]
 
                     // 初始化第一题 saverMode是判断当前用户是否有漏题
                     if (!saverMode) {
@@ -95,9 +98,6 @@ export default class ChatWindow extends Vue {
         return Object.assign(action, rawData) as listAction
     }
 
-    // 选择繁忙状态
-    private selectBusy: boolean = false
-
     private _selectOptions(titleId: number, optionId: number, title: string, li: listAction) {
         if (this.selectBusy) {
             return
@@ -111,7 +111,8 @@ export default class ChatWindow extends Vue {
     }
 
     // 用户操作 用户选择opetions的时候 传入id 所选的id 该title
-    private selectOptions(titleId: number, optionId: number, title: string, li: listAction, selectIndexBoolean = true as boolean) {
+    private selectOptions(titleId: number, optionId: number, title: string,
+                          li: listAction, selectIndexBoolean = true as boolean) {
         const usersAction = {
             from: 'user',
             answer: title,
@@ -158,9 +159,8 @@ export default class ChatWindow extends Vue {
     }
 
     // 保存用户目前的答题
-    private saveAction() {
-
-    }
+    // private saveAction() {
+    // }
 
     // edit actions 编辑答案 输入题的id 查找该 listData id (如果用index的话， 那么查找robotAction, 修改index的 open状态, 修改index + 1 的答案)
     private editActions(robotIndex: number) {
@@ -197,16 +197,18 @@ export default class ChatWindow extends Vue {
             this.$axios.get('/api/users/assessments/undone', { params: { id: this.$root.id } }).then((res: any) => {
                 if (res.data.status === 0) {
                     this.$root.loading = false
-                    const undoneData = typeof res.data.data.undone_data === 'string' ? JSON.parse(res.data.data.undone_data) : res.data.data.undone_data
+                    const undoneData = typeof res.data.data.undone_data === 'string'
+                        ? JSON.parse(res.data.data.undone_data)
+                        : res.data.data.undone_data
 
                     // 为0的话 则 做初始化处理
                     if (undoneData.length === 0) {
-                        const parse = this.parseToListAction(this.list[this.index])
-                        this.actions(parse)
+                        const PARSE = this.parseToListAction(this.list[this.index])
+                        this.actions(PARSE)
                         return
                     }
 
-                    let listAction = [] as listAction[]
+                    const listAction = [] as listAction[]
 
                     const userAction = res.data.data.undone_data.map((v: any, index: number) => {
                         const data = this.parseToListAction(this.list[index]) as listAction
@@ -282,10 +284,11 @@ export default class ChatWindow extends Vue {
         })
     }
 
-    private destoryed() {
-    }
+    // private destoryed() {
+    // }
 
     private async created() {
+        this.$root.loadingText = '数据加载中…'
         this.$root.loading = true
         if (!this.$root.token) {
             await this.$root.login()

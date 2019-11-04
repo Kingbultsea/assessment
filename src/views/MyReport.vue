@@ -56,17 +56,21 @@ export default class MyReport extends Vue {
         this.isGetData = true // 数据正在获取中
         this.$root.loading = true
         this.pageIndex += 1
-        this.$axios.get('/api/assessments/reports', { params: { id: this.$root.id, page: this.pageIndex } }).then((res: any) => {
+
+        const PARAMS = { id: this.$root.id, page: this.pageIndex } as any
+
+        this.$axios.get('/api/assessments/reports', { params: PARAMS }).then((res: any) => {
             if (res.data.status === 0) {
                 this.isGetData = false
                 // console.log('???')
                 this.dataList = this.dataList.concat(res.data.data.list)
                 if (this.dataList.length === 0) {
                     this.nullList = '1'
+                    this.getPageDone = true
                 }
 
                 if (res.data.data.paging.page_total === res.data.data.paging.curr) {
-                    console.log('done page', res.data.data.page_total, res.data.data.curr)
+                    // console.log('done page', res.data.data.page_total, res.data.data.curr)
                     this.getPageDone = true
                     this.$root.loading = false
                     return
@@ -106,42 +110,45 @@ export default class MyReport extends Vue {
 
     // 底部加载
     private getPageReportList() {
-        console.log('?')
         const u = navigator.userAgent
         const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1
 
         let toTop = 12340
         this.$nextTick(() => {
             const sectionElement = document.querySelector('#report') as HTMLBaseElement
-            if (isAndroid) {
-
-            }
         })
 
         const scrollFunc = () => {
-            console.log('scroll func')
+            if (!this.$root.canScroll) {
+                // console.log('remove scroll')
+                window.document.removeEventListener('scroll', scrollFunc)
+                return
+            }
+            // console.log('scroll func')
             const sectionElement = document.querySelector('#report') as HTMLBaseElement
-            toTop = sectionElement.offsetHeight
+            if (sectionElement) {
+                toTop = sectionElement.offsetHeight
+            }
             if (this.isGetData) { // 数据正在获取中
                 return
             }
             if (this.getPageDone) { // 如果页数已经尽头的话那么无需请求
-                console.log('scroll func done')
+                // console.log('scroll func done')
                 window.document.removeEventListener('scroll', scrollFunc)
                 return
-            } else {
             }
-            // console.log('scroll', toTop, window.document.documentElement.scrollTop, window.screen.height - window.innerHeight, window.screen, document.body.scrollTop) // document.body.scrollTop 兼容微信
+            // console.log('scroll', toTop, window.document.documentElement.scrollTop, window.screen.height -
+            // window.innerHeight, window.screen, document.body.scrollTop) // document.body.scrollTop 兼容微信
 
             // 兼容安卓和ios
             let scrollSize = window.document.documentElement.scrollTop + window.screen.height
             if (isAndroid) {
                 scrollSize = document.body.scrollTop + window.screen.height
             }
-            console.log(scrollSize >= toTop, scrollSize, toTop, '查看')
+            // console.log(scrollSize >= toTop, scrollSize, toTop, '查看')
 
             if (scrollSize >= toTop) {
-                console.log('底部')
+                // console.log('底部')
                 this.getData()
             }
         }
@@ -157,13 +164,12 @@ export default class MyReport extends Vue {
         sessionStorage.setItem('reportId', id)
         this.$router.push('/rp')
     }
+
     private async mounted() {
-        console.log('---')
+        this.$root.loadingText = '数据加载中…'
+        this.$root.canScroll = true
         this.$root.loading = true
         window.scrollTo(0, 0)
-        if (!this.$root.token) {
-            await this.$root.login()
-        }
         this.goodsDesc = {
             id: this.$root.id,
             title: sessionStorage.getItem('title'),

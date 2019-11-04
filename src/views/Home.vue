@@ -57,7 +57,7 @@
 
     <div class="fixed-bar">
       <img @click="toMyReport" class="icon" src="../assets/我的报告.png" />
-      <div class="btn" @click="payAPI">
+      <div class="btn" @click="this.$root.payAPI">
         <!-- 立即购买 -->
         {{this.$root.haveUnDone ? '继续测评' : '立即购买'}}
       </div>
@@ -177,7 +177,6 @@ export default class Home extends Vue {
         this.homeData.groups = data[cv.groups]
         this.homeData.groupsPic = data[cv.groupsPic]
 
-
         this.$root.haveUnDone = data.undone
 
         sessionStorage.setItem('title', '' + this.homeData.name)
@@ -202,7 +201,7 @@ export default class Home extends Vue {
             'getBrandWCPayRequest', getBrandWCPayRequest,
             (res: any) => {
               // console.log(res)
-              if (res.err_msg === "get_brand_wcpay_request:ok" ) {
+              if (res.err_msg === 'get_brand_wcpay_request:ok' ) {
                 // 使用以上方式判断前端返回,微信团队郑重提示：
                 // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                 this.$router.push('/cw')
@@ -215,25 +214,33 @@ export default class Home extends Vue {
     if (this.busyPay) {
       return
     }
-    if (this.$root.haveUnDone) {
-      // localStorage.setItem('loadingtext', '支付信息获取中 请稍候…')
-    } else {
-      localStorage.setItem('loadingtext', '支付信息获取中 请稍候…')
-    }
-    this.$root.loading = true
     this.busyPay = true
     if (!this.$root.token) {
       // await this.$root.share.wei
       await this.$root.login()
     }
+
+    if (!this.$root.token) {
+      // 用户没有登录 进入授权页面
+      if (!localStorage.getItem('openid') || localStorage.getItem('openid') === 'null') {
+        this.$router.push('/lp')
+      }
+      return
+    }
+
+    if (this.$root.haveUnDone) {
+      this.$root.loadingText = '数据加载中…'
+    } else {
+      this.$root.loadingText = '支付信息获取中 请稍候…'
+    }
+
+    this.$root.loading = true
     const data = {
       goods_id: this.$root.id,
       goods_vendor_ids: '[' + this.$root.channel + ']',
       wap_url: window.location.href.split('#')[0] + '#/cw'
     }
     this.$axios.post('/api/pay/order', data).then((res: any) => {
-      localStorage.removeItem('loadingtext')
-      this.$root.loading = false
       if (res.data.status === 0) {
         this.busyPay = false
         let query = ''
@@ -241,6 +248,7 @@ export default class Home extends Vue {
           query = 'wechatpubpay'
           this.wechatPublicPayWayData(res.data.data.pay_platforms[query] as webchatpubpay)
         }
+        this.$root.loading = false
         return
       }
 
@@ -249,9 +257,15 @@ export default class Home extends Vue {
         // 用户是否有未完成的数据
         this.$root.haveUnDone = true
         this.$router.push('/cw')
+        this.$root.loading = false
         return
       }
 
+      // 用户没有登录 进入授权页面
+      // if (!localStorage.getItem('openid')) {
+      //   this.$router.push('/lp')
+      // }
+    }).catch(() => {
       // 用户没有登录 进入授权页面
       if (!localStorage.getItem('openid')) {
         this.$router.push('/lp')
@@ -283,9 +297,14 @@ export default class Home extends Vue {
   }
 
   private async created() {
+    localStorage.removeItem('loadingtext')
+    this.$root.canScroll = false
+    if (this.$root.scrollFun) {
+      window.document.removeEventListener('scroll', this.$root.scrollFun)
+    }
     this.$root.loading = true
     window.scrollTo(0, 0)
-    if (!this.$root.token) {
+    if (!this.$root.token && (localStorage.getItem('openid') === 'null' || localStorage.getItem('openid'))) {
       await this.$root.login()
     }
     this.getData()

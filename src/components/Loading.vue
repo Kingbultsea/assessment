@@ -2,7 +2,7 @@
     <div class='loading'>
         <div class="greed">
             <img src="../assets/Loading-common.gif"/>
-            <p>{{loadingText}}</p>
+            <p>{{this.$root.loadingText}}</p>
         </div>
         <!-- <div class="template">
         </div> -->
@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
+import {Component, Vue} from 'vue-property-decorator'
 
 @Component({
     components: {}
