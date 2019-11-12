@@ -11,6 +11,8 @@ import wjhJS from './unit/wjhJS'
 require('@/unit/setSize')
 const md5 = require('blueimp-md5')
 
+const EVN = process.env.VUE_APP_TITLE
+
 const URL = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'https://wenjuan.common.heartide.com/' : 'https://debug.wenjuan.common.heartide.com/' // http://heartide.free.idcfengye.com https://debug.wenjuan.common.heartide.com/
 const URLSHARE = 'https://api.psy-1.com'
 // process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment'
@@ -147,6 +149,9 @@ new Vue({
     },
     // 微信那边获取code
     async getCodeWeChat(init = true as boolean) {
+      if (process.env.VUE_APP_TITLE === 'experiment' && !/micromessenger/.test(navigator.userAgent.toLowerCase())) {
+        return
+      }
       // console.log('code ~~22334')
       if (true) { // /micromessenger/.test(navigator.userAgent.toLowerCase())
         this.share.weiXinInit(URLSHARE)
