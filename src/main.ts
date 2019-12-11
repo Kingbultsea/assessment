@@ -322,9 +322,7 @@ new Vue({
       this.setAxios()
     } else { // 没有token 需要去获取code 然后再去获取token 测试的时候这里可以去除 可以方便查看ui
       // this.getCodeWeChat() // 微信获取code
-      if (process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment') {
-        this.getCodeWeChat()
-      }
+      // this.getCodeWeChat()
     }
 
     this.id = this.parseQuery(window.location.href).id || 107

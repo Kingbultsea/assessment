@@ -17,6 +17,7 @@
       box-sizing: border-box;
       padding: px2html(20px) px2html(32px) px2html(20px) px2html(32px);
       >.name {
+        color: #000000;
         line-height: px2html(33px);
         font-size: px2html(20px);
         font-weight: 600;
@@ -39,7 +40,7 @@
         }
         .origin-price {
           position: relative;
-          height: px2html(12px);
+          height: px2html(15px);
           display: inline-block;
           font-size: px2html(12px);
           color: rgba(153, 153, 153, 0.63);
@@ -92,25 +93,26 @@
     margin-top: px2html(20px);
   }
   .title {
-    right: px2html(-12px);
+    text-align: center;
     font-weight: 600;
     font-size: px2html(20px);
     line-height: px2html(28px);
-    color: #2EA1FF;
-    position: relative;
-  }
-  .title:before {
-    position: absolute;
-    content: '';
-    background: rgba(46, 161, 255, 0.11);
-    width: px2html(26px);
-    height: px2html(26px);
-    left: 0px;
-    top: 0px;
-    transform: translateY(-20%) translateX(-50%);
-    border-radius: 50%;
+    color: #FFB074;
+    @mixin bind {
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    span:first-of-type {
+      background: linear-gradient(to right, rgba(255, 176, 116, 0.10), #FFB074);
+      @include bind;
+    }
+    span:last-of-type {
+      background: linear-gradient(to right, #FFB074, rgba(255, 176, 116, 0.10));
+      @include bind;
+    }
   }
   .content-template {
+    color: #5C4D42;
     margin-top: px2html(20px);
     font-size: px2html(12px);
     line-height: px2html(23px);
@@ -137,7 +139,7 @@
   }
 }
 .professional-parameters-title {
-  color: #999999;
+  color: #B3AAA4;
   font-size: px2html(12px);
   font-weight: 600;
   margin-top: px2html(20px);

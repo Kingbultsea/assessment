@@ -90,32 +90,41 @@
 }
 
 .section {
+  color: #5C4D42;
   position: relative;
   top: px2html(-20px);
   margin-bottom: px2html(10px);
   .title {
-    text-align: left;
-    position: relative;
-    font-weight: 600;
-    .num {
-      font-size: px2html(64px);
-      line-height: px2html(90px);
-      color: #2196F3;
-      opacity: 0.1;
+    margin-top: px2html(30px);
+    margin-bottom: px2html(20px);
+    font-size: px2html(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .icon-block {
+      position: relative;
+      box-sizing: border-box;
+      border: px2html(1px) solid #FFB074;
+      transform: rotate(45deg);
+      width: px2html(6px);
+      height: px2html(6px);
+      margin-left: px2html(3px);
+      margin-right: px2html(3px);
+    }
+    .set-size {
+      width: px2html(5px);
+      height: px2html(5px);
     }
     .content {
+      margin-left: px2html(5px);
+      margin-right: px2html(5px);
+      color: #FFB074;
       font-size: px2html(20px);
-      line-height: px2html(28px);
-      color: #2196F3;
-      position: absolute;
-      width: max-content;
-      top: 50%;
-      left: 7%;
-      transform: translateY(-50%);
-      max-width: 90%;
+      line-height: px2html(20px);
       overflow: hidden;
       white-space:nowrap;
-      text-align: justify;
+      text-align: center;
+      width: max-content;
     }
   }
   .content-template {
@@ -135,13 +144,14 @@
       width: 80%;
       overflow: hidden;
       margin-top: px2html(30px);
+      margin-bottom: px2html(10px);
       white-space: nowrap;
-      color: #333333;
+      color: #5C5149;
     }
     .chart-explan {
       width: px2html(279px);
       text-align: justify;
-      color: #999999;
+      color: #B3AAA4;
       font-size: px2html(12px);
       line-height: px2html(23px);
       margin-bottom: px2html(30px);
@@ -168,9 +178,10 @@
       margin-top: px2html(10px);
       font-size: px2html(18px);
       line-height: px2html(25px);
-      color: #000000;
+      color: #5C4D42;
       position: relative;
       z-index: 10;
+      transform: translateX(px2html(18px));
       width: max-content;
       margin-bottom: px2html(30px);
     }
@@ -178,13 +189,14 @@
       padding-right: px2html(12px);
       z-index: -1;
       content: '';
-      width: 100%;
-      height: px2html(14px);
-      background: rgba(46, 161, 255, 0.9);
+      height: px2html(20px);
+      width: px2html(10px);
+      background: url("../assets/icon_title_love3@3x.png");
+      background-repeat: no-repeat;
+      background-size: px2html(10px) px2html(20px);
       position: absolute;
-      left: px2html(-5px);
-      top: px2html(13px);
-      border-radius: px2html(7px);
+      top: px2html(1px);
+      left: px2html(-15px);
     }
 
 
@@ -215,13 +227,12 @@
     position: absolute;
     left: px2html(-5px);
     top: px2html(13px);
-    border-radius: px2html(7px);
+    // border-radius: px2html(7px);
   }
   .levelText {
     font-size: px2html(13px);
     line-height: px2html(23px);
     text-align: justify;
-    color: #333333;
   }
 }
 

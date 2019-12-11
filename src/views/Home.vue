@@ -19,20 +19,36 @@
     </div>
 
     <div class="introduce-template">
-      <div class="title">内容简介</div>
+      <div class="title">
+        <span>::::</span>
+         内容简介
+        <span>::::</span>
+      </div>
       <div class="content-template fix-bootom-10" v-html="parseHTMLToindector(homeData.contentValidity)"></div>
     </div>
     <div class="introduce-template">
-      <div class="title">你将获得</div>
+      <div class="title">
+        <span>::::</span>
+         你将获得
+        <span>::::</span>
+      </div>
       <div class="content-template tag-content" v-html="homeData.yourHarvest">
       </div>
     </div>
     <div class="introduce-template">
-      <div class="title">适合谁测</div>
+      <div class="title">
+        <span>::::</span>
+         适合谁测
+        <span>::::</span>
+      </div>
       <div class="content-template tag-content2" v-html="homeData.suitableForSpeculation"></div>
     </div>
     <div class="introduce-template add-margin">
-      <div class="title">理论背景</div>
+      <div class="title">
+        <span>::::</span>
+         理论背景
+        <span>::::</span>
+      </div>
       <div class="content-template" v-html="homeData.professionalTheory"></div>
       <div class="professional-parameters-title fix-btm">- 研发团队 -</div>
       <div class="content-template color-bg-content" style="text-align: justify" v-html="homeData.groups"></div>
@@ -318,7 +334,7 @@ export default class Home extends Vue {
 
 <style lang="scss">
   .professional-query {
-    color: #999999;
+    color: #B3AAA4;
     margin-top: px2html(20px);
     font-size: px2html(12px);
     border-left: px2html(1px) solid #E6E6E6;
@@ -389,13 +405,15 @@ export default class Home extends Vue {
     background-size: auto 100%;
   }
 
-
   .color-bg-content {
     div div {
       margin-bottom: px2html(14px);
     }
+    div div:last-of-type {
+      margin-bottom: 0px;
+    }
     margin-top: 0px!important;
-    color: #999999;
+    color: #B3AAA4 !important;
     // border-top: px2html(1px) solid rgba(153, 153, 153, 0.22);
     // padding-top: px2html(24px);
     // margin-top: px2html(24px);
@@ -414,8 +432,8 @@ export default class Home extends Vue {
   }
 
   .fix-green-color {
-    margin: 0px!important;
-    color: #999999 !important;
+    // margin: 0px!important;
+    color: #5C4D42!important;
     div {
       margin: 0px!important;
     }

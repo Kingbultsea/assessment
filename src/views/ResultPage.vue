@@ -10,7 +10,7 @@
 
         <img class="header-pic" :src="rpData.banner" />
         <div class="introduce-template">
-            <p class="name">在职场中，你可能成为一位优秀的：</p><!-- {{title}} -->
+            <p class="name">在恋爱中，你可能是：</p><!-- {{title}} -->
             <p class="result-name">{{section.sectionOne.resultTitle}}</p>
             <div class="self-time">
                 <div class="users-features">
@@ -35,14 +35,19 @@
 
         <div class="section" id="section">
             <div class="title">
-                <div class="num">01</div>
+                <div class="icon-block set-size"></div>
+                <div class="icon-block"></div>
                 <div class="content" v-html="section.sectionOne.levelOneTitle"></div>
+                <div class="icon-block"></div>
+                <div class="icon-block set-size"></div>
             </div>
             <div class="content-template" style="padding: unset;display: flex;justify-content: center;align-items: center;flex-direction: column">
                 <p class="chart-title" v-if="section.sectionOne.chartPicTitle" v-html="section.sectionOne.chartPicTitle"></p>
                 <div id="chart" class="chart"></div>
                 <p class="chart-explan" v-if="section.sectionOne.chartExplan" v-html="section.sectionOne.chartExplan"></p>
+
                 <p class="levelTitle fix-bottom-to-20" v-if="section.sectionOne.levelTwoTitle" v-html="section.sectionOne.levelTwoTitle"></p> <!-- v-if="section.sectionOne.levelTwoTitle" v-html="section.sectionOne.levelTwoTitle" -->
+
                 <p class="levelTwo-text fix-bootom-10" v-if="section.sectionOne.text" v-html="parseHTMLICON(section.sectionOne.text)"></p>
                 <div class="fix-rest-section" v-for="(li, index) in section.sectionOneRelease">
                     <div class="levelTitle" v-if="li.levelTwoTitle" v-html="li.levelTwoTitle"></div> <!-- -->
@@ -54,8 +59,11 @@
 
         <div class="section sectionTwo">
             <div class="title">
-                <div class="num" @click="getIcon(1)">02</div>
+                <div class="icon-block set-size"></div>
+                <div class="icon-block"></div>
                 <div class="content" v-html="section.sectionTwo.data.levelOneTitle"></div>
+                <div class="icon-block"></div>
+                <div class="icon-block set-size"></div>
             </div>
             <div class="content-template">
                 <div class="levelTitle" v-if="section.sectionTwo.data.levelTwoTitle" v-html="section.sectionTwo.data.levelTwoTitle"></div>
@@ -71,8 +79,11 @@
 
         <div class="section sectionTwo">
             <div class="title">
-                <div class="num">03</div>
+                <div class="icon-block set-size"></div>
+                <div class="icon-block"></div>
                 <div class="content" v-html="section.sectionThree.data.levelOneTitle"></div>
+                <div class="icon-block"></div>
+                <div class="icon-block set-size"></div>
             </div>
             <div class="content-template fix-first-child-margin-top">
                 <div class="levelTitle" v-if="section.sectionThree.data.levelTwoTitle" v-html="section.sectionThree.data.levelTwoTitle"></div>
@@ -107,7 +118,11 @@ export default class ResultPage extends Vue {
         require(`../assets/resultIconList/6@3x.png`),
         require(`../assets/resultIconList/7@3x.png`),
         require(`../assets/resultIconList/8@3x.png`),
-        require(`../assets/resultIconList/9@3x.png`)
+        require(`../assets/resultIconList/9@3x.png`),
+        require(`../assets/resultIconList/10@3x.png`),
+        require(`../assets/resultIconList/11@3x.png`),
+        require(`../assets/resultIconList/12@3x.png`),
+        require(`../assets/resultIconList/12@3x.png`)
     ]
     private canParseCharts: boolean = false // 能否渲染报告
     private showNotice: boolean = false
@@ -256,7 +271,7 @@ export default class ResultPage extends Vue {
                 // shape: 'circle',
                 name: {
                     textStyle: {
-                        color: '#333333'
+                        color: '#5C5149'
                     }
                 },
                 indicator,
@@ -265,7 +280,7 @@ export default class ResultPage extends Vue {
             series: [{
                 name: '预算 vs 开销（Budget vs spending）',
                 type: 'radar',
-                color: '#2196F3',
+                color: '#FFB074',
                 smooth: true,
                 radius: '0%',
                 // symbol: 'pin',
@@ -296,19 +311,19 @@ export default class ResultPage extends Vue {
                     width: 1 // 设置一个 图形 的粗细
                 },
                 areaStyle: {
-                    color: 'rgb(33,150,243)'
-                    // color: {
-                    //     type: 'radial',
-                    //     x: documentChart.clientWidth / 2,
-                    //     y: documentChart.clientHeight / 2,
-                    //     r: 100,
-                    //     colorStops: [{
-                    //         offset: 0, color: 'rgba(33,150,243,0.3)' // 0% 处的颜色
-                    //     }, {
-                    //         offset: 1, color: '#2196F3' // 100% 处的颜色
-                    //     }],
-                    //     global: true // 缺省为 false
-                    // }
+                    // color: 'rgb(33,150,243)'
+                    color: {
+                        type: 'radial',
+                        x: documentChart.clientWidth / 2,
+                        y: documentChart.clientHeight / 2,
+                        r: 100,
+                        colorStops: [{
+                            offset: 0, color: '#FFE8D6' // 0% 处的颜色
+                        }, {
+                            offset: 1, color: '#FFB074' // 100% 处的颜色
+                        }],
+                        global: true // 缺省为 false
+                    }
                 },
                 data : [
                     {
