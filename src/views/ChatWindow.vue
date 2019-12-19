@@ -55,6 +55,7 @@ type submitUsersType = 'submit' | 'save'
     components: {}
 })
 export default class ChatWindow extends Vue {
+    private submitBusy: boolean = false // 点击繁忙中
     private list: listData[] = []
     private users: usersAction[] = [] // 用户操作
     private avatar: string | null = localStorage.getItem('avatar') // 用户头像
@@ -253,6 +254,10 @@ export default class ChatWindow extends Vue {
 
     // 提交用户的选项到服务器
     private submitData(type = 'submit' as submitUsersType) {
+        if (this.submitBusy) {
+            return
+        }
+        this.submitBusy = true
         const usersAction = this.robotAction.filter((f: usersAction | listAction, index: number) => {
             return f.from === 'user'
         }) as usersAction[]
@@ -281,6 +286,8 @@ export default class ChatWindow extends Vue {
                 }
                 // console.log(res.data.data)
             }
+        }).finally(() => {
+            this.submitBusy = false
         })
     }
 
