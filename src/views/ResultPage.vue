@@ -10,7 +10,7 @@
 
         <img class="header-pic" :src="rpData.banner" />
         <div class="introduce-template">
-            <p class="name">在职场中，你可能成为一位优秀的：</p><!-- {{title}} -->
+            <p class="name">{{this.section.sectionOne.chartPicTitle ? this.section.sectionOne.chartPicTitle : '在职场中，你可能成为一位优秀的：'}}</p><!-- {{title}} -->
             <p class="result-name">{{section.sectionOne.resultTitle}}</p>
             <div class="self-time">
                 <div class="users-features">
@@ -183,9 +183,6 @@ export default class ResultPage extends Vue {
                         this.section.sectionOne.chartPicTitle = res.data.data.card_desc
                     }
 
-                    console.log(
-                        res.data.data.chart, '查看chart'
-                    )
 
                     if (res.data.data.chart && Object.keys(res.data.data.chart.position).length > 0) {
                         console.log('??')
