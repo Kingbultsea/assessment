@@ -138,6 +138,9 @@
       margin-bottom: px2html(40px);
     }
     .chart-title {
+      position: relative;
+      z-index: 3;
+      background-color: #fff;
       font-size: px2html(13px);
       line-height: px2html(18px);
       text-align: center;
