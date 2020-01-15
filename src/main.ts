@@ -395,17 +395,13 @@ new Vue({
     if (this.token) {
       // 配置全局axios
       this.setAxios()
-<<<<<<< HEAD
-    } else { // 没有token 需要去获取code 然后再去获取token
-      this.getCodeWeChat() // 微信获取code
-=======
     } else { // 没有token 需要去获取code 然后再去获取token 测试的时候这里可以去除 可以方便查看ui
       // this.getCodeWeChat() // 微信获取code
       if (this.isCosSeep) {
       } else {
         // this.getCodeWeChat()
       }
->>>>>>> 4e2f7bb... 支付版本1，组件staggeredpPlusMinusChart初始化（橙色）
+
     }
 
     this.id = this.parseQuery(window.location.href).id || 107
