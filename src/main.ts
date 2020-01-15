@@ -107,7 +107,7 @@ new Vue({
       URLSHARE,
       openid: localStorage.getItem('openid'), // || '1234-s3qIvA1_qcA-r6fYH7zF50k',
       id: 43 as number,
-      token: localStorage.getItem('token'), // || '4b10ff4b6ab96d42da5f9371b61281ef',
+      token: localStorage.getItem('token') || '4b10ff4b6ab96d42da5f9371b61281ef',
       channel: 1, // 支付参数也是这个
       platForm: 2, // ios: 1  android: 2
       rpData: '' as any, // 做完题 传递给 结果页
