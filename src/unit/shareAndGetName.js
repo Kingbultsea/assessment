@@ -118,7 +118,6 @@ export default class Share {
         // console.log(getSDK.data.wechat_config)
         getSDK.data.wechat_config.debug = false
 
-        // console.log('这里错误？')
         const appid = 'wx2dbf7017998b37cb' // process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'wx2dbf7017998b37cb' : 'wx632d4c99bd681cf3'
         // console.log(
         //   'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid +  '&redirect_uri=' + encodeURI(location.href.split('#')[0]) +'&response_type=code&scope=snsapi_userinfo#wechart_redirect'

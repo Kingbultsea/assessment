@@ -40,7 +40,8 @@
             </div>
             <div class="content-template" style="padding: unset;display: flex;justify-content: center;align-items: center;flex-direction: column">
                 <p class="chart-title" v-if="section.sectionOne.chartPicTitle" v-html="section.sectionOne.chartPicTitle"></p>
-                <div id="chart" class="chart"></div>
+                <StaggeredpPlusMinusChart color-a="#199BF5" color-b="#7BC3F5" color-font="#333333" ref="StaggeredpPlusMinusChart" v-show="chartType === 2" />
+                <div id="chart" v-show="chartType !== 2" class="chart"></div>
                 <p class="chart-explan" v-if="section.sectionOne.chartExplan" v-html="section.sectionOne.chartExplan"></p>
                 <p class="levelTitle fix-bottom-to-20" v-if="section.sectionOne.levelTwoTitle" v-html="section.sectionOne.levelTwoTitle"></p> <!-- v-if="section.sectionOne.levelTwoTitle" v-html="section.sectionOne.levelTwoTitle" -->
                 <p class="levelTwo-text fix-bootom-10" v-if="section.sectionOne.text" v-html="parseHTMLICON(section.sectionOne.text)"></p>
@@ -90,12 +91,16 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator'
+import StaggeredpPlusMinusChart from '@/components/StaggeredpPlusMinusChart.vue'
 const echarts = require('echarts')
 
 @Component({
-    components: {}
+    components: {
+        StaggeredpPlusMinusChart
+    }
 })
 export default class ResultPage extends Vue {
+    private chartType: number = 0 // 绘制结果图的样式
     private initialReady: boolean = false // 初始化渲染
     private myChart: any = undefined // 图表引用 拿来设置数据展开效果
     private iconList: any[] = [
@@ -160,6 +165,11 @@ export default class ResultPage extends Vue {
         })
     }
 
+    private _ref(s: string) { // editContentArea
+        const ref: any = this.$refs[s]
+        return ref
+    }
+
     // 从服务器处领取信息
     private getApiData(id: number) {
         this.$axios.get('/api/assessments/reports/find', { params: { id } }).then((res: any) => {
@@ -169,13 +179,30 @@ export default class ResultPage extends Vue {
                     this.dimensions = res.data.data.dimension
                     this.section = res.data.data.section
 
+                    if (res.data.data.card_desc) {
+                        this.section.sectionOne.chartPicTitle = res.data.data.card_desc
+                    }
+
+                    console.log(
+                        res.data.data.chart, '查看chart'
+                    )
+
+                    if (res.data.data.chart && Object.keys(res.data.data.chart.position).length > 0) {
+                        console.log('??')
+                        this.dimensions = res.data.data.chart.position
+                        const chartData = res.data.data.chart
+                        this.section.sectionOne.chartExplan = chartData.desc
+                        this.chartType = res.data.data.chart.type - 1
+                        console.log('have chart', this.chartType)
+                    }
+
                     // 如果没有则为空数组
                     if (!this.section['sectionOneRelease']) {
                         this.section.sectionOneRelease = []
                     }
                     this.rpData = res.data.data
                     this.canParseCharts = true
-                    this.parseCharts(false) // true 是需要初始化饼图
+                    this.parseCharts(false, res.data.data.chart.position) // true 是需要初始化饼图
                     this.delayToParseCharts() // 动画效果
                     this.$root.loading = false
                 })
@@ -195,7 +222,12 @@ export default class ResultPage extends Vue {
     }
 
     // 结果页表格处理
-    private parseCharts(init: boolean = false) {
+    private parseCharts(init: boolean = false, position: any = undefined) {
+        if (this.chartType === 2) {
+            this._ref('StaggeredpPlusMinusChart').convertPositionServeData(position)
+            return
+        }
+
         const chartsData = this.prrseDimensionToChartsData(this.dimensions)
         // const chartsData = [{ name: '测试', value: 5, axis_max: 10 },
         // { name: '测试', value: 5, axis_max: 10 }, { name: '测试', value: 5, axis_max: 10 },

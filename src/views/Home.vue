@@ -67,6 +67,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import wjhJS from '@/unit/wjhJS';
 
 interface webchatpubpay {
   appId: string,
@@ -106,6 +107,10 @@ const enum cv {
   }
 })
 export default class Home extends Vue {
+  private styleList: any = {
+    默认: 1,
+    橙色感性主题: 2
+  }
   private initialReady: boolean = false // 初始化
   private homeData: homeData = {
     id: 1,
@@ -144,6 +149,28 @@ export default class Home extends Vue {
     return text.replace(/\${(.+)}/, `<div class="color-bg-content">$1</div>`)
   }
 
+  // 跳转到正确的style_id
+  private link2Style(serveName: string) {
+    console.log(serveName)
+    const styleId = this.$wjh.parseQuery(window.location.href) as any
+    if (serveName === '默认' || serveName === '蓝色理性主题') {
+      if (styleId.style_id) {
+        window.location.href = this.$wjh.funcUrlDel('style_id') + '#' + window.location.href.split('#')[1]
+        return
+      }
+    }
+
+    if (serveName === '橙色感性主题') {
+      if (parseInt(styleId.style_id) !== 2) {
+        window.location.href = this.$wjh.changeUrlArg(window.location.href.split('#')[0], 'style_id', '2') + '#' + window.location.href.split('#')[1]
+        return
+      }
+    }
+
+    this.$root.loading = false
+    this.initialReady = true // 初始化渲染成功
+  }
+
   // 获取服务器信息
   private getData() {
     this.$axios.get('/api/assessments/find', { params: { id: this.$root.id } }).then((res: any) => {
@@ -156,6 +183,7 @@ export default class Home extends Vue {
             this.homeData[i] = data[cv[i]]
           }
         } */
+        this.link2Style(data.theme_color)
 
         this.homeData.id = data[cv.id]
         this.homeData.name = data[cv.name]
@@ -185,10 +213,9 @@ export default class Home extends Vue {
 
         document.title = this.homeData.name
         this.$root.bannerPic = this.homeData.bannerPic
-        this.$root.loading = false
+        // this.$root.loading = false
 
         this.$root.shareM(this.homeData.name, this.homeData.viceName, this.homeData.coverPic || 'https://res.psy-1.com/Fp1Izu3J4WNYC3kJaFd5hAOQCKb5')
-        this.initialReady = true // 初始化渲染成功
       }
     })
   }
@@ -304,7 +331,10 @@ export default class Home extends Vue {
     }
     this.$root.loading = true
     window.scrollTo(0, 0)
-    if (!this.$root.token && (localStorage.getItem('openid') === 'null' || localStorage.getItem('openid'))) {
+
+    if (!this.$root.token && (localStorage.getItem('openid') === 'null'
+            || localStorage.getItem('openid')
+            || this.$root.isCosSeep)) {
       await this.$root.login()
     }
     this.getData()
