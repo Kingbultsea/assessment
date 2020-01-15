@@ -10,7 +10,7 @@
                 <span class="num" :id="li.order_number">{{li.order_number}}</span>
                 <img @click="copyNumber(li.order_number)" class="icon" src="../assets/myreport_icon@3x.png"/>
             </div>
-            <div class="btn" @click="viewReport(li.id)">查看报告</div>
+            <div class="btn" @click="viewReport(li.id, li.theme_color)">查看报告</div>
         </div>
         <div class="null-template" v-if="nullList === '1'">
             <img class="pic" src="../assets/myreport_null@3x.png"/>
@@ -160,9 +160,30 @@ export default class MyReport extends Vue {
         window.document.addEventListener('scroll', scrollFunc)
     }
 
-    private viewReport(id: string) {
-        sessionStorage.setItem('reportId', id)
+    // 跳转到正确的style_id
+    private link2Style(serveName: string) {
+        this.$root.loading = true
+        const styleId = this.$wjh.parseQuery(window.location.href) as any
+        if (serveName === '默认' || serveName === '蓝色理性主题') {
+            if (styleId.style_id) {
+                window.location.href = this.$wjh.funcUrlDel('style_id') + '#/rp'
+                return
+            }
+        }
+
+        if (serveName === '橙色感性主题') {
+            if (parseInt(styleId.style_id) !== 2) {
+                window.location.href = this.$wjh.changeUrlArg(window.location.href.split('#')[0], 'style_id', '2') + '#/rp'
+                return
+            }
+        }
         this.$router.push('/rp')
+    }
+
+    private viewReport(id: string, serveName: string) {
+        sessionStorage.setItem('reportId', id)
+        this.link2Style(serveName)
+        // this.$router.push('/rp')
     }
 
     private async mounted() {
