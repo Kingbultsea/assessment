@@ -92,6 +92,7 @@ Vue.use(animated)
 new Vue({
   data() {
     return {
+      haveBuy: false, // 是否已经购买
       isCosSeep: Tool.is_cosleep(),
       usersData: {
           avatarurl: '',
@@ -107,9 +108,9 @@ new Vue({
       URLSHARE,
       openid: localStorage.getItem('openid'), // || '1234-s3qIvA1_qcA-r6fYH7zF50k',
       id: 43 as number,
-      token: localStorage.getItem('token') || '4b10ff4b6ab96d42da5f9371b61281ef',
+      token: localStorage.getItem('token'), // || '4b10ff4b6ab96d42da5f9371b61281ef',
       channel: 1, // 支付参数也是这个
-      platForm: 2, // ios: 1  android: 2
+      platForm: (navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1) ? 2 : 1, // ios: 1  android: 2
       rpData: '' as any, // 做完题 传递给 结果页
       bannerPic: '' as any, // 做完题 传递给结果页的 bannerPic
       share: new Share({ pic: 'picUrl', url: window.location.href.split('#')[0], title: 'title', desc: 'desc' }) as any,
@@ -215,9 +216,18 @@ new Vue({
         if (res.data.status === 0) {
           // console.log(res)
           // this.token = true
+          let reReload = false
+          if (!localStorage.getItem('token')) {
+            reReload = true
+          }
+
           localStorage.setItem('token', res.data.data.token)
           localStorage.setItem('avatar', res.data.data.avatarurl)
           localStorage.setItem('name', res.data.data.nickname)
+          if (reReload) {
+            window.location.reload()
+            return
+          }
           this.token = res.data.data.token
           this.usersData = res.data.data
 
@@ -242,7 +252,7 @@ new Vue({
       const headers = {
         openid: '', // cosleep的openid
         channel: this.channel, // wechat: 1 cosleep: 2
-        package: 2 // ios: 1  android: 2
+        package: this.platForm // ios: 1  android: 2
       }
 
       let data = {
@@ -279,7 +289,7 @@ new Vue({
       const headers = {
         // openid: this.openid,
         channel: this.channel, // wechat: 1
-        package: 2 // ios: 1  android: 2
+        package: this.platForm // ios: 1  android: 2
       }
 
       // const data = {
@@ -322,11 +332,24 @@ new Vue({
       this.busyPay = true
 
       if (this.$root.channel === 2) { // 调用睡呗支付 cosleep端
+        if (this.haveUnDone) {
+          this.$router.push('/cw')
+          this.busyPay = false
+          return
+        }
         // console.log('睡呗支付调用', res.data.data)
         Tool.callAppRouter('paymentCall', { func_id: this.id, func_type: 32 }, (res: any, ed: any) => {
-          console.log(res, ed, '查看参数')
-          if (res.status === 1) {
+          this.busyPay = false
+
+          ed = JSON.parse(ed)
+          if (ed.status === 1) {
             this.$router.push('/cw')
+          }
+          if (ed.status === 2) {
+            this.loadingText = '支付失败'
+            setTimeout(() => {
+              this.loading = false
+            }, 2000)
           }
         })
         return
