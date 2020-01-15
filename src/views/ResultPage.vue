@@ -453,6 +453,8 @@ export default class ResultPage extends Vue {
     @import "ResultPage.scss";
     #chart {
         width: 90%;
+        margin-top: 20px;
+        margin-bottom: 20px;
         height: px2html(400px);
     }
 </style>

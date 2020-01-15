@@ -422,7 +422,7 @@ new Vue({
       // this.getCodeWeChat() // 微信获取code
       if (this.isCosSeep) {
       } else {
-        // this.getCodeWeChat()
+        this.getCodeWeChat()
       }
     }
 
