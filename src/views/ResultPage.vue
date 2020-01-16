@@ -10,7 +10,7 @@
 
         <img class="header-pic" :src="rpData.banner" />
         <div class="introduce-template">
-            <p class="name">{{this.section.sectionOne.chartPicTitle ? this.section.sectionOne.chartPicTitle : '在职场中，你可能成为一位优秀的：'}}</p><!-- {{title}} -->
+            <p class="name">{{this.chartTitle ? this.chartTitle : '在职场中，你可能成为一位优秀的：'}}</p><!-- {{title}} -->
             <p class="result-name">{{section.sectionOne.resultTitle}}</p>
             <div class="self-time">
                 <div class="users-features">
@@ -101,6 +101,7 @@ const echarts = require('echarts')
 })
 export default class ResultPage extends Vue {
     private chartType: number = 0 // 绘制结果图的样式
+    private chartTitle: string = ''
     private initialReady: boolean = false // 初始化渲染
     private myChart: any = undefined // 图表引用 拿来设置数据展开效果
     private iconList: any[] = [
@@ -180,11 +181,11 @@ export default class ResultPage extends Vue {
                     this.section = res.data.data.section
 
                     if (res.data.data.card_desc) {
-                        this.section.sectionOne.chartPicTitle = res.data.data.card_desc
+                        this.chartTitle = res.data.data.card_desc
                     }
 
 
-                    if (res.data.data.chart && Object.keys(res.data.data.chart.position).length > 0) {
+                    if (res.data.data.chart && Object.keys(res.data.data.chart.position).length > 0 && res.data.data.chart.desc) {
                         console.log('??')
                         this.dimensions = res.data.data.chart.position
                         const chartData = res.data.data.chart
