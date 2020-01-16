@@ -370,7 +370,7 @@ new Vue({
 
         this.timeOutMaker = setTimeout(() => {
           if (this.busyPay === true) {
-            this.loadingText = '支付超时'
+            // this.loadingText = '支付超时'
             setTimeout(() => {
               this.loading = false
               this.busyPay = false
