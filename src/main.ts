@@ -92,6 +92,7 @@ Vue.use(animated)
 new Vue({
   data() {
     return {
+      timeOutMaker: '' as any,
       haveBuy: false, // 是否已经购买
       isCosSeep: Tool.is_cosleep(),
       usersData: {
@@ -319,6 +320,24 @@ new Vue({
           break
       }
     },
+    async checkUserLoginStatus() {
+      return new Promise((resolve) => {
+        Tool.callAppRouter('isLogin', {}, (res: any, ed: any) => {
+          let mesg = null
+          if (typeof ed === 'string') {
+            mesg = JSON.parse(ed)
+          } else {
+            mesg = ed
+          }
+          if (mesg.msg === '已登录') {
+            resolve(true)
+          } else {
+            this.login()
+            resolve(false)
+          }
+        })
+      })
+    },
     async payAPI() {
       if (this.busyPay) {
         return
@@ -332,13 +351,35 @@ new Vue({
       this.busyPay = true
 
       if (this.$root.channel === 2) { // 调用睡呗支付 cosleep端
+        const logiinStatus = await this.checkUserLoginStatus()
+        if (!logiinStatus) {
+          this.busyPay = false
+          this.$root.loading = false
+          // 没有登录 或登录失效
+          return
+        }
         if (this.haveUnDone) {
           this.$router.push('/cw')
           this.busyPay = false
           return
         }
+
+        if (this.timeOutMaker) {
+          clearTimeout(this.timeOutMaker)
+        }
+
+        this.timeOutMaker = setTimeout(() => {
+          if (this.busyPay === true) {
+            this.loadingText = '支付超时'
+            setTimeout(() => {
+              this.loading = false
+              this.busyPay = false
+            }, 2000)
+          }
+        }, 14000)
         // console.log('睡呗支付调用', res.data.data)
         Tool.callAppRouter('paymentCall', { func_id: this.id, func_type: 32 }, (res: any, ed: any) => {
+          console.log(ed, '查看信息，查看取消支付')
           this.busyPay = false
 
           ed = JSON.parse(ed)
@@ -421,6 +462,7 @@ new Vue({
     } else { // 没有token 需要去获取code 然后再去获取token 测试的时候这里可以去除 可以方便查看ui
       // this.getCodeWeChat() // 微信获取code
       if (this.isCosSeep) {
+        this.login()
       } else {
         this.getCodeWeChat()
       }
