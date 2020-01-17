@@ -350,7 +350,7 @@ export default class Home extends Vue {
 
     if (!this.$root.token && (localStorage.getItem('openid') === 'null'
             || localStorage.getItem('openid')
-            || this.$root.isCosSeep)) {
+            ) && !this.$root.isCosSeep) {
       await this.$root.login()
     }
     this.getData()

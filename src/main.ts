@@ -451,7 +451,7 @@ new Vue({
           })
     }
   },
-  created() {
+  async created() {
     if (this.isCosSeep) {
       this.channel = 2
     }
@@ -462,7 +462,11 @@ new Vue({
     } else { // 没有token 需要去获取code 然后再去获取token 测试的时候这里可以去除 可以方便查看ui
       // this.getCodeWeChat() // 微信获取code
       if (this.isCosSeep) {
-        this.login()
+        const loginStatus = await this.checkUserLoginStatus()
+        if (loginStatus) {
+          this.login()
+        }
+        // this.login()
       } else {
         this.getCodeWeChat()
       }
