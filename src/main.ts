@@ -167,6 +167,10 @@ new Vue({
     },
     // 设置axios
     setAxios() {
+      console.log(
+          this.channel,
+          this.token
+      )
       // 设置全局header
       Vue.prototype.$axios = Axios.create({
         baseURL: URL,
@@ -259,6 +263,9 @@ new Vue({
       let data = {
       }
 
+      let needLogin = true
+      let noReload = false
+
       await new Promise((resolve) => {
         Tool.callAppRouter('Login', {}, (res: any, ed: any) => {
           let mesg = null
@@ -267,7 +274,25 @@ new Vue({
           } else {
             mesg = ed
           }
+
+          if (localStorage.getItem('openid') !== mesg.data.openid) {
+            noReload = true
+            localStorage.clear()
+            localStorage.setItem('openid', mesg.data.openid as string)
+            window.location.reload()
+            return
+          }
+
+          if (localStorage.getItem('openid') === mesg.data.openid && localStorage.getItem('token')) {
+            needLogin = false
+            return
+          }
+
           this.openid = mesg.data.openid
+
+          console.log(this.openid, 'openid')
+
+          localStorage.setItem('openid', this.openid as string)
           headers.openid = mesg.data.openid
 
           data = {
@@ -280,10 +305,14 @@ new Vue({
         })
       })
 
-      return this.loginApi(headers, data, (): any => {
-        localStorage.clear()
-        window.location.reload()
-      })
+      if (needLogin) {
+        return this.loginApi(headers, data, (): any => {
+          if (!noReload) {
+            localStorage.clear()
+          }
+          window.location.reload()
+        })
+      }
     },
     // 微信登录
     async wechatLogin() {
@@ -316,13 +345,13 @@ new Vue({
           this.wechatLogin()
           break
         case 2:
-          this.coSeepLogin()
+          await this.coSeepLogin()
           break
       }
     },
-    async checkUserLoginStatus() {
+    async checkUserLoginStatus(needLogin: boolean = true) {
       return new Promise((resolve) => {
-        Tool.callAppRouter('isLogin', {}, (res: any, ed: any) => {
+        Tool.callAppRouter('isLogin', {}, async (res: any, ed: any) => {
           let mesg = null
           if (typeof ed === 'string') {
             mesg = JSON.parse(ed)
@@ -332,7 +361,9 @@ new Vue({
           if (mesg.msg === '已登录') {
             resolve(true)
           } else {
-            this.login()
+            if (needLogin) {
+              await this.login()
+            }
             resolve(false)
           }
         })
@@ -452,11 +483,28 @@ new Vue({
     }
   },
   async created() {
+    this.id = this.parseQuery(window.location.href).id || 107
     if (this.isCosSeep) {
       this.channel = 2
     }
+
+    if (this.isCosSeep) {
+      if (this.token) {
+        console.log('配置全局axios')
+        // 配置全局axios
+        this.setAxios()
+      }
+      const loginStatus = await this.checkUserLoginStatus(false)
+      if (loginStatus) {
+        this.login()
+      }
+      return
+      // this.login()
+    }
+
     // 如果有token的情况下
     if (this.token) {
+      console.log('配置全局axios')
       // 配置全局axios
       this.setAxios()
     } else { // 没有token 需要去获取code 然后再去获取token 测试的时候这里可以去除 可以方便查看ui
@@ -471,8 +519,6 @@ new Vue({
         this.getCodeWeChat()
       }
     }
-
-    this.id = this.parseQuery(window.location.href).id || 107
   },
   router,
   store,
