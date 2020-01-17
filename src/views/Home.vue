@@ -314,7 +314,16 @@ export default class Home extends Vue {
   }
 
   // 我的报告按钮
-  private toMyReport() {
+  private async toMyReport() {
+    if (this.$root.isCosSeep) {
+      const loginStatus = await this.$root.checkUserLoginStatus()
+      if (!loginStatus) {
+        await this.login()
+      } else {
+        this.$router.push('/mp')
+      }
+      return
+    }
     // if (this.$root.haveUnDone) {
     //   this.$router.push('/cw')
     // } else {
@@ -335,6 +344,7 @@ export default class Home extends Vue {
     if (!this.$root.token && (localStorage.getItem('openid') === 'null'
             || localStorage.getItem('openid')
             ) && !this.$root.isCosSeep) {
+      console.log('Home 调用登录')
       await this.$root.login()
     }
     this.getData()
