@@ -167,10 +167,6 @@ new Vue({
     },
     // 设置axios
     setAxios() {
-      console.log(
-          this.channel,
-          this.token
-      )
       // 设置全局header
       Vue.prototype.$axios = Axios.create({
         baseURL: URL,
@@ -266,6 +262,8 @@ new Vue({
       let needLogin = true
       let noReload = false
 
+      this.$root.loading = false
+
       await new Promise((resolve) => {
         Tool.callAppRouter('Login', {}, (res: any, ed: any) => {
           let mesg = null
@@ -289,8 +287,6 @@ new Vue({
           }
 
           this.openid = mesg.data.openid
-
-          console.log(this.openid, 'openid')
 
           localStorage.setItem('openid', this.openid as string)
           headers.openid = mesg.data.openid
@@ -362,6 +358,7 @@ new Vue({
             resolve(true)
           } else {
             if (needLogin) {
+              this.$root.loading = true
               await this.login()
             }
             resolve(false)
@@ -490,7 +487,6 @@ new Vue({
 
     if (this.isCosSeep) {
       if (this.token) {
-        console.log('配置全局axios')
         // 配置全局axios
         this.setAxios()
       }
@@ -504,18 +500,11 @@ new Vue({
 
     // 如果有token的情况下
     if (this.token) {
-      console.log('配置全局axios')
       // 配置全局axios
       this.setAxios()
     } else { // 没有token 需要去获取code 然后再去获取token 测试的时候这里可以去除 可以方便查看ui
       // this.getCodeWeChat() // 微信获取code
-      if (this.isCosSeep) {
-        const loginStatus = await this.checkUserLoginStatus()
-        if (loginStatus) {
-          this.login()
-        }
-        // this.login()
-      } else {
+      if (!this.isCosSeep) {
         this.getCodeWeChat()
       }
 
