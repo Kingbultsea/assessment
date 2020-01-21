@@ -362,9 +362,9 @@ export default class ResultPage extends Vue {
     private parseHTMLToindector(data: string) {
         if (data) {
             const saver = data
+            data = data.replace(/\n/g, '')
             data = data.replace(/<div>(\})<\/div>/g, '$1')
             data = data.replace(/<div>(\^\{)<\/div>/g, '$1')
-            data = data.replace(/\n/g, '')
             return data.replace(/\^\{(.*?)\}/g, (a: string, b: any): string => {
                 // console.log(b, saver, '123 svaer @@@@')
                 return `<div class="fix-green-color green-add-10-margin-bottom">${b}</div>`
