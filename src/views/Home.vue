@@ -20,7 +20,7 @@
 
     <div class="introduce-template">
       <div class="title">内容简介</div>
-      <div class="content-template fix-bootom-10" v-html="parseHTMLToindector(homeData.contentValidity)"></div>
+      <div class="content-template fix-bootom-10" v-html="removeBrStr(parseHTMLToindector(homeData.contentValidity))"></div>
     </div>
     <div class="introduce-template">
       <div class="title">你将获得</div>
@@ -29,7 +29,7 @@
     </div>
     <div class="introduce-template">
       <div class="title">适合谁测</div>
-      <div class="content-template tag-content2" v-html="homeData.suitableForSpeculation"></div>
+      <div class="content-template tag-content2" v-html="padDiv(homeData.suitableForSpeculation)"></div>
     </div>
     <div class="introduce-template add-margin">
       <div class="title">理论背景</div>
@@ -147,14 +147,43 @@ export default class Home extends Vue {
 
   private busyPay: boolean = false
 
+  private removeBrStr(content: string): string {
+    if (content) {
+      content = content.replace('<br>', '')
+    }
+    return content
+  }
+
+  // 内容传进来有可能首个div会不被纳进来，需要添加
+  private padDiv(content: string): string {
+    // console.log(content)
+    const haveDiv = content.startsWith('div')
+    if (!haveDiv) {
+      const replaceStr = /(.*?)<div>/.exec(content)
+      if (replaceStr && replaceStr instanceof Array && replaceStr.length >= 2) {
+        // console.log(
+        //         content.replace(replaceStr[1] as string, '<div>' + replaceStr[1] + '</div>'),
+        //         replaceStr
+        // )
+        return content.replace(replaceStr[1] as string, '<div>' + replaceStr[1] + '</div>')
+      }
+
+      // 纯文字 单句
+      if (!content.includes('div')) {
+        return '<div>' + content + '</div>'
+      }
+    }
+    return content
+  }
+
   // 查看当前版本是否为最新版本
   private checkNeedUpdate(cb = () => {}) {
-    console.log('?')
+    // console.log('?')
     if (!this.Tool.is_cosleep_android()) {
       return
     }
     this.Tool.callAppRouter('getEnv', {}, (res: any, ed: any) => {
-      console.log(ed)
+      // console.log(ed)
       if (ed.data.version < 85) {
         this.needUpdate = true
       }
@@ -185,7 +214,7 @@ export default class Home extends Vue {
 
   // 跳转到正确的style_id
   private link2Style(serveName: string) {
-    console.log(serveName)
+    // console.log(serveName)
     const styleId = this.$wjh.parseQuery(window.location.href) as any
     if (serveName === '默认' || serveName === '蓝色理性主题') {
       if (styleId.style_id) {
@@ -337,11 +366,14 @@ export default class Home extends Vue {
   // 渲染成 灰色 带 ·的样式
   private parseHTMLToindector(data: string) {
     if (data) {
+      data = data.replace(/\n/g, '')
+      // console.log(data, '查看原型是怎么样子的')
       data = data.replace(/<div>(\})<\/div>/, '$1')
       data = data.replace(/<div>(\^\{)<\/div>/, '$1')
-      data = data.replace(/\n/g, '')
+      // console.log(data, '查看replace 修复过来的str')
       return data.replace(/\^\{(.*?)\}/g, (a: string, b: any): string => {
         // console.log(b, '123')
+        // console.log(a, '456')
         return `<div class="fix-green-color">${b}</div>`
       })
     }
@@ -379,7 +411,7 @@ export default class Home extends Vue {
     if (!this.$root.token && (localStorage.getItem('openid') === 'null'
             || localStorage.getItem('openid')
             ) && !this.$root.isCosSeep) {
-      console.log('Home 调用登录')
+      // console.log('Home 调用登录')
       await this.$root.login()
     }
     this.getData()

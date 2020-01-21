@@ -189,6 +189,7 @@ export default class ResultPage extends Vue {
                         console.log('??')
                         this.dimensions = res.data.data.chart.position
                         const chartData = res.data.data.chart
+                        this.section.sectionOne.chartPicTitle = chartData.title
                         this.section.sectionOne.chartExplan = chartData.desc
                         this.chartType = res.data.data.chart.type - 1
                         console.log('have chart', this.chartType)
