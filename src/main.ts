@@ -110,7 +110,7 @@ new Vue({
       URLSHARE,
       openid: localStorage.getItem('openid'), // || '1234-s3qIvA1_qcA-r6fYH7zF50k',
       id: 43 as number,
-      token: localStorage.getItem('token'), // || '4b10ff4b6ab96d42da5f9371b61281ef',
+      token: process.env.NODE_ENV === 'production' ? localStorage.getItem('token') : '2aed3eb2b031c350250a468d5f6b1706', // || '2aed3eb2b031c350250a468d5f6b1706',
       channel: 1, // 支付参数也是这个
       platForm: (navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1) ? 2 : 1, // ios: 1  android: 2
       rpData: '' as any, // 做完题 传递给 结果页
@@ -506,7 +506,9 @@ new Vue({
     } else { // 没有token 需要去获取code 然后再去获取token 测试的时候这里可以去除 可以方便查看ui
       // this.getCodeWeChat() // 微信获取code
       if (!this.isCosSeep) {
-        this.getCodeWeChat()
+        process.env.NODE_ENV === 'production'
+            ? this.getCodeWeChat()
+            : ''
       }
     }
   },

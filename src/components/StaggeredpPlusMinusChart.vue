@@ -101,8 +101,9 @@
         width: 301px;
         font-size: 11px;
         color: #5C5149;
-        // overflow: hidden;
+        overflow: hidden;
         position: relative;
+        margin: px2html(20px) 0px;
         .line {
             display: flex;
             justify-content: space-between;
@@ -136,7 +137,7 @@
                 position: absolute;
                 left: 0px;
                 top: 50%;
-                transform: translateX(-100%) translateY(-50%);
+                transform: translateX(-115%) translateY(-50%);
                 content: attr(data-number);
             }
             .right-bar {
@@ -149,7 +150,7 @@
                 position: absolute;
                 right: 0px;
                 top: 50%;
-                transform: translateX(100%) translateY(-50%);
+                transform: translateX(115%) translateY(-50%);
                 content: attr(data-number);
             }
         }
