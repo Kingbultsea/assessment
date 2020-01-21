@@ -7,7 +7,7 @@
             <div class="decloration-line"></div>
             <div class="decloration-line"></div>
 
-            <div class="decloration-line" :style="{backgroundColor: colorA}" style="width: 2px"></div>
+            <div class="decloration-line" :style="{background: '#FFE8D6'}" style="width: 2px"></div>
 
             <div class="decloration-line"></div>
             <div class="decloration-line"></div>
