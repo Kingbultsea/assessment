@@ -5,6 +5,7 @@ import LandingPage from '@/views/LandingPage.vue'
 import MyReport from '@/views/MyReport.vue'
 import ChatWindow from '@/views/ChatWindow.vue'
 import ResultPage from '@/views/ResultPage.vue'
+import List from '@/views/List.vue'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
       path: '/rp',
       name: 'ResultPage',
       component: ResultPage
+    },
+    {
+      path: '/list',
+      name: 'List',
+      component: List
     },
     {
       path: '/about',
