@@ -85,6 +85,7 @@ declare module 'vue/types/vue' { // 模块补充 可以去这个路径查阅
 
 Vue.prototype.$wjh = wjh
 Vue.prototype.$axios = myAxios
+Vue.prototype.Tool = Tool
 
 Vue.config.productionTip = false
 Vue.use(animated)
@@ -263,6 +264,7 @@ new Vue({
       let noReload = false
 
       this.$root.loading = false
+      this.busyPay = false
 
       await new Promise((resolve) => {
         Tool.callAppRouter('Login', {}, (res: any, ed: any) => {
@@ -407,7 +409,6 @@ new Vue({
         }, 14000)
         // console.log('睡呗支付调用', res.data.data)
         Tool.callAppRouter('paymentCall', { func_id: this.id, func_type: 32 }, (res: any, ed: any) => {
-          console.log(ed, '查看信息，查看取消支付')
           this.busyPay = false
 
           ed = JSON.parse(ed)

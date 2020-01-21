@@ -54,6 +54,18 @@
       <div class="content professional-query" v-html="homeData.notice">
       </div>
     </div> -->
+    <div class="update-template animated fadeIn" v-if="needUpdate">
+      <div class="update">
+        <img class="update-img" src="../assets/cosleep_windows_img_upgrade@2x.png">
+        <div class="content">
+          <p class="title">小睡眠升级新版提示</p>
+          <p>你正使用的小睡眠版本较低
+            暂时不支持当前功能或活动
+            请升级到小睡眠4.2.0及以上版本</p>
+        </div>
+        <div class="button" @click="toUpdate">立刻升级</div>
+      </div>
+    </div>
 
     <div class="fixed-bar">
       <img @click="toMyReport" class="icon" src="../assets/我的报告.png" />
@@ -130,7 +142,29 @@ export default class Home extends Vue {
     groupsPic: ''
   }
 
+  // 是否需要进行升级
+  private needUpdate: boolean = false
+
   private busyPay: boolean = false
+
+  // 查看当前版本是否为最新版本
+  private checkNeedUpdate(cb = () => {}) {
+    console.log('?')
+    if (!this.Tool.is_cosleep_android()) {
+      return
+    }
+    this.Tool.callAppRouter('getEnv', {}, (res: any, ed: any) => {
+      console.log(ed)
+      if (ed.data.version < 85) {
+        this.needUpdate = true
+      }
+    })
+  }
+
+  // 去更新最新版本
+  private toUpdate() {
+    this.Tool.callAppRouter('updateApp')
+  }
 
   // 换行功能
   public parseLineFeed(text: string, times: number): string {
@@ -333,6 +367,7 @@ export default class Home extends Vue {
   }
 
   private async created() {
+    this.checkNeedUpdate()
     localStorage.removeItem('loadingtext')
     this.$root.canScroll = false
     if (this.$root.scrollFun) {
@@ -357,6 +392,49 @@ export default class Home extends Vue {
 </style>
 
 <style lang="scss">
+  .update-template {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 99;
+    left: 0px;
+    top: 0px;
+    @include flexCenter;
+    background: rgba(0, 0, 0, 0.5);
+    .update {
+      overflow: hidden;
+      border-radius: px2html(10px);
+      display: flex;
+      flex-direction: column;
+      width: px2html(290px);
+      background: #fff;
+      color: #000;
+      align-items: center;
+      .update-img {
+        width: 100%;
+      }
+      .content {
+        padding: px2html(10px) px2html(20px);
+        font-size: px2html(10px);
+        .title {
+          font-size: px2html(18px);
+          font-weight: 700;
+          margin-bottom: px2html(20px);
+        }
+      }
+      .button {
+        width: px2html(100px);
+        height: px2html(30px);
+        font-size: px2html(12px);
+        color: #fff;
+        border-radius: px2html(20px);
+        @include flexCenter;
+        background: #4B90E0;
+        margin-top: px2html(10px);
+        margin-bottom: px2html(20px);
+      }
+    }
+  }
   .professional-query {
     color: #999999;
     margin-top: px2html(20px);
