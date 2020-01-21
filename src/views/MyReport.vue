@@ -10,7 +10,7 @@
                 <span class="num" :id="li.order_number">{{li.order_number}}</span>
                 <img @click="copyNumber(li.order_number)" class="icon" src="../assets/myreport_icon@3x.png"/>
             </div>
-            <div class="btn" @click="viewReport(li.id, li.theme_color)">查看报告</div>
+            <div class="btn" @click="viewReport(li.id, li.theme_color, li.title)">查看报告</div>
         </div>
         <div class="null-template" v-if="nullList === '1'">
             <img class="pic" src="../assets/myreport_null@3x.png"/>
@@ -180,8 +180,9 @@ export default class MyReport extends Vue {
         this.$router.push('/rp')
     }
 
-    private viewReport(id: string, serveName: string) {
+    private viewReport(id: string, serveName: string, title: string) {
         sessionStorage.setItem('reportId', id)
+        sessionStorage.setItem('title', title)
         this.link2Style(serveName)
         // this.$router.push('/rp')
     }
