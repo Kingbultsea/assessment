@@ -583,7 +583,7 @@ export default class Home extends Vue {
 
   .fix-green-color {
     // margin: 0px!important;
-    color: #5C4D42!important;
+    color: #999999!important;
     div {
       margin: 0px!important;
     }
