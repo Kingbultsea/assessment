@@ -6,7 +6,7 @@
         <p class="name">{{homeData.name}}</p>
         <p class="vice-name">{{homeData.viceName}}</p>
         <div class="price-div">
-          <span class="price">{{isCosSleep ? '' : '￥'}}{{homeData.price}}{{isCosSleep ? '睡贝' : ''}}</span>
+          <span class="price">{{isCosSleep ? '' : '￥'}}{{homeData.price}}<span :class="{'set-font-size-12': isCosSleep}"> {{isCosSleep ? '睡贝' : ''}}</span></span>
           <div class="origin-price">{{isCosSleep ? '' : '￥'}}{{homeData.originPrice}}{{isCosSleep ? '睡贝' : ''}}</div>
         </div>
         <div class="dirvide"></div> <!-- 分割线 -->
