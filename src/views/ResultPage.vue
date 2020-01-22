@@ -186,7 +186,6 @@ export default class ResultPage extends Vue {
 
 
                     if (res.data.data.chart && Object.keys(res.data.data.chart.position).length > 0 && res.data.data.chart.desc) {
-                        console.log('??')
                         this.dimensions = res.data.data.chart.position
                         const chartData = res.data.data.chart
                         this.section.sectionOne.chartPicTitle = chartData.title
@@ -205,6 +204,8 @@ export default class ResultPage extends Vue {
                     this.delayToParseCharts() // 动画效果
                     this.$root.loading = false
                 })
+            } else {
+                this.$root.loading = false
             }
         })
     }

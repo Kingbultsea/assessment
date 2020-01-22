@@ -1,5 +1,5 @@
 <template>
-    <div class='list'>
+    <div class='list animated fadeIn'>
         <template v-for="(l1, index) in list">
             <div class="category-title" :class="setThemeColor(theme2Val[l1.themeColor])">{{l1.categoryName}}</div>
             <div class="card-group">
@@ -81,9 +81,9 @@
         private linkTo(id: number) {
             const removeHashUrl = window.location.href.split('#')[0]
             if (removeHashUrl.includes('?')) {
-                window.location.href = removeHashUrl + '&id=' + id
+                window.location.href = removeHashUrl + '&id=' + id + (this.$root.isCosSeep ? '#/home' : '')
             } else {
-                window.location.href = removeHashUrl + '?id=' + id
+                window.location.href = removeHashUrl + '?id=' + id + (this.$root.isCosSeep ? '#/home' : '')
             }
         }
 
@@ -117,7 +117,7 @@
             width: 100%;
             content: '';
             height: px2html(10px);
-            background-color: #2EA1FF;
+            background: linear-gradient(#42B7FF, #2EA1FF);
             position: absolute;
             left: 50%;
             bottom: 0px;
@@ -131,7 +131,7 @@
             width: 100%;
             content: '';
             height: px2html(10px);
-            background-color: #FFB074;
+            background: linear-gradient(#FFC387, #FFB074);
             position: absolute;
             left: 50%;
             bottom: 0px;

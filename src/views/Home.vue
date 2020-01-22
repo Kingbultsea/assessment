@@ -6,8 +6,8 @@
         <p class="name">{{homeData.name}}</p>
         <p class="vice-name">{{homeData.viceName}}</p>
         <div class="price-div">
-          <span class="price">￥{{homeData.price}}</span>
-          <div class="origin-price">￥{{homeData.originPrice}}</div>
+          <span class="price">{{isCosSleep ? '' : '￥'}}{{homeData.price}}{{isCosSleep ? '睡贝' : ''}}</span>
+          <div class="origin-price">{{isCosSleep ? '' : '￥'}}{{homeData.originPrice}}{{isCosSleep ? '睡贝' : ''}}</div>
         </div>
         <div class="dirvide"></div> <!-- 分割线 -->
         <div class="count-template">
@@ -79,6 +79,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import Tool from '../unit/tool'
 import wjhJS from '@/unit/wjhJS';
 
 interface webchatpubpay {
@@ -119,6 +120,7 @@ const enum cv {
   }
 })
 export default class Home extends Vue {
+  private isCosSleep: boolean = Tool.is_cosleep()
   private styleList: any = {
     默认: 1,
     橙色感性主题: 2
@@ -218,17 +220,21 @@ export default class Home extends Vue {
     const styleId = this.$wjh.parseQuery(window.location.href) as any
     if (serveName === '默认' || serveName === '蓝色理性主题') {
       if (styleId.style_id) {
-        window.location.href = this.$wjh.funcUrlDel('style_id') + '#' + window.location.href.split('#')[1]
+        window.location.replace(this.$wjh.funcUrlDel('style_id') + '#' + window.location.href.split('#')[1])
         return
       }
     }
 
     if (serveName === '橙色感性主题') {
       if (parseInt(styleId.style_id) !== 2) {
-        window.location.href = this.$wjh.changeUrlArg(window.location.href.split('#')[0], 'style_id', '2') + '#' + window.location.href.split('#')[1]
+        window.location.replace(
+                this.$wjh.changeUrlArg(window.location.href.split('#')[0], 'style_id', '2') + '#' + window.location.href.split('#')[1]
+        )
         return
       }
     }
+
+    document.title = this.homeData.name
 
     this.$root.loading = false
     this.initialReady = true // 初始化渲染成功
@@ -246,10 +252,10 @@ export default class Home extends Vue {
             this.homeData[i] = data[cv[i]]
           }
         } */
+        this.homeData.name = data[cv.name]
         this.link2Style(data.theme_color)
 
         this.homeData.id = data[cv.id]
-        this.homeData.name = data[cv.name]
         this.homeData.viceName = data[cv.viceName]
         this.homeData.specie = data[cv.specie]
         this.homeData.coverPic = data[cv.coverPic]
@@ -274,7 +280,8 @@ export default class Home extends Vue {
         sessionStorage.setItem('price', '' + this.homeData.price)
         sessionStorage.setItem('originPrice', '' + this.homeData.originPrice)
 
-        document.title = this.homeData.name
+        // document.title = this.homeData.name
+        // 在连接跳转总做判断 免得闪烁
         this.$root.bannerPic = this.homeData.bannerPic
         // this.$root.loading = false
 

@@ -1,5 +1,5 @@
 <template>
-    <div class='loading'>
+    <div class='loading animated fadeIn'>
         <div class="greed">
             <img src="../assets/Loading-common.gif"/>
             <p>{{this.$root.loadingText}}</p>
