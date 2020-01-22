@@ -175,6 +175,13 @@ export default class ResultPage extends Vue {
         return text.replace(/script/g, '').replace(/\n/g, '<br/>'.repeat(times))
     }
 
+    private removeBrStr(content: string): string {
+        if (content) {
+            content = content.replace('<br>', '')
+        }
+        return content
+    }
+
     // 获取用户测评报告列表api
     private getReportListId() {
         this.$axios.get('/api/assessments/reports', { params: { id: this.$root.id } }).then((res: any) => {
@@ -379,6 +386,7 @@ export default class ResultPage extends Vue {
     private parseHTMLToindector(data: string) {
         if (data) {
             const saver = data
+            data = this.removeBrStr(data)
             data = data.replace(/\n/g, '')
             data = data.replace(/<div>(\})<\/div>/g, '$1')
             data = data.replace(/<div>(\^\{)<\/div>/g, '$1')

@@ -101,6 +101,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: 700;
     .icon-block {
       position: relative;
       box-sizing: border-box;
@@ -121,7 +122,7 @@
       color: #FFB074;
       font-size: px2html(20px);
       line-height: px2html(20px);
-      overflow: hidden;
+      // overflow: hidden;
       white-space:nowrap;
       text-align: center;
       width: max-content;
@@ -165,7 +166,7 @@
       line-height: px2html(23px);
       width: px2html(279px);
       text-align: justify;
-      font-weight: 600;
+      font-weight: 800;
       margin-bottom: px2html(20px);
     }
     .levelTwo-text {
