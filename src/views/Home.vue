@@ -17,6 +17,7 @@
         </div>
       </div>
     </div>
+    <!-- <span style="font-size: 8px;color:rgba(0, 0, 0 0.5)">{{$root.msg}}</span> -->
 
     <div class="introduce-template">
       <div class="title">
