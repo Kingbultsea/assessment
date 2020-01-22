@@ -93,6 +93,7 @@ Vue.use(animated)
 new Vue({
   data() {
     return {
+      msg: '',
       timeOutMaker: '' as any,
       haveBuy: false, // 是否已经购买
       isCosSeep: Tool.is_cosleep(),
@@ -274,6 +275,8 @@ new Vue({
           } else {
             mesg = ed
           }
+
+          this.mesg = ed
 
           if (localStorage.getItem('openid') !== mesg.data.openid) {
             noReload = true
