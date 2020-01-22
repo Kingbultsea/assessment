@@ -133,6 +133,7 @@
     background-color: #fff;
     border-radius: px2html(10px);
     box-sizing: border-box;
+    overflow: hidden;
     padding: px2html(30px) px2html(20px);
     .fix-rest-section:last-of-type {
       margin-bottom: px2html(40px);
@@ -186,7 +187,7 @@
       z-index: 10;
       transform: translateX(px2html(18px));
       width: max-content;
-      margin-bottom: px2html(30px);
+      margin-bottom: px2html(20px);
     }
     .levelTitle::after {
       padding-right: px2html(12px);
