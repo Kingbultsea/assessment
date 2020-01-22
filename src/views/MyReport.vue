@@ -18,8 +18,10 @@
         <div class="null-bar" v-if="nullList === '1'">
             <div class="title">{{goodsDesc.title}}</div>
             <div class="price-div">
-                <span class="price">￥{{goodsDesc.price}}</span>
-                <div class="origin-price">￥{{goodsDesc.price_origin}}</div>
+                <span class="price">{{isCosSleep ? '' : '￥'}}{{goodsDesc.price}}<span :class="{'set-font-size-12': isCosSleep}"> {{isCosSleep ? '睡贝' : ''}}</span></span>
+                <div class="origin-price">
+                    {{isCosSleep ? '' : '￥'}}{{goodsDesc.price_origin}}{{isCosSleep ? '睡贝' : ''}}
+                </div>
             </div>
             <div class="btn" id="test" :class="{'fix-top': goodsDesc.title.length <= 8 ? true : false}" @click="pay()">立即购买</div>
         </div>
@@ -29,6 +31,7 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator'
 import Tips from '@/components/Tips.vue'
+import Tool from '../unit/tool'
 
 @Component({
     components: {
@@ -36,6 +39,7 @@ import Tips from '@/components/Tips.vue'
     }
 })
 export default class MyReport extends Vue {
+    private isCosSleep: boolean = Tool.is_cosleep()
     private showTips: boolean = false // 展示提示
     private isGetData: boolean = false // 数据正在获取中
     private goodsDesc: any = {
