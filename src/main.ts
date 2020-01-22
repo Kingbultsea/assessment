@@ -276,7 +276,7 @@ new Vue({
             mesg = ed
           }
 
-          this.mesg = ed
+          this.msg = JSON.stringify(ed) + ' - ' + localStorage.getItem('openid') + ' - ' + mesg
 
           if (localStorage.getItem('openid') !== mesg.data.openid) {
             noReload = true
