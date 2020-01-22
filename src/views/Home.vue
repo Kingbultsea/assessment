@@ -431,6 +431,9 @@ export default class Home extends Vue {
 </style>
 
 <style lang="scss">
+  .set-font-size-12 {
+    font-size: px2html(12px) !important;
+  }
   .update-template {
     width: 100vw;
     height: 100vh;
