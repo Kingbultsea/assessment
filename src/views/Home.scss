@@ -102,11 +102,15 @@
       -webkit-background-clip: text;
       color: transparent;
     }
-    span:first-of-type {
+    div:first-of-type {
+      display: inline-block;
+      transform: translateY(px2html(-1.5px));
       background: linear-gradient(to right, rgba(255, 176, 116, 0.10), #FFB074);
       @include bind;
     }
-    span:last-of-type {
+    div:last-of-type {
+      transform: translateY(px2html(-1.5px));
+      display: inline-block;
       background: linear-gradient(to right, #FFB074, rgba(255, 176, 116, 0.10));
       @include bind;
     }

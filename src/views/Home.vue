@@ -37,9 +37,9 @@
     </div>
     <div class="introduce-template">
       <div class="title">
-        <span>::::</span>
+        <div>::::</div>
          适合谁测
-        <span>::::</span>
+        <div>::::</div>
       </div>
       <div class="content-template tag-content2" v-html="padDiv(homeData.suitableForSpeculation)"></div>
     </div>
