@@ -22,7 +22,7 @@
                     <div :data-number="Math.ceil((li.percent / li.axis_max) * 100) + '%'" class="left-bar" :style="{width: (li.percent / li.axis_max) * 100 + '%', backgroundColor: (li.percent / li.axis_max) * 100 >= 50 ? colorA : colorB}"></div>
                 </div>
                 <div class="container">
-                    <div :data-number="parseInt(100 - ((li.percent / li.axis_max) * 100)) + '%'" class="right-bar" :style="{width: parseInt(100 - ((li.percent / li.axis_max) * 100)) + '%', backgroundColor: ((li.percent / li.axis_max) * 100 < 50 && Math.ceil((li.percent / li.axis_max) * 100) !== 50) ? colorA : colorB}"></div>
+                    <div :data-number="parseInt(100 - ((li.percent / li.axis_max) * 100)) + '%'" class="right-bar" :style="{width: parseInt(100 - ((li.percent / li.axis_max) * 100)) + '%', backgroundColor: (li.percent / li.axis_max) * 100 <= 50 ? colorA : colorB}"></div>
                 </div>
             </div>
             <div style="width: 24px"><p style="float: left;width: max-content">{{li.name[1]}}</p></div>
