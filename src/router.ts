@@ -13,7 +13,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: Tool.is_cosleep() ? '/home' : '/',
       name: 'home',
       component: Home
     },
@@ -38,7 +38,7 @@ export default new Router({
       component: ResultPage
     },
     {
-      path: '/list',
+      path: Tool.is_cosleep() ? '/' : '/list',
       name: 'List',
       component: List
     },
