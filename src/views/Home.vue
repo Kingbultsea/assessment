@@ -20,17 +20,17 @@
 
     <div class="introduce-template">
       <div class="title">
-        <span>::::</span>
+        <div>::::</div>
          内容简介
-        <span>::::</span>
+        <div>::::</div>
       </div>
       <div class="content-template fix-bootom-10" v-html="removeBrStr(parseHTMLToindector(homeData.contentValidity))"></div>
     </div>
     <div class="introduce-template">
       <div class="title">
-        <span>::::</span>
+        <div>::::</div>
          你将获得
-        <span>::::</span>
+        <div>::::</div>
       </div>
       <div class="content-template tag-content" v-html="homeData.yourHarvest">
       </div>
@@ -45,9 +45,9 @@
     </div>
     <div class="introduce-template add-margin">
       <div class="title">
-        <span>::::</span>
+        <div>::::</div>
          理论背景
-        <span>::::</span>
+        <div>::::</div>
       </div>
       <div class="content-template" v-html="homeData.professionalTheory"></div>
       <div class="professional-parameters-title fix-btm">- 研发团队 -</div>
@@ -447,6 +447,9 @@ export default class Home extends Vue {
 </style>
 
 <style lang="scss">
+  .set-font-size-12 {
+    font-size: px2html(12px) !important;
+  }
   .update-template {
     width: 100vw;
     height: 100vh;
