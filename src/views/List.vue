@@ -81,9 +81,9 @@
         private linkTo(id: number) {
             const removeHashUrl = window.location.href.split('#')[0]
             if (removeHashUrl.includes('?')) {
-                window.location.href = removeHashUrl + '&id=' + id + (this.$root.isCosSeep ? '#/home' : '')
+                window.location.href = removeHashUrl + '&id=' + id
             } else {
-                window.location.href = removeHashUrl + '?id=' + id + (this.$root.isCosSeep ? '#/home' : '')
+                window.location.href = removeHashUrl + '?id=' + id
             }
         }
 

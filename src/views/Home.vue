@@ -221,7 +221,7 @@ export default class Home extends Vue {
     const styleId = this.$wjh.parseQuery(window.location.href) as any
     if (serveName === '默认' || serveName === '蓝色理性主题') {
       if (styleId.style_id) {
-        window.location.replace(this.$wjh.funcUrlDel('style_id') + '#' + window.location.href.split('#')[1])
+        window.location.replace(this.$wjh.funcUrlDel('style_id'))
         return
       }
     }
@@ -229,7 +229,7 @@ export default class Home extends Vue {
     if (serveName === '橙色感性主题') {
       if (parseInt(styleId.style_id) !== 2) {
         window.location.replace(
-                this.$wjh.changeUrlArg(window.location.href.split('#')[0], 'style_id', '2') + '#' + window.location.href.split('#')[1]
+                this.$wjh.changeUrlArg(window.location.href.split('#')[0], 'style_id', '2')
         )
         return
       }
