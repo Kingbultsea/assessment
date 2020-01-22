@@ -7,13 +7,14 @@ import ChatWindow from '@/views/ChatWindow.vue'
 import ResultPage from '@/views/ResultPage.vue'
 import List from '@/views/List.vue'
 import Tool from './unit/tool.js'
+import WJH from './unit/wjhJS'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: Tool.is_cosleep() ? '/home' : '/',
+      path: '/',
       name: 'home',
       component: Home
     },
@@ -38,7 +39,7 @@ export default new Router({
       component: ResultPage
     },
     {
-      path: Tool.is_cosleep() ? '/' : '/list',
+      path: '/list',
       name: 'List',
       component: List
     },
