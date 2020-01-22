@@ -36,11 +36,9 @@
 
         <div class="section" id="section">
             <div class="title">
-                <div class="icon-block set-size"></div>
-                <div class="icon-block"></div>
+                <img class="left-icon" src="../assets/left.png"/>
                 <div class="content" v-html="section.sectionOne.levelOneTitle"></div>
-                <div class="icon-block"></div>
-                <div class="icon-block set-size"></div>
+                <img class="right-icon" src="../assets/right.png"/>
             </div>
             <div class="content-template" style="padding: unset;display: flex;justify-content: center;align-items: center;flex-direction: column">
                 <p class="chart-title" v-if="section.sectionOne.chartPicTitle" v-html="section.sectionOne.chartPicTitle"></p>
@@ -61,19 +59,17 @@
 
         <div class="section sectionTwo">
             <div class="title">
-                <div class="icon-block set-size"></div>
-                <div class="icon-block"></div>
+                <img class="left-icon" src="../assets/left.png"/>
                 <div class="content" v-html="section.sectionTwo.data.levelOneTitle"></div>
-                <div class="icon-block"></div>
-                <div class="icon-block set-size"></div>
+                <img class="right-icon" src="../assets/right.png"/>
             </div>
             <div class="content-template">
                 <div class="levelTitle" v-if="section.sectionTwo.data.levelTwoTitle" v-html="section.sectionTwo.data.levelTwoTitle"></div>
-                <div class="levelText fix-bootom-10" v-html="parseHTMLICON(section.sectionTwo.data.text)">
+                <div class="levelText fix-bootom-10" v-html="removeBrStr(parseHTMLICON(section.sectionTwo.data.text))">
                 </div>
                 <div class="fix-rest-section" v-for="(li, index) in section.sectionTwo.release" :key="index">
                     <div class="levelTitle" v-if="li.levelTwoTitle" v-html="li.levelTwoTitle"></div>
-                    <div class="levelText fix-bootom-10" v-if="li.text" v-html="parseHTMLICON(li.text)">
+                    <div class="levelText fix-bootom-10" v-if="li.text" v-html="removeBrStr(parseHTMLICON(li.text))">
                     </div>
                 </div>
             </div>
@@ -81,19 +77,17 @@
 
         <div class="section sectionTwo">
             <div class="title">
-                <div class="icon-block set-size"></div>
-                <div class="icon-block"></div>
+                <img class="left-icon" src="../assets/left.png"/>
                 <div class="content" v-html="section.sectionThree.data.levelOneTitle"></div>
-                <div class="icon-block"></div>
-                <div class="icon-block set-size"></div>
+                <img class="right-icon" src="../assets/right.png"/>
             </div>
             <div class="content-template fix-first-child-margin-top">
                 <div class="levelTitle" v-if="section.sectionThree.data.levelTwoTitle" v-html="section.sectionThree.data.levelTwoTitle"></div>
-                <div class="levelText fix-bootom-10" v-if="section.sectionThree.data.text" v-html="parseHTMLICON(section.sectionThree.data.text)">
+                <div class="levelText fix-bootom-10" v-if="section.sectionThree.data.text" v-html="removeBrStr(parseHTMLICON(section.sectionThree.data.text))">
                 </div>
                 <div class="fix-rest-section" v-for="(li, index) in section.sectionThree.release" :key="index">
                     <div class="levelTitle" v-if="li.levelTwoTitle" v-html="li.levelTwoTitle"></div>
-                    <div class="levelText" v-if="li.text" v-html="parseHTMLICON(li.text)">
+                    <div class="levelText" v-if="li.text" v-html="removeBrStr(parseHTMLICON(li.text))">
                     </div>
                 </div>
             </div>

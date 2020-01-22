@@ -102,15 +102,15 @@
     justify-content: center;
     align-items: center;
     font-weight: 700;
-    .icon-block {
-      position: relative;
-      box-sizing: border-box;
-      border: px2html(1px) solid #FFB074;
-      transform: rotate(45deg);
-      width: px2html(6px);
-      height: px2html(6px);
-      margin-left: px2html(3px);
-      margin-right: px2html(3px);
+    .left-icon {
+      height: px2html(10px);
+      display: inline-block;
+      margin-right: px2html(0px);
+    }
+    .right-icon {
+      display: inline-block;
+      height: px2html(10px);
+      margin-left: px2html(0px);
     }
     .set-size {
       width: px2html(5px);
