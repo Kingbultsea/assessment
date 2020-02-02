@@ -197,11 +197,18 @@ export default class Home extends Vue {
 
   // 查看当前版本是否为最新版本
   private checkNeedUpdate(cb = () => {}) {
-    // console.log('?')
-    if (!this.Tool.is_cosleep_android()) {
+    if (!this.Tool.is_cosleep()) {
       return
     }
     this.Tool.callAppRouter('getEnv', {}, (res: any, ed: any) => {
+      if (this.Tool.is_cosleep_ios()) {
+        // ios 端
+        ed = JSON.parse(ed)
+        if (ed.data.version < 252) {
+          this.needUpdate = true
+        }
+        return
+      }
       // console.log(ed)
       if (ed.data.version < 85) {
         this.needUpdate = true

@@ -82,6 +82,9 @@ export default class ChatWindow extends Vue {
                     }
 
                     resolve()
+                } else {
+                    // localStorage.clear()
+                    // window.location.reload()
                 }
             })
         })
