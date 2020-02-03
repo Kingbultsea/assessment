@@ -9,6 +9,10 @@ import Share from './unit/shareAndGetName.js'
 import wjhJS from './unit/wjhJS'
 import Tool from './unit/tool'
 
+if (process.env.NODE_ENV !== 'production') {
+  require('../public/vconsole.min.js')
+}
+
 require('@/unit/setSize')
 const md5 = require('blueimp-md5')
 
