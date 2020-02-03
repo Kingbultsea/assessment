@@ -219,27 +219,29 @@ new Vue({
     },
     // 处理登录的未知错误
     async loginApi(headers: any, data: any, func: () => {}) {
-      this.$axios.post('/api/users/login', data, { headers }).then((res: any) => {
+      this.$axios.post('/api/users/login', data, { headers }).then(async (res: any) => {
         if (res.data.status === 0) {
           // console.log(res)
           // this.token = true
           let reReload = false
-          if (!localStorage.getItem('token')) {
-            reReload = true
-          }
+          const beforeToken = localStorage.getItem('token')
 
           localStorage.setItem('token', res.data.data.token)
           localStorage.setItem('avatar', res.data.data.avatarurl)
           localStorage.setItem('name', res.data.data.nickname)
-          if (reReload) {
-            window.location.reload()
-            return
-          }
+
           this.token = res.data.data.token
           this.usersData = res.data.data
 
           // 配置axios
           this.setAxios()
+
+          if (beforeToken !== this.token) {
+            // 有新的token的话 需要重新拉取home.vue的获取信息 因为需要知道是否继续测评
+            // async 的ts 结构要熟悉下
+            const UNDONE: boolean = (await this.checkAssessmentsVerify()) as any
+            this.haveUnDone = UNDONE
+          }
 
           return res.data.data.token
         }
@@ -252,6 +254,26 @@ new Vue({
         }
       }).catch(() => {
         return null
+      })
+    },
+    // 获取用户对指定测评的状态值
+    async checkAssessmentsVerify() {
+      return this.$axios.get('/api/users/assessments/verify', { params: { id: this.id } }).then((res: any) => {
+        if (res.data.status === 0) {
+          return res.data.data.undone
+        }
+      }).finally(() => false)
+    },
+    // 检查token是否有效
+    async checkTokenValid() {
+      return this.$axios.get('/api/users/verify/token').then((res: any) => {
+        if (res.data.status === 0) {
+          return true
+        } else {
+          return false
+        }
+      }).finally(() => {
+        return false
       })
     },
     // 小睡眠登录
@@ -272,7 +294,7 @@ new Vue({
       this.busyPay = false
 
       await new Promise((resolve) => {
-        Tool.callAppRouter('Login', {}, (res: any, ed: any) => {
+        Tool.callAppRouter('Login', {}, async (res: any, ed: any) => {
           let mesg = null
           if (typeof ed === 'string') {
             mesg = JSON.parse(ed)
@@ -290,7 +312,13 @@ new Vue({
             return
           }
 
-          if (localStorage.getItem('openid') === mesg.data.openid && localStorage.getItem('token')) {
+          const checkValid = await this.checkTokenValid()
+
+          console.log(
+              checkValid, '不需要login阿'
+          )
+
+          if (localStorage.getItem('openid') === mesg.data.openid && localStorage.getItem('token') && checkValid) {
             needLogin = false
             return
           }
@@ -487,13 +515,16 @@ new Vue({
           })
     }
   },
+  mounted() {
+    console.log(
+        this.$refs
+    )
+  },
   async created() {
     this.id = this.parseQuery(window.location.href).id || 107
-    if (this.isCosSeep) {
-      this.channel = 2
-    }
 
     if (this.isCosSeep) {
+      this.channel = 2
       if (this.token) {
         // 配置全局axios
         this.setAxios()
