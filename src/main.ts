@@ -256,6 +256,18 @@ new Vue({
         return null
       })
     },
+    // 检查token是否有效
+    async checkTokenValid() {
+      await this.$axios.get('/api/users/verify/token').then((res: any) => {
+        if (res.data.status === 0) {
+          return true
+        } else {
+          return false
+        }
+      }).finally(() => {
+        return false
+      })
+    },
     // 小睡眠登录
     async coSeepLogin() {
       const headers = {
@@ -274,7 +286,7 @@ new Vue({
       this.busyPay = false
 
       await new Promise((resolve) => {
-        Tool.callAppRouter('Login', {}, (res: any, ed: any) => {
+        Tool.callAppRouter('Login', {}, async (res: any, ed: any) => {
           let mesg = null
           if (typeof ed === 'string') {
             mesg = JSON.parse(ed)
@@ -292,7 +304,9 @@ new Vue({
             return
           }
 
-          if (localStorage.getItem('openid') === mesg.data.openid && localStorage.getItem('token')) {
+          const checkValid = await this.checkTokenValid()
+
+          if (localStorage.getItem('openid') === mesg.data.openid && localStorage.getItem('token') && checkValid) {
             needLogin = false
             return
           }
