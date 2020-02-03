@@ -231,15 +231,17 @@ new Vue({
           localStorage.setItem('token', res.data.data.token)
           localStorage.setItem('avatar', res.data.data.avatarurl)
           localStorage.setItem('name', res.data.data.nickname)
-          if (reReload) {
-            window.location.reload()
-            return
-          }
+
           this.token = res.data.data.token
           this.usersData = res.data.data
 
           // 配置axios
           this.setAxios()
+
+          if (reReload) {
+            // 有新的token的话 需要重新拉取home.vue的获取信息 因为需要知道是否继续测评
+            return
+          }
 
           return res.data.data.token
         }
@@ -487,13 +489,16 @@ new Vue({
           })
     }
   },
+  mounted() {
+    console.log(
+        this.$refs
+    )
+  },
   async created() {
     this.id = this.parseQuery(window.location.href).id || 107
-    if (this.isCosSeep) {
-      this.channel = 2
-    }
 
     if (this.isCosSeep) {
+      this.channel = 2
       if (this.token) {
         // 配置全局axios
         this.setAxios()
