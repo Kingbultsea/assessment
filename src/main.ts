@@ -9,7 +9,7 @@ import Share from './unit/shareAndGetName.js'
 import wjhJS from './unit/wjhJS'
 import Tool from './unit/tool'
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' || (process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE === 'experiment')) {
   require('../public/vconsole.min.js')
 }
 
