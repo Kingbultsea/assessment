@@ -248,7 +248,7 @@ export default class Home extends Vue {
     this.initialReady = true // 初始化渲染成功
 
     // 可以进行授权询问了
-    if (!this.$root.isCosSeep) {
+    if (!this.$root.isCosSeep && !this.$root.token) {
       process.env.NODE_ENV === 'production'
               ? this.$root.getCodeWeChat()
               : ''
