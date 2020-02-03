@@ -126,9 +126,13 @@ export default class Share {
         const redirtUrl = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? true : false
 
         if (redirtUrl) { // 正式
-          if (bl && !localStorage.getItem('name')) window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid +  '&redirect_uri=' + encodeURIComponent(location.href.split('#')[0]) +'&response_type=code&scope=snsapi_userinfo#wechart_redirect'
+          if (bl && !localStorage.getItem('name')) {
+            window.location.replace('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid +  '&redirect_uri=' + encodeURIComponent(location.href.split('#')[0]) +'&response_type=code&scope=snsapi_userinfo#wechart_redirect')
+          }
         } else { // 测试
-          if (bl && !localStorage.getItem('name')) window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid +  '&redirect_uri=' + encodeURIComponent('https://www.heartide.com/heartidemp/auth/proxy?link_actual=' + encodeURIComponent(location.href.split('#')[0])) +'&response_type=code&scope=snsapi_userinfo#wechart_redirect'
+          if (bl && !localStorage.getItem('name')) {
+            window.location.replace(window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid +  '&redirect_uri=' + encodeURIComponent('https://www.heartide.com/heartidemp/auth/proxy?link_actual=' + encodeURIComponent(location.href.split('#')[0])) +'&response_type=code&scope=snsapi_userinfo#wechart_redirect')
+          }
         }
 
         if (!bl || localStorage.getItem('name')) {
