@@ -81,7 +81,7 @@
                 <div class="content" v-html="section.sectionThree.data.levelOneTitle"></div>
                 <img class="right-icon" src="../assets/right.png"/>
             </div>
-            <div class="content-template fix-first-child-margin-top">
+            <div class="content-template fix-first-child-margin-top remove-padding-bottom">
                 <div class="levelTitle" v-if="section.sectionThree.data.levelTwoTitle" v-html="section.sectionThree.data.levelTwoTitle"></div>
                 <div class="levelText fix-bootom-10" v-if="section.sectionThree.data.text" v-html="removeBrStr(parseHTMLICON(section.sectionThree.data.text))">
                 </div>
@@ -171,7 +171,7 @@ export default class ResultPage extends Vue {
 
     private removeBrStr(content: string): string {
         if (content) {
-            content = content.replace('<br>', '')
+            content = content.replace(/\<br\>/g, '')
         }
         return content
     }
