@@ -543,11 +543,6 @@ new Vue({
       this.setAxios()
     } else { // 没有token 需要去获取code 然后再去获取token 测试的时候这里可以去除 可以方便查看ui
       // this.getCodeWeChat() // 微信获取code
-      if (!this.isCosSeep && !window.location.href.includes('list')) {
-        process.env.NODE_ENV === 'production'
-            ? this.getCodeWeChat()
-            : ''
-      }
     }
   },
   router,
