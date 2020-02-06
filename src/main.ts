@@ -174,15 +174,19 @@ new Vue({
     // 设置axios
     setAxios() {
       // 设置全局header
+      let headers = {
+        channel: this.channel,
+        package: this.platForm,
+        token: this.token,
+        version: VERSION
+      } as any
+
+      if (this.openid) {
+        headers.openid = this.openid
+      }
       Vue.prototype.$axios = Axios.create({
         baseURL: URL,
-        headers: {
-          openid: this.openid,
-          channel: this.channel,
-          package: this.platForm,
-          token: this.token,
-          version: VERSION
-        }
+        headers
       })
 
       Vue.prototype.$axios.defaults.retry = 4
