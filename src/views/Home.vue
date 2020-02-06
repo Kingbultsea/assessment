@@ -305,7 +305,7 @@ export default class Home extends Vue {
         this.homeData.groups = data[cv.groups]
         this.homeData.groupsPic = data[cv.groupsPic]
 
-        // this.$root.haveUnDone = data.undone
+        this.$root.haveUnDone = data.undone
 
         sessionStorage.setItem('title', '' + this.homeData.name)
         sessionStorage.setItem('price', '' + this.homeData.price)
