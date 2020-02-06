@@ -177,6 +177,7 @@ new Vue({
       Vue.prototype.$axios = Axios.create({
         baseURL: URL,
         headers: {
+          openid: this.openid,
           channel: this.channel,
           package: this.platForm,
           token: this.token,
