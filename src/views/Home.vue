@@ -57,7 +57,7 @@
       <div class="professional-parameters-title">- 专业参数 -</div>
       <div class="professional-query add-margin-profession" v-html="homeData.notice"></div>
       <div class="professional-parameters-title fix-btm">- 部分参考文献 -</div>
-      <div class="content-template color-bg-content" v-html="homeData.reference"></div>
+      <div class="content-template color-bg-content reference-align" v-html="homeData.reference"></div>
     </div>
 
     <!-- <div class="dirvide-special">
