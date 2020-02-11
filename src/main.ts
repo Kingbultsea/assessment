@@ -125,6 +125,17 @@ new Vue({
     }
   },
   methods: {
+    debugLogger(content: any) {
+      if (localStorage.getItem('openid') === '02423fa90222ff4f1218a6ee033f72f3') {
+        const logger = {
+          msgtype: 'text',
+          text: {
+            content: content
+          }
+        }
+        this.$axios.post('/api/resource/logger/proxy', { logger: JSON.stringify(logger) }).then((res: any) => {})
+      }
+    },
     parseQuery(url: string) {
       const queryObj = {} as any
       const reg = /[?&]([^=&#]+)=([^&#]*)/g
