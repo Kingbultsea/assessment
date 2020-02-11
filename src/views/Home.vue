@@ -277,6 +277,8 @@ export default class Home extends Vue {
       if (res.data.status === 0) {
         const data = res.data.data as any
 
+        this.$root.debugLogger(`查询问卷接口id: ${this.$root.id}\r\n用户是否未完成测评：${data.undone}`)
+
         /* 枚举实在无法使用....
         for (const i in this.homeData) {
           if (i) {

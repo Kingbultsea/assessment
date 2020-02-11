@@ -126,7 +126,7 @@ new Vue({
   },
   methods: {
     debugLogger(content: any) {
-      if (localStorage.getItem('openid') === '02423fa90222ff4f1218a6ee033f72f3') {
+      if (localStorage.getItem('openid') === '02423fa90222ff4f1218a6ee033f72f3' || this.openid === '02423fa90222ff4f1218a6ee033f72f3') {
         const logger = {
           msgtype: 'text',
           text: {
@@ -195,6 +195,9 @@ new Vue({
       if (this.openid) {
         headers.openid = this.openid
       }
+
+      this.debugLogger(`配置全局header: ${JSON.stringify(headers)}`)
+
       Vue.prototype.$axios = Axios.create({
         baseURL: URL,
         headers
@@ -258,6 +261,8 @@ new Vue({
             const UNDONE: boolean = (await this.checkAssessmentsVerify()) as any
             this.haveUnDone = UNDONE
           }
+
+          this.debugLogger(`调用/api/users/login\r\n, 重新配置全局header, 请求/api/users/assessments/verify, 用户是否未完成问卷：${this.haveUnDone}`)
 
           return res.data.data.token
         }
@@ -330,14 +335,19 @@ new Vue({
 
           const checkValid = await this.checkTokenValid()
 
+          this.debugLogger(`token是否有效: ${checkValid}`)
+
           console.log(
               checkValid, '不需要login阿'
           )
 
           if (localStorage.getItem('openid') === mesg.data.openid && localStorage.getItem('token') && checkValid) {
+            this.debugLogger(`token有效且重新获取的openid和本地缓存的一致且缓存中有token，无需登录，复用token`)
             needLogin = false
             return
           }
+
+          this.debugLogger(`token无效且重新获取的openid和本地缓存的不一致，需要重新登录`)
 
           this.openid = mesg.data.openid
 
@@ -540,8 +550,10 @@ new Vue({
     this.id = this.parseQuery(window.location.href).id || 107
 
     if (this.isCosSeep) {
+      this.debugLogger('小睡眠app端')
       this.channel = 2
       if (this.token) {
+        this.debugLogger(`拥有token：${this.token}\r\n`)
         // 配置全局axios
         this.setAxios()
       }
