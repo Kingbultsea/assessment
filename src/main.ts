@@ -238,7 +238,9 @@ new Vue({
     },
     // 处理登录的未知错误
     async loginApi(headers: any, data: any, func: () => {}) {
+      this.debugLogger(`调用/api/users/login`)
       this.$axios.post('/api/users/login', data, { headers }).then(async (res: any) => {
+        this.debugLogger(`/api/users/login: ${JSON.stringify(res.data)}`)
         if (res.data.status === 0) {
           // console.log(res)
           // this.token = true
