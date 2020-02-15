@@ -312,7 +312,7 @@ new Vue({
       }
 
       let data = {
-      }
+      } as any
 
       let needLogin = true
       let noReload = false
@@ -363,7 +363,10 @@ new Vue({
           data = {
             sex: mesg.data.sex || 0,
             nickname: mesg.data.name || '',
-            avatarUrl: mesg.data.avatar || ''
+          }
+
+          if (mesg.data.avatar) {
+            data.avatarUrl = mesg.data.avatar
           }
 
           resolve()
