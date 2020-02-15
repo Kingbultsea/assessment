@@ -357,9 +357,9 @@ new Vue({
           headers.openid = mesg.data.openid
 
           data = {
-            sex: mesg.data.sex,
-            nickname: mesg.data.name,
-            avatarUrl: mesg.data.avatar
+            sex: mesg.data.sex || 0,
+            nickname: mesg.data.name || '',
+            avatarUrl: mesg.data.avatar || ''
           }
 
           resolve()
