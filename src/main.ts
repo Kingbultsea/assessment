@@ -125,8 +125,8 @@ new Vue({
     }
   },
   methods: {
-    debugLogger(content: any) {
-      if (localStorage.getItem('openid') === '02423fa90222ff4f1218a6ee033f72f3' || this.openid === '02423fa90222ff4f1218a6ee033f72f3') {
+    debugLogger(content: any, anything: boolean = false) {
+      if (localStorage.getItem('openid') === '02423fa90222ff4f1218a6ee033f72f3' || this.openid === '02423fa90222ff4f1218a6ee033f72f3' || anything) {
         const logger = {
           msgtype: 'text',
           text: {
@@ -276,6 +276,9 @@ new Vue({
           // this.$router.push('/lp')
           return
         }
+
+        this.debugLogger(`用户登录出错：/api/users/login: ${JSON.stringify(res.data)}`, true)
+        this.debugLogger(`${JSON.stringify(headers)},${JSON.stringify(data)}`, true)
       }).catch(() => {
         return null
       })
