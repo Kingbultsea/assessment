@@ -233,6 +233,15 @@ export default class Home extends Vue {
       }
     }
 
+    if (serveName === '紫色主题') {
+      if (parseInt(styleId.style_id) !== 2) {
+        window.location.replace(
+                this.$wjh.changeUrlArg(window.location.href.split('#')[0], 'style_id', '3')
+        )
+        return
+      }
+    }
+
     if (serveName === '橙色感性主题') {
       if (parseInt(styleId.style_id) !== 2) {
         window.location.replace(
