@@ -384,12 +384,14 @@ new Vue({
       // } as apiUSERSDATA
       const CODE = this.parseQuery(window.document.location.href).code || localStorage.getItem('code')
       const data = {
-        code: CODE
+      } as any
+      if (CODE) {
+        data.code = CODE
+        return this.loginApi(headers, data, (): any => {
+          localStorage.clear()
+          window.location.href = this.$wjh.funcUrlDel('code') + '#/lp'
+        })
       }
-      return this.loginApi(headers, data, (): any => {
-        localStorage.clear()
-        window.location.href = this.$wjh.funcUrlDel('code') + '#/lp'
-      })
     },
     async login() {
       switch (this.channel) {
