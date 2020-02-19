@@ -175,6 +175,13 @@ export default class MyReport extends Vue {
             }
         }
 
+        if (serveName === '紫色主题') {
+            if (parseInt(styleId.style_id) !== 3) {
+                window.location.href = this.$wjh.changeUrlArg(window.location.href.split('#')[0], 'style_id', '3') + '#/rp'
+                return
+            }
+        }
+
         if (serveName === '橙色感性主题') {
             if (parseInt(styleId.style_id) !== 2) {
                 window.location.href = this.$wjh.changeUrlArg(window.location.href.split('#')[0], 'style_id', '2') + '#/rp'
