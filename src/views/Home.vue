@@ -234,7 +234,7 @@ export default class Home extends Vue {
     }
 
     if (serveName === '紫色主题') {
-      if (parseInt(styleId.style_id) !== 2) {
+      if (parseInt(styleId.style_id) !== 3) {
         window.location.replace(
                 this.$wjh.changeUrlArg(window.location.href.split('#')[0], 'style_id', '3')
         )
