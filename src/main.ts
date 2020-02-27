@@ -126,7 +126,7 @@ new Vue({
   },
   methods: {
     debugLogger(content: any) {
-      if (localStorage.getItem('openid') === '02423fa90222ff4f1218a6ee033f72f3') {
+      if (localStorage.getItem('openid') === '2232800f36a1eb5cc779426934a2b37b') {
         const logger = {
           msgtype: 'text',
           text: {
@@ -340,6 +340,7 @@ new Vue({
           }
 
           this.openid = mesg.data.openid
+          // this.debugLogger('获取用户的openid: ' +  this.openid)
 
           localStorage.setItem('openid', this.openid as string)
           headers.openid = mesg.data.openid
@@ -436,6 +437,7 @@ new Vue({
       this.$root.loading = true
       this.busyPay = true
 
+      // this.debugLogger('支付平台: ' + this.$root.channel)
       if (this.$root.channel === 2) { // 调用睡呗支付 cosleep端
         const logiinStatus = await this.checkUserLoginStatus()
         if (!logiinStatus) {
@@ -463,10 +465,12 @@ new Vue({
             }, 2000)
           }
         }, 14000)
+
+        // this.debugLogger('调用睡呗支付')
         // console.log('睡呗支付调用', res.data.data)
         Tool.callAppRouter('paymentCall', { func_id: this.id, func_type: 32 }, (res: any, ed: any) => {
           this.busyPay = false
-
+          // this.debugLogger('睡呗回调' + JSON.stringify(ed))
           ed = JSON.parse(ed)
           if (ed.status === 1) {
             this.$router.push('/cw')
