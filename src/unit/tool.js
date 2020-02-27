@@ -67,7 +67,11 @@ export default class Tool {
       if (/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
         window.webkit.messageHandlers.XinchaoApp.postMessage({req, cbName});
       } else {
-        XinchaoApp.callRouter(req, cbName);
+        try {
+          XinchaoApp.callRouter(req, cbName);
+        } catch (e) {
+          window.webkit.messageHandlers.XinchaoApp.postMessage({req, cbName});
+        }
       }
     } catch (e) {
 
