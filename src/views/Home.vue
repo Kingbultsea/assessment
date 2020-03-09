@@ -251,6 +251,15 @@ export default class Home extends Vue {
       }
     }
 
+    if (serveName === '绿色健康主题') {
+      if (parseInt(styleId.style_id) !== 4) {
+        window.location.replace(
+                this.$wjh.changeUrlArg(window.location.href.split('#')[0], 'style_id', '4')
+        )
+        return
+      }
+    }
+
     document.title = this.homeData.name
 
     this.$root.loading = false
