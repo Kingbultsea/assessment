@@ -57,8 +57,7 @@
             默认: 'a',
             蓝色理性主题: 'b',
             橙色感性主题: 'c',
-            紫色主题: 'd',
-            绿色健康主题: 'e'
+            紫色主题: 'd'
         }
 
         // 设置标题的颜色
@@ -147,19 +146,6 @@
             content: '';
             height: px2html(10px);
             background: linear-gradient(#E4DCFF, #876EDB);
-            position: absolute;
-            left: 50%;
-            bottom: 0px;
-            transform: translateX(-50%);
-            z-index: -1;
-            border-radius: px2html(5px);
-        }
-        .category-title-e::before { // 这里也可以用data的绑定方式传入
-            display: inline-block;
-            width: 100%;
-            content: '';
-            height: px2html(10px);
-            background: linear-gradient(#4E6158, #3CC78F);
             position: absolute;
             left: 50%;
             bottom: 0px;
