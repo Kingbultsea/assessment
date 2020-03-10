@@ -1,7 +1,7 @@
 var qiniu = require("qiniu");
 var glob= require("glob")
-const key='Wxe4Fvn8XfvDpkeUO0RVUj2Sz1E1KVi05wwZAr6x'
-const secret='LG1FrkyGlglfCl67m7Clib7Rbj-GONqVPDi0GNnC'
+const key=''
+const secret=''
 console.log(
   qiniu.zone
 )

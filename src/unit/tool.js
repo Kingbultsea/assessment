@@ -23,26 +23,6 @@ export default class Tool {
     return typeof window.XinchaoApp !== 'undefined'
   }
 
-  // API请求基地址
-  static get_api_root () {
-    switch (process.env.NODE_ENV) {
-      case 'production':
-        return 'https://api.psy-1.com'
-      case 'test':
-        return 'https://api.debug.psy-1.com'
-    }
-  }
-
-  // WEB跳转基地址
-  static get_web_root () {
-    switch (process.env.NODE_ENV) {
-      case 'production':
-        return 'https://www.heartide.com'
-      case 'test':
-        return 'https://web.debug.psy-1.com'
-    }
-  }
-
   // 加入百度统计
   static baidu_statics () {
     var hm = document.createElement('script')

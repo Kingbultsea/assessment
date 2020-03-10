@@ -1,8 +1,9 @@
 // const JSEncodePlugin = require('./jjencode.js')
+import config from './init.config'
 const UglifyPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production' ? 'https://webres.psy-1.com/sgy/dist' : './', // /cosleep/teacher/    ./ https://webres.psy-1.com/sgy/dist
+  baseUrl: process.env.NODE_ENV === 'production' ? config.qiniu_cdn : './', // /cosleep/teacher/    ./ https://webres.psy-1.com/sgy/dist
   assetsDir: './',
   // configureWebpack: {
   //   plugins: [

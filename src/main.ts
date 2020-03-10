@@ -8,6 +8,7 @@ import animated from 'animate.css'
 import Share from './unit/shareAndGetName.js'
 import wjhJS from './unit/wjhJS'
 import Tool from './unit/tool'
+import CONFIG from '../init.config'
 
 if (process.env.NODE_ENV !== 'production') {
   require('../public/vconsole.min.js')
@@ -18,7 +19,7 @@ const md5 = require('blueimp-md5')
 
 const EVN = process.env.VUE_APP_TITLE
 
-const URL = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? 'https://wenjuan.common.heartide.com/' : 'https://debug.wenjuan.common.heartide.com/' // http://heartide.free.idcfengye.com https://debug.wenjuan.common.heartide.com/
+const URL = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? CONFIG.api : CONFIG.api_debug // http://heartide.free.idcfengye.com https://debug.wenjuan.common.heartide.com/
 const URLSHARE = 'https://api.psy-1.com'
 // process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment'
 // ? 'https://api.psy-1.com'
@@ -43,7 +44,7 @@ const AXIOSFULLFILLFUNCTION = (config: any) => {
   }
 
   let params = '' as string
-  const key = 'fe4cd0c961d9e394ddf370aa3033da33+5db1796320e71' as string
+  const key = CONFIG.key as string
   const groupsData = [] as any
   for (const i in data) {
     if (data[i] !== '') {
