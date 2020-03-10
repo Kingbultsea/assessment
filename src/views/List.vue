@@ -159,7 +159,7 @@
             width: 100%;
             content: '';
             height: px2html(10px);
-            background: linear-gradient(#4E6158, #3CC78F);
+            background: linear-gradient(#57D9A4, #3CC78F);
             position: absolute;
             left: 50%;
             bottom: 0px;
