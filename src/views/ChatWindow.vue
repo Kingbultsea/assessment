@@ -214,23 +214,38 @@ export default class ChatWindow extends Vue {
 
                     const listAction = [] as listAction[]
 
-                    const userAction = res.data.data.undone_data.map((v: any, index: number) => {
-                        const data = this.parseToListAction(this.list[index]) as listAction
-                        const selected = v.selected - 1
-                        data.open = false
-                        data.selectIndex = selected
+                    let userAction = res.data.data.undone_data.map((v: any, index: number) => {
+                        let nIndex = undefined
+                        for (let i = 0; i < this.list.length; i++) {
+                            if (this.list[i].id === v.qid) {
+                                nIndex = i
+                                break
+                            }
+                        }
+                        if (nIndex || nIndex === 0) {
+                            const data = this.parseToListAction(this.list[nIndex]) as listAction
+                            const selected = v.selected - 1
+                            data.open = false
+                            data.selectIndex = selected
 
-                        listAction.push(
-                            data
-                        )
-                        // this.list[index].selectIndex
-                        return {
-                            from: 'user',
-                            answer: data.options[selected].desc,
-                            qid: v.qid,
-                            selected
+                            listAction.push(
+                                data
+                            )
+                            // this.list[index].selectIndex
+                            return {
+                                from: 'user',
+                                answer: data.options[selected].desc,
+                                qid: v.qid,
+                                selected
+                            }
                         }
                     }) as usersAction[]
+
+                    for (let i = 0; i < userAction.length; i++) {
+                        if (!userAction[i]) {
+                            userAction.splice(i, 1)
+                        }
+                    }
 
                     // console.log(userAction, '查看action', listAction, 'list action')
 
