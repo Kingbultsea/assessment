@@ -25,7 +25,7 @@ const URLSHARE = 'https://api.psy-1.com'
 // : 'https://api.debug.psy-1.com'
 
 // 版本号
-const VERSION = 2
+const VERSION = 3
 
 const myAxios = Axios.create({
   baseURL: URL,
@@ -191,6 +191,23 @@ new Vue({
         token: this.token,
         version: VERSION
       } as any
+
+      console.log('setAxios')
+
+      const URLPARAMS = this.parseQuery(window.document.location.href) // url参数
+
+      if (URLPARAMS.id) {
+        headers.id = URLPARAMS.id
+      }
+      if (URLPARAMS.productUserId) {
+        headers.productUserId = URLPARAMS.productUserId
+      }
+      if (URLPARAMS.productId) {
+        headers.productId = URLPARAMS.productId
+      }
+      if (URLPARAMS.subChannelId) {
+        headers.subChannelId = URLPARAMS.subChannelId
+      }
 
       if (this.openid) {
         headers.openid = this.openid
@@ -558,6 +575,7 @@ new Vue({
     )
   },
   async created() {
+    this.setAxios()
     this.id = this.parseQuery(window.location.href).id || 107
 
     if (this.isCosSeep) {
@@ -566,7 +584,7 @@ new Vue({
       if (this.token) {
         this.debugLogger(`拥有token：${this.token}\r\n`)
         // 配置全局axios
-        this.setAxios()
+        // this.setAxios()
       }
       const loginStatus = await this.checkUserLoginStatus(false)
       if (loginStatus) {
@@ -579,7 +597,7 @@ new Vue({
     // 如果有token的情况下
     if (this.token) {
       // 配置全局axios
-      this.setAxios()
+      // this.setAxios()
     } else { // 没有token 需要去获取code 然后再去获取token 测试的时候这里可以去除 可以方便查看ui
       // this.getCodeWeChat() // 微信获取code
     }
