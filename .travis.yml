@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "10"
+services:
+  - docker
+
+cache:
+  directories:
+    - node_modules
+
+script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t hodor123/hserve:latest .
+  - docker push hodor123/hserve:latest

@@ -19,11 +19,8 @@ const md5 = require('blueimp-md5')
 
 const EVN = process.env.VUE_APP_TITLE
 
-const URL = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? CONFIG.api : CONFIG.api_debug // http://heartide.free.idcfengye.com https://debug.wenjuan.common.heartide.com/
-const URLSHARE = 'https://api.psy-1.com'
-// process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment'
-// ? 'https://api.psy-1.com'
-// : 'https://api.debug.psy-1.com'
+const URL = process.env.NODE_ENV === 'production' && process.env.VUE_APP_TITLE !== 'experiment' ? CONFIG.api : CONFIG.api_debug
+const URLSHARE = ''
 
 // 版本号
 const VERSION = 2

@@ -71,6 +71,7 @@ npm run build
 ├── init.config.js                               # 项目初始化配置
 ├── cdn.js                                       # 七牛cdn配置文件
 ├── babel.config.js                              # babel配置
+├── travis.yml 
 ├── .env.experiment                              # vuecli experiment环境配置文件
 ├── tests                                        # 单元测试 自动化测试目录
 ├── src                                          # 源码目录
